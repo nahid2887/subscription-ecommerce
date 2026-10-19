@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Admin Portal — Authentication & Console</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ----------------------------------------------------
+       THEME VARIABLES: Dark (Default) & Day (Light) Moods
+    ---------------------------------------------------- */
+    :root, [data-theme="dark"] {
+      --bg-base: #090d16;
+      --card-bg: rgba(16, 21, 35, 0.78);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-label: #cbd5e1;
+      --input-bg: rgba(12, 16, 28, 0.85);
+      --input-border: rgba(255, 255, 255, 0.12);
+      --input-text: #ffffff;
+      --input-placeholder: #475569;
+      --input-focus-bg: rgba(16, 22, 38, 0.95);
+      --panel-bg: rgba(9, 13, 24, 0.75);
+      --panel-border: rgba(255, 255, 255, 0.06);
+      --code-bg: #05070d;
+      --code-text: #93c5fd;
+      --code-border: rgba(255, 255, 255, 0.05);
+      --btn-secondary-bg: rgba(255, 255, 255, 0.05);
+      --btn-secondary-hover: rgba(255, 255, 255, 0.1);
+      --btn-secondary-text: #cbd5e1;
+      --btn-secondary-border: rgba(255, 255, 255, 0.12);
+      --glow-1: rgba(99, 102, 241, 0.22);
+      --glow-2: rgba(168, 85, 247, 0.18);
+      --theme-toggle-bg: rgba(255, 255, 255, 0.08);
+      --theme-toggle-border: rgba(255, 255, 255, 0.15);
+      --theme-toggle-text: #fbbf24;
+      --badge-tag-bg: rgba(99, 102, 241, 0.12);
+      --badge-tag-border: rgba(99, 102, 241, 0.35);
+      --badge-tag-text: #a5b4fc;
+      --title-grad: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f3f6fc;
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(226, 232, 240, 0.95);
+      --card-shadow: 0 20px 50px rgba(99, 102, 241, 0.09), 0 4px 12px rgba(0, 0, 0, 0.03);
+      --text-main: #0f172a;
+      --text-secondary: #64748b;
+      --text-label: #334155;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --input-text: #0f172a;
+      --input-placeholder: #94a3b8;
+      --input-focus-bg: #ffffff;
+      --panel-bg: #f8fafc;
+      --panel-border: #e2e8f0;
+      --code-bg: #f1f5f9;
+      --code-text: #2563eb;
+      --code-border: #e2e8f0;
+      --btn-secondary-bg: #ffffff;
+      --btn-secondary-hover: #f1f5f9;
+      --btn-secondary-text: #334155;
+      --btn-secondary-border: #cbd5e1;
+      --glow-1: rgba(99, 102, 241, 0.15);
+      --glow-2: rgba(56, 189, 248, 0.15);
+      --theme-toggle-bg: #ffffff;
+      --theme-toggle-border: #cbd5e1;
+      --theme-toggle-text: #475569;
+      --badge-tag-bg: rgba(99, 102, 241, 0.08);
+      --badge-tag-border: rgba(99, 102, 241, 0.25);
+      --badge-tag-text: #4f46e5;
+      --title-grad: linear-gradient(135deg, #0f172a 30%, #4338ca 100%);
+    }
+
+    /* Common accents */
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.35);
+      --accent-purple: #a855f7;
+      --success: #10b981;
+      --danger: #ef4444;
+      --radius-lg: 20px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow-x: hidden;
+      transition: background-color 0.35s ease, color 0.35s ease;
+    }
+
+    /* Ambient background glows */
+    .ambient-glow-1 {
+      position: fixed;
+      top: -160px;
+      left: -160px;
+      width: 580px;
+      height: 580px;
+      background: radial-gradient(circle, var(--glow-1) 0%, rgba(99, 102, 241, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(60px);
+      transition: var(--transition-smooth);
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -160px;
+      right: -160px;
+      width: 620px;
+      height: 620px;
+      background: radial-gradient(circle, var(--glow-2) 0%, rgba(168, 85, 247, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(65px);
+      transition: var(--transition-smooth);
+    }
+
+    /* Top Utility Bar (Theme Switcher & Status) */
+    .top-bar {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle-btn {
+      background: var(--theme-toggle-bg);
+      border: 1px solid var(--theme-toggle-border);
+      color: var(--theme-toggle-text);
+      padding: 8px 14px;
+      border-radius: 9999px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: var(--transition-smooth);
+    }
+
+    .theme-toggle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.2);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      position: relative;
+      z-index: 1;
+      transition: max-width 0.4s ease;
+    }
+
+    .container.wide {
+      max-width: 780px;
+    }
+
+    .brand-header {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--badge-tag-bg);
+      border: 1px solid var(--badge-tag-border);
+      color: var(--badge-tag-text);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      box-shadow: 0 0 16px rgba(99, 102, 241, 0.12);
+      transition: var(--transition-smooth);
+    }
+
+    .badge-tag .dot {
+      width: 7px;
+      height: 7px;
+      background-color: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: var(--title-grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+      transition: var(--transition-smooth);
+    }
+
+    .brand-subtitle {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+    }
+
+    /* Glass Card */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), var(--accent-purple), transparent);
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      margin-bottom: 20px;
+      display: none;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.45;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: var(--danger);
+    }
+
+    .alert-success {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--success);
+    }
+
+    /* Form Styles */
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-label);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+      transition: var(--transition-smooth);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--text-secondary);
+      pointer-events: none;
+      display: flex;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-md);
+      padding: 13px 14px 13px 44px;
+      color: var(--input-text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: var(--transition-smooth);
+      outline: none;
+    }
+
+    input::placeholder {
+      color: var(--input-placeholder);
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+      background: var(--input-focus-bg);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
+    .toggle-password:hover {
+      color: var(--text-main);
+    }
+
+    /* Submit Button */
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 25px var(--primary-glow);
+      margin-top: 10px;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #7073fc 0%, #4338ca 100%);
+      box-shadow: 0 14px 30px rgba(99, 102, 241, 0.45);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Result Dashboard Section */
+    #dashboardSection {
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .user-header-card {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--panel-border);
+      margin-bottom: 24px;
+    }
+
+    .avatar-circle {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 10px 20px var(--primary-glow);
+      flex-shrink: 0;
+    }
+
+    .user-meta h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-email-text {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 3px;
+    }
+
+    .pill-badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pill-superuser {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .meta-item {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      transition: var(--transition-smooth);
+    }
+
+    .meta-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .meta-value {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      font-weight: 600;
+      margin-top: 4px;
+      word-break: break-all;
+    }
+
+    /* Tokens Box */
+    .token-box {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+      transition: var(--transition-smooth);
+    }
+
+    .token-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .token-title-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .token-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-label);
+    }
+
+    .token-tag {
+      background: var(--badge-tag-bg);
+      border: 1px solid var(--badge-tag-border);
+      color: var(--badge-tag-text);
+      font-size: 0.7rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .token-display {
+      background: var(--code-bg);
+      border: 1px solid var(--code-border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--code-text);
+      word-break: break-all;
+      max-height: 85px;
+      overflow-y: auto;
+      line-height: 1.45;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-copy {
+      background: var(--btn-secondary-bg);
+      border: 1px solid var(--btn-secondary-border);
+      color: var(--btn-secondary-text);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-copy:hover {
+      background: var(--btn-secondary-hover);
+      color: var(--text-main);
+    }
+
+    .btn-copy.copied {
+      background: rgba(16, 185, 129, 0.18);
+      border-color: rgba(16, 185, 129, 0.5);
+      color: var(--success);
+    }
+
+    /* Actions bar */
+    .action-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      min-width: 160px;
+      background: var(--btn-secondary-bg);
+      border: 1px solid var(--btn-secondary-border);
+      color: var(--btn-secondary-text);
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition-smooth);
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: var(--btn-secondary-hover);
+      color: var(--text-main);
+    }
+
+    .btn-logout {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: var(--danger);
+    }
+
+    .btn-logout:hover {
+      background: rgba(239, 68, 68, 0.18);
+      color: var(--danger);
+    }
+
+    /* Live profile verification box */
+    #verifyResult {
+      margin-top: 16px;
+      padding: 14px;
+      background: var(--code-bg);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-md);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--success);
+      display: none;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+
+    /* Footer */
+    .portal-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .portal-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .portal-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Top bar with Theme Switcher -->
+  <div class="top-bar">
+    <button class="theme-toggle-btn" id="themeToggleBtn" type="button" aria-label="Toggle Dark and Day Mode">
+      <span id="themeIcon">
+        <!-- Sun icon (shown in dark mode) -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </span>
+      <span id="themeLabel">Day Mode</span>
+    </button>
+  </div>
+
+  <div class="container" id="mainContainer">
+    <!-- Brand Header -->
+    <div class="brand-header">
+      <div class="badge-tag">
+        <span class="dot"></span> Super Admin Portal
+      </div>
+      <h1 id="pageTitle">Superuser Sign In</h1>
+      <p class="brand-subtitle" id="pageSubtitle">Authenticate to obtain Bearer & Access tokens</p>
+    </div>
+
+    <!-- Main Glass Card -->
+    <div class="glass-card">
+      
+      <!-- Error / Success Alert -->
+      <div id="alertBox" class="alert alert-error">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="alertMessage">Error message</span>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm" autocomplete="off">
+        <div class="form-group">
+          <label for="emailInput">Superuser Email or Username</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </span>
+            <input 
+              type="text" 
+              id="emailInput" 
+              placeholder="e.g. nahid2887@gmail.com" 
+              required
+              autofocus
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="passwordInput">Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </span>
+            <input 
+              type="password" 
+              id="passwordInput" 
+              placeholder="Enter your superuser password" 
+              required
+            >
+            <button type="button" class="toggle-password" id="togglePasswordBtn" title="Toggle password visibility">
+              <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" id="submitBtn">
+          <span class="spinner" id="btnSpinner"></span>
+          <span id="btnText">Sign In to Super Admin</span>
+        </button>
+      </form>
+
+      <!-- DASHBOARD / AUTH RESULT VIEW (Initially hidden) -->
+      <div id="dashboardSection">
+        <!-- User Info Header -->
+        <div class="user-header-card">
+          <div class="avatar-circle" id="userAvatar">N</div>
+          <div class="user-meta">
+            <h2>
+              <span id="displayUsername">nahid</span>
+              <span class="pill-badge pill-superuser">Superuser</span>
+            </h2>
+            <p class="user-email-text" id="displayEmail">nahid2887@gmail.com</p>
+          </div>
+        </div>
+
+        <!-- Meta Grid -->
+        <div class="meta-grid">
+          <div class="meta-item">
+            <div class="meta-label">User ID</div>
+            <div class="meta-value" id="displayUserId">#1</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Staff Status</div>
+            <div class="meta-value" id="displayIsStaff">Active Staff</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Member Since</div>
+            <div class="meta-value" id="displayDateJoined">-</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-label">Token Format</div>
+            <div class="meta-value" id="displayTokenType">Bearer (JWT)</div>
+          </div>
+        </div>
+
+        <!-- Bearer Access Token Box -->
+        <div class="token-box">
+          <div class="token-header">
+            <div class="token-title-wrapper">
+              <span class="token-title">Access Token</span>
+              <span class="token-tag">Bearer Token</span>
+            </div>
+            <button class="btn-copy" id="copyAccessBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy Bearer Token</span>
+            </button>
+          </div>
+          <div class="token-display" id="displayAccessToken">Loading token...</div>
+        </div>
+
+        <!-- Refresh Token Box -->
+        <div class="token-box">
+          <div class="token-header">
+            <div class="token-title-wrapper">
+              <span class="token-title">Refresh Token</span>
+              <span class="token-tag">7-Day Expiry</span>
+            </div>
+            <button class="btn-copy" id="copyRefreshBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy Refresh Token</span>
+            </button>
+          </div>
+          <div class="token-display" id="displayRefreshToken">Loading token...</div>
+        </div>
+
+        <!-- Live Endpoint Verification Test -->
+        <div class="action-group">
+          <button class="btn-secondary" id="verifyTokenBtn" style="border-color: rgba(99, 102, 241, 0.4); color: var(--primary);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            Test Bearer on Protected API
+          </button>
+          <a href="/api/docs/" target="_blank" class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            Swagger Docs
+          </a>
+          <button class="btn-secondary btn-logout" id="logoutBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            Sign Out
+          </button>
+        </div>
+
+        <!-- Live API response box -->
+        <div id="verifyResult"></div>
+      </div>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="portal-footer">
+      Django Super Admin Portal &bull; <a href="/api/docs/">Swagger UI</a> &bull; <a href="/admin/">Django Admin</a>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ----------------------------------------------------
+     * Theme Switcher: Dark Mode and Day (Light) Mode
+     * ----------------------------------------------------
+     */
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeLabel = document.getElementById('themeLabel');
+
+    const sunIconSvg = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+    `;
+
+    const moonIconSvg = `
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    `;
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('superadmin_theme', theme);
+
+      if (theme === 'light') {
+        themeIcon.innerHTML = moonIconSvg;
+        themeLabel.textContent = 'Dark Mode';
+        themeToggleBtn.style.color = '#475569';
+      } else {
+        themeIcon.innerHTML = sunIconSvg;
+        themeLabel.textContent = 'Day Mode';
+        themeToggleBtn.style.color = '#fbbf24';
+      }
+    }
+
+    // Initialize saved or preferred theme
+    const savedTheme = localStorage.getItem('superadmin_theme');
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    } else {
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      applyTheme(prefersDark ? 'dark' : 'light');
+    }
+
+    // Theme toggle event
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+    });
+
+    /**
+     * ----------------------------------------------------
+     * Strict Type Casting & Safety Utilities
+     * ----------------------------------------------------
+     */
+    function castToString(value, fallback = '') {
+      if (value === null || value === undefined) return fallback;
+      return String(value).trim();
+    }
+
+    function castToNumber(value, fallback = 0) {
+      const parsed = Number(value);
+      return Number.isNaN(parsed) ? fallback : parsed;
+    }
+
+    function castToBoolean(value) {
+      if (typeof value === 'boolean') return value;
+      if (typeof value === 'string') {
+        const lower = value.toLowerCase().trim();
+        return lower === 'true' || lower === '1' || lower === 'yes';
+      }
+      return Boolean(value);
+    }
+
+    function castAuthResponse(raw) {
+      if (!raw || typeof raw !== 'object') {
+        throw new TypeError('API response must be a JSON object.');
+      }
+
+      const rawUser = raw.user || {};
+
+      return {
+        message: castToString(raw.message, 'Login successful'),
+        tokenType: castToString(raw.token_type, 'Bearer'),
+        accessToken: castToString(raw.access_token),
+        refreshToken: castToString(raw.refresh_token),
+        user: {
+          id: castToNumber(rawUser.id),
+          username: castToString(rawUser.username, 'Admin'),
+          email: castToString(rawUser.email, 'No email'),
+          first_name: castToString(rawUser.first_name),
+          last_name: castToString(rawUser.last_name),
+          firstName: castToString(rawUser.first_name),
+          lastName: castToString(rawUser.last_name),
+          is_superuser: castToBoolean(rawUser.is_superuser),
+          isSuperuser: castToBoolean(rawUser.is_superuser),
+          is_staff: castToBoolean(rawUser.is_staff),
+          isStaff: castToBoolean(rawUser.is_staff),
+          is_active: castToBoolean(rawUser.is_active),
+          isActive: castToBoolean(rawUser.is_active),
+          date_joined: castToString(rawUser.date_joined),
+          dateJoined: castToString(rawUser.date_joined),
+          last_login: castToString(rawUser.last_login),
+          lastLogin: castToString(rawUser.last_login),
+        }
+      };
+    }
+
+    // DOM Elements
+    const mainContainer = document.getElementById('mainContainer');
+    const loginForm = document.getElementById('loginForm');
+    const dashboardSection = document.getElementById('dashboardSection');
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+    const alertBox = document.getElementById('alertBox');
+    const alertMessage = document.getElementById('alertMessage');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const btnText = document.getElementById('btnText');
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    const eyeIcon = document.getElementById('eyeIcon');
+
+    // Dashboard Elements
+    const userAvatar = document.getElementById('userAvatar');
+    const displayUsername = document.getElementById('displayUsername');
+    const displayEmail = document.getElementById('displayEmail');
+    const displayUserId = document.getElementById('displayUserId');
+    const displayIsStaff = document.getElementById('displayIsStaff');
+    const displayDateJoined = document.getElementById('displayDateJoined');
+    const displayTokenType = document.getElementById('displayTokenType');
+    const displayAccessToken = document.getElementById('displayAccessToken');
+    const displayRefreshToken = document.getElementById('displayRefreshToken');
+    const copyAccessBtn = document.getElementById('copyAccessBtn');
+    const copyRefreshBtn = document.getElementById('copyRefreshBtn');
+    const verifyTokenBtn = document.getElementById('verifyTokenBtn');
+    const verifyResult = document.getElementById('verifyResult');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    let currentAuth = null;
+
+    // Toggle Password Visibility
+    togglePasswordBtn.addEventListener('click', () => {
+      const isPassword = passwordInput.getAttribute('type') === 'password';
+      passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+      eyeIcon.style.opacity = isPassword ? '0.5' : '1';
+    });
+
+    // Alert display helper
+    function showAlert(message, type = 'error') {
+      alertBox.className = `alert alert-${type}`;
+      alertBox.style.display = 'flex';
+      alertMessage.textContent = castToString(message);
+    }
+
+    function hideAlert() {
+      alertBox.style.display = 'none';
+    }
+
+    // Set loading state
+    function setLoading(isLoading) {
+      if (isLoading) {
+        submitBtn.disabled = true;
+        btnSpinner.style.display = 'inline-block';
+        btnText.textContent = 'Authenticating...';
+        hideAlert();
+      } else {
+        submitBtn.disabled = false;
+        btnSpinner.style.display = 'none';
+        btnText.textContent = 'Sign In to Super Admin';
+      }
+    }
+
+    // Copy to clipboard helper
+    async function copyToClipboard(text, btnElement, label) {
+      try {
+        await navigator.clipboard.writeText(castToString(text));
+        const originalHtml = btnElement.innerHTML;
+        btnElement.classList.add('copied');
+        btnElement.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Copied!</span>
+        `;
+        setTimeout(() => {
+          btnElement.classList.remove('copied');
+          btnElement.innerHTML = originalHtml;
+        }, 2000);
+      } catch (err) {
+        alert('Could not copy to clipboard.');
+      }
+    }
+
+    copyAccessBtn.addEventListener('click', () => {
+      if (currentAuth) {
+        copyToClipboard(currentAuth.accessToken, copyAccessBtn, 'Bearer Token');
+      }
+    });
+
+    copyRefreshBtn.addEventListener('click', () => {
+      if (currentAuth) {
+        copyToClipboard(currentAuth.refreshToken, copyRefreshBtn, 'Refresh Token');
+      }
+    });
+
+    // Handle Form Submit
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const rawEmailOrUsername = castToString(emailInput.value);
+      const rawPassword = castToString(passwordInput.value);
+
+      if (!rawEmailOrUsername || !rawPassword) {
+        showAlert('Please enter both your email/username and password.');
+        return;
+      }
+
+      setLoading(true);
+
+      const payload = {
+        password: rawPassword
+      };
+
+      if (rawEmailOrUsername.includes('@')) {
+        payload.email = rawEmailOrUsername;
+      } else {
+        payload.username = rawEmailOrUsername;
+      }
+
+      const API_URL = '/api/superuser/login/';
+
+      try {
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          let errDetail = 'Authentication failed. Please verify credentials.';
+          if (data && data.detail) {
+            errDetail = castToString(data.detail);
+          } else if (data && typeof data === 'object') {
+            const firstKey = Object.keys(data)[0];
+            if (firstKey && data[firstKey]) {
+              const val = data[firstKey];
+              errDetail = Array.isArray(val) ? castToString(val[0]) : castToString(val);
+            }
+          }
+          showAlert(errDetail, 'error');
+          setLoading(false);
+          return;
+        }
+
+        const authData = castAuthResponse(data);
+        currentAuth = authData;
+
+        // Persist session to localStorage so new tabs and reloads stay logged in
+        localStorage.setItem('superadmin_auth', JSON.stringify(authData));
+
+        // Redirect to full admin dashboard
+        window.location.href = '/super-admin/dashboard/';
+
+      } catch (networkError) {
+        console.error('Login request error:', networkError);
+        showAlert('Network error: Unable to reach the API server at ' + API_URL, 'error');
+        setLoading(false);
+      }
+    });
+
+    // Render Dashboard View
+    function renderDashboard(auth) {
+      setLoading(false);
+      hideAlert();
+
+      mainContainer.classList.add('wide');
+
+      pageTitle.textContent = 'Super Admin Console';
+      pageSubtitle.textContent = 'Authenticated via JWT Bearer Token';
+
+      const user = auth.user;
+      const initial = user.username ? user.username.charAt(0).toUpperCase() : 'A';
+      userAvatar.textContent = initial;
+      displayUsername.textContent = user.username;
+      displayEmail.textContent = user.email || 'No email registered';
+      displayUserId.textContent = `#${user.id}`;
+      displayIsStaff.textContent = user.isStaff ? 'Verified Staff' : 'Standard';
+
+      if (user.dateJoined) {
+        const date = new Date(user.dateJoined);
+        displayDateJoined.textContent = date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+      } else {
+        displayDateJoined.textContent = 'N/A';
+      }
+
+      displayTokenType.textContent = `${auth.tokenType} (JWT)`;
+      displayAccessToken.textContent = auth.accessToken;
+      displayRefreshToken.textContent = auth.refreshToken;
+
+      loginForm.style.display = 'none';
+      dashboardSection.style.display = 'block';
+    }
+
+    // Verify Bearer Token on Protected API
+    verifyTokenBtn.addEventListener('click', async () => {
+      if (!currentAuth || !currentAuth.accessToken) return;
+
+      verifyTokenBtn.disabled = true;
+      verifyResult.style.display = 'block';
+      verifyResult.textContent = 'Sending GET /api/superuser/profile/ with Authorization: Bearer <access_token>...';
+
+      try {
+        const response = await fetch('/api/superuser/profile/', {
+          method: 'GET',
+          headers: {
+            'Authorization': `${currentAuth.tokenType} ${currentAuth.accessToken}`,
+            'Accept': 'application/json'
+          }
+        });
+
+        const profileData = await response.json();
+        verifyResult.textContent = JSON.stringify({
+          status: response.status,
+          statusText: response.statusText,
+          data: profileData
+        }, null, 2);
+      } catch (err) {
+        verifyResult.textContent = 'Error testing protected endpoint: ' + castToString(err.message);
+      } finally {
+        verifyTokenBtn.disabled = false;
+      }
+    });
+
+    // Logout and session clearing
+    function handleLogout(clearStorage = true) {
+      if (clearStorage) {
+        localStorage.removeItem('superadmin_auth');
+      }
+      currentAuth = null;
+      loginForm.reset();
+      hideAlert();
+      verifyResult.style.display = 'none';
+      verifyResult.textContent = '';
+      
+      mainContainer.classList.remove('wide');
+      pageTitle.textContent = 'Superuser Sign In';
+      pageSubtitle.textContent = 'Authenticate to obtain Bearer & Access tokens';
+
+      dashboardSection.style.display = 'none';
+      loginForm.style.display = 'block';
+      emailInput.focus();
+    }
+
+    logoutBtn.addEventListener('click', () => handleLogout(true));
+
+    // Validate or silently refresh token in background
+    async function validateOrRefreshToken(auth) {
+      try {
+        const testRes = await fetch('/api/superuser/profile/', {
+          method: 'GET',
+          headers: {
+            'Authorization': `${auth.tokenType} ${auth.accessToken}`,
+            'Accept': 'application/json'
+          }
+        });
+
+        if (testRes.status === 401) {
+          // Token expired, attempt refresh
+          if (auth.refreshToken) {
+            const refreshRes = await fetch('/api/superuser/token/refresh/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({ refresh: auth.refreshToken })
+            });
+
+            if (refreshRes.ok) {
+              const refreshData = await refreshRes.json();
+              auth.accessToken = castToString(refreshData.access);
+              localStorage.setItem('superadmin_auth', JSON.stringify(auth));
+              displayAccessToken.textContent = auth.accessToken;
+              return;
+            }
+          }
+          handleLogout(true);
+        }
+      } catch (err) {
+        console.warn('Background token check warning:', err);
+      }
+    }
+
+    // If already logged in, forward immediately to dashboard
+    function restoreSession() {
+      try {
+        const rawSaved = localStorage.getItem('superadmin_auth');
+        if (rawSaved) {
+          const parsed = JSON.parse(rawSaved);
+          const authData = castAuthResponse(parsed);
+          if (authData.accessToken) {
+            window.location.href = '/super-admin/dashboard/';
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Could not restore session:', e);
+        localStorage.removeItem('superadmin_auth');
+      }
+    }
+
+    // Sync login and logout state across all open browser tabs
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'superadmin_auth') {
+        if (!e.newValue) {
+          handleLogout(false);
+        } else {
+          try {
+            const authData = castAuthResponse(JSON.parse(e.newValue));
+            currentAuth = authData;
+            renderDashboard(authData);
+          } catch (err) {
+            console.error('Storage sync error:', err);
+          }
+        }
+      }
+    });
+
+    // Run on startup
+    restoreSession();
+  </script>
+</body>
+</html>

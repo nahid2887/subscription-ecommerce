@@ -1,0 +1,2755 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subverse — Premium Digital Subscriptions & Software Licenses</title>
+  <meta name="description"
+    content="Buy premium digital subscriptions with instant delivery. ChatGPT Plus, Netflix 4K, Canva Pro, NordVPN, and cloud storage at unbeatable prices with 100% replacement warranty.">
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM & CSS VARIABLES
+       ========================================================================== */
+    :root,
+    [data-theme="dark"] {
+      --bg-base: #07090e;
+      --bg-surface: #0e121d;
+      --bg-card: rgba(16, 21, 35, 0.75);
+      --bg-card-hover: rgba(22, 29, 48, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.45);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      --panel-bg: rgba(10, 14, 25, 0.85);
+      --input-bg: rgba(15, 20, 34, 0.9);
+      --header-bg: rgba(7, 9, 14, 0.82);
+      --modal-overlay: rgba(3, 5, 10, 0.82);
+      --glow-primary: rgba(99, 102, 241, 0.22);
+      --glow-purple: rgba(168, 85, 247, 0.18);
+      --glow-cyan: rgba(6, 182, 212, 0.15);
+      --card-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+      --tag-bg: rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.92);
+      --bg-card-hover: #ffffff;
+      --border-subtle: rgba(226, 232, 240, 0.9);
+      --border-hover: rgba(99, 102, 241, 0.5);
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-subtle: #94a3b8;
+      --panel-bg: #f1f5f9;
+      --input-bg: #ffffff;
+      --header-bg: rgba(255, 255, 255, 0.88);
+      --modal-overlay: rgba(15, 23, 42, 0.6);
+      --glow-primary: rgba(99, 102, 241, 0.12);
+      --glow-purple: rgba(168, 85, 247, 0.1);
+      --glow-cyan: rgba(6, 182, 212, 0.1);
+      --card-shadow: 0 12px 32px rgba(99, 102, 241, 0.08);
+      --tag-bg: rgba(99, 102, 241, 0.08);
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: rgba(99, 102, 241, 0.15);
+      --accent-purple: #a855f7;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --transition-smooth: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Reset & Base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      position: relative;
+    }
+
+    /* Ambient Background Glows */
+    .ambient-glow-1 {
+      position: fixed;
+      top: -150px;
+      right: -100px;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, var(--glow-primary) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(40px);
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      top: 40%;
+      left: -200px;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, var(--glow-purple) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(50px);
+    }
+
+    .ambient-glow-3 {
+      position: fixed;
+      bottom: -150px;
+      right: 15%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(45px);
+    }
+
+    /* Top Announcement Bar */
+    .top-promo-bar {
+      background: linear-gradient(90deg, #4f46e5, #7c3aed, #06b6d4);
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-align: center;
+      padding: 7px 16px;
+      position: relative;
+      z-index: 101;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .top-promo-badge {
+      background: rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(8px);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== */
+    header.site-header {
+      background: var(--header-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: var(--transition-smooth);
+    }
+
+    .header-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(99, 102, 241, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+    }
+
+    .brand-name {
+      font-size: 1.28rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-name span {
+      background: linear-gradient(135deg, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-store-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    nav.main-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    @media (max-width: 900px) {
+      nav.main-nav {
+        display: none;
+      }
+    }
+
+    .nav-item {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition-smooth);
+    }
+
+    .nav-item:hover {
+      color: var(--text-main);
+      background: var(--tag-bg);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-icon-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-icon-circle:hover {
+      color: var(--text-main);
+      border-color: var(--border-hover);
+      transform: translateY(-1px);
+    }
+
+    .cart-btn-wrap {
+      position: relative;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: linear-gradient(135deg, var(--accent-rose), var(--accent-amber));
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(244, 63, 94, 0.5);
+    }
+
+    .admin-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .admin-link-btn:hover {
+      color: var(--primary);
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    /* ==========================================================================
+       HERO SECTION
+       ========================================================================== */
+    section.hero-section {
+      position: relative;
+      padding: 75px 24px 60px;
+      max-width: 1320px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+      }
+    }
+
+    .hero-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #a5b4fc;
+      margin-bottom: 20px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+      }
+    }
+
+    .hero-title {
+      font-size: clamp(2.3rem, 5vw, 3.8rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+      color: var(--text-main);
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.08rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 620px;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-cta-group {
+        justify-content: center;
+      }
+    }
+
+    .btn-hero-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, #4338ca 100%);
+      color: #fff;
+      font-size: 0.98rem;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+      transition: var(--transition-smooth);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+    }
+
+    .btn-hero-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(99, 102, 241, 0.55);
+    }
+
+    .btn-hero-secondary {
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.98rem;
+      font-weight: 700;
+      padding: 14px 24px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border-subtle);
+      transition: var(--transition-smooth);
+      cursor: pointer;
+    }
+
+    .btn-hero-secondary:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    /* Trust Stats Strip */
+    .hero-stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 24px;
+    }
+
+    @media (max-width: 600px) {
+      .hero-stats-strip {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-val {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .stat-desc {
+      font-size: 0.76rem;
+      color: var(--text-subtle);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Interactive Showcase Card (Hero Right) */
+    .hero-showcase-box {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .hero-featured-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 26px;
+      box-shadow: var(--card-shadow);
+      width: 100%;
+      max-width: 440px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+    }
+
+    .hero-featured-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent-purple), var(--accent-cyan));
+    }
+
+    .hero-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .hero-deal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.35);
+      color: #fb7185;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero-card-img-wrap {
+      height: 160px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.25));
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-card-icon-art {
+      font-size: 3.5rem;
+      filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+    }
+
+    .hero-card-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .hero-card-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Live Interactive Plan Switcher in Hero */
+    .hero-plan-switcher {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 18px;
+    }
+
+    .hero-plan-switcher-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hero-tier-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .hero-tier-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 6px 8px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      transition: var(--transition-smooth);
+    }
+
+    .hero-tier-pill.active {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+      color: var(--text-main);
+    }
+
+    .hero-card-price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .hero-price-amount {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-card-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      color: #fff;
+      border: none;
+      padding: 12px;
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      transition: var(--transition-smooth);
+    }
+
+    .hero-card-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.55);
+    }
+
+    /* Floating badges on hero */
+    .floating-chip {
+      position: absolute;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      padding: 8px 14px;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      animation: floatChip 4s ease-in-out infinite alternate;
+      z-index: 2;
+    }
+
+    .floating-chip-1 {
+      top: -15px;
+      right: -15px;
+      color: var(--accent-emerald);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .floating-chip-2 {
+      bottom: -15px;
+      left: -20px;
+      color: var(--accent-cyan);
+      border-color: rgba(6, 182, 212, 0.35);
+      animation-delay: -2s;
+    }
+
+    @keyframes floatChip {
+      0% {
+        transform: translateY(0px);
+      }
+      100% {
+        transform: translateY(-8px);
+      }
+    }
+
+    /* ==========================================================================
+       PRODUCT CATALOG SECTION (THE CORE)
+       ========================================================================== */
+    section.catalog-section {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 50px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title-wrap {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 36px;
+    }
+
+    .section-subtitle-tag {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      color: var(--text-main);
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+      line-height: 1.55;
+    }
+
+    /* Filter & Search Toolbar */
+    .catalog-toolbar {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      margin-bottom: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .toolbar-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .search-box-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 480px;
+    }
+
+    .search-box-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .search-box-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px 14px 10px 42px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+
+    .search-box-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .sort-select-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sort-select {
+      background: var(--input-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 9px 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .sort-select:focus {
+      border-color: var(--primary);
+    }
+
+    /* Category Filter Pills */
+    .category-pills-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .category-pills-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-filter-pill {
+      background: var(--tag-bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 7px 16px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition-smooth);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .cat-filter-pill:hover {
+      color: var(--text-main);
+      border-color: var(--border-hover);
+    }
+
+    .cat-filter-pill.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    /* ==========================================================================
+       PRODUCT CARDS GRID
+       ========================================================================== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
+      gap: 26px;
+    }
+
+    @media (max-width: 480px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* E-Commerce Product Card Design */
+    .store-product-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition-smooth);
+    }
+
+    .store-product-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      box-shadow: 0 25px 55px rgba(0, 0, 0, 0.5), 0 0 35px var(--glow-primary);
+    }
+
+    /* Card Top Banner */
+    .card-banner-wrap {
+      position: relative;
+      height: 170px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.2));
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .store-product-card:hover .card-banner-img {
+      transform: scale(1.06);
+    }
+
+    .card-banner-placeholder {
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: #818cf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-category-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(10, 14, 25, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #e2e8f0;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .card-instant-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: #34d399;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .card-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .card-product-title {
+      font-size: 1.28rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+
+    .card-sku-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-subtle);
+      background: var(--tag-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.7em;
+    }
+
+    /* MULTI-DEVICE PLAN SELECTOR (The differentiator!) */
+    .card-plan-selector-box {
+      background: var(--panel-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      margin-bottom: 16px;
+    }
+
+    .card-plan-header {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-plan-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .card-plan-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      padding: 5px 10px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: var(--transition-smooth);
+    }
+
+    .card-plan-pill:hover {
+      color: var(--text-main);
+      border-color: rgba(99, 102, 241, 0.35);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .card-plan-pill.active {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: var(--primary);
+      color: #818cf8;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+    }
+
+    /* Price Section */
+    .card-price-section {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--border-subtle);
+    }
+
+    .card-price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .card-price-amount {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .card-price-cycle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .card-device-badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-purple);
+      background: rgba(168, 85, 247, 0.12);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    /* Key Trust Chips: Warranty & Delivery */
+    .card-trust-chips {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .trust-chip-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .trust-chip-warranty {
+      color: var(--accent-amber);
+    }
+
+    .trust-chip-delivery {
+      color: var(--accent-cyan);
+    }
+
+    /* Action Buttons */
+    .card-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 10px;
+    }
+
+    .btn-card-outline {
+      background: var(--tag-bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 10px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-card-outline:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-main);
+      border-color: var(--border-hover);
+    }
+
+    .btn-card-buy {
+      background: linear-gradient(135deg, var(--primary) 0%, #4338ca 100%);
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+      transition: var(--transition-smooth);
+    }
+
+    .btn-card-buy:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    /* Empty state */
+    .empty-catalog-state {
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--bg-card);
+      border: 1px dashed var(--border-subtle);
+      border-radius: var(--radius-xl);
+      display: none;
+    }
+
+    /* ==========================================================================
+       WHY CHOOSE US / 4 PILLARS
+       ========================================================================== */
+    section.features-section {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 70px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 26px 22px;
+      transition: var(--transition-smooth);
+    }
+
+    .feature-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+    }
+
+    .feature-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 1.4rem;
+    }
+
+    .icon-emerald {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+
+    .icon-indigo {
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+    }
+
+    .icon-purple {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+    }
+
+    .icon-amber {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+    }
+
+    .feature-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ==========================================================================
+       CUSTOMER REVIEWS SECTION
+       ========================================================================== */
+    section.reviews-section {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    @media (max-width: 900px) {
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .review-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .stars-row {
+      color: #fbbf24;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+
+    .review-text {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 18px;
+      font-style: italic;
+    }
+
+    .review-user-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .review-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .review-user-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .review-user-meta {
+      font-size: 0.72rem;
+      color: var(--accent-emerald);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       FAQ SECTION
+       ========================================================================== */
+    section.faq-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 60px 24px 90px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: var(--transition-smooth);
+    }
+
+    .faq-question {
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text-main);
+      font-size: 1rem;
+    }
+
+    .faq-question svg {
+      transition: transform 0.3s ease;
+      color: var(--text-muted);
+    }
+
+    .faq-item.open .faq-question svg {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    .faq-answer {
+      padding: 0 22px 18px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .faq-item.open .faq-answer {
+      display: block;
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer.site-footer {
+      background: var(--header-bg);
+      border-top: 1px solid var(--border-subtle);
+      padding: 60px 24px 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.5fr repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+
+    @media (max-width: 900px) {
+      .footer-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .footer-col h4 {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 18px;
+      letter-spacing: -0.01em;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.86rem;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    /* ==========================================================================
+       MODALS: PRODUCT DETAILS & INSTANT CHECKOUT
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--modal-overlay);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      max-width: 640px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+      position: relative;
+      animation: modalSlide 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalSlide {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--tag-bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .modal-close-btn:hover {
+      color: var(--text-main);
+      background: rgba(244, 63, 94, 0.15);
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast-pill {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      animation: toastIn 0.3s ease forwards;
+    }
+
+    .toast-pill.success {
+      border-left: 4px solid var(--accent-emerald);
+    }
+
+    .toast-pill.info {
+      border-left: 4px solid var(--primary);
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+  <div class="ambient-glow-3"></div>
+
+  <!-- Top Announcement Bar -->
+  <div class="top-promo-bar">
+    <span class="top-promo-badge">⚡ Instant Provisioning</span>
+    <span>Get instant digital licenses with 100% replacement warranty & multi-device flexibility.</span>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="brand-wrap">
+        <div class="brand-logo-icon">
+          <svg viewBox="0 0 24 24">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-name">
+          Sub<span>verse</span>
+        </div>
+        <span class="brand-store-tag">Verified Store</span>
+      </a>
+
+      <nav class="main-nav">
+        <a href="#catalog" class="nav-item">Catalog</a>
+        <a href="#why-us" class="nav-item">Why Choose Us</a>
+        <a href="#reviews" class="nav-item">Reviews</a>
+        <a href="#faq" class="nav-item">FAQ</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" class="btn-icon-circle" title="Toggle Dark/Light Mode">
+          <svg id="themeIconSvg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
+        <!-- Cart / Orders Button -->
+        <div class="cart-btn-wrap">
+          <button id="cartDrawerBtn" class="btn-icon-circle" title="View Selected Subscriptions">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </button>
+          <span id="cartCountBadge" class="cart-badge">0</span>
+        </div>
+
+        <!-- Super Admin Portal Link -->
+        <a href="/super-admin/login/" class="admin-link-btn" title="Super Admin Portal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Admin Portal
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       HERO SECTION
+       ========================================================================== -->
+  <section class="hero-section">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="hero-pill-badge">
+          <div class="pulse-dot"></div>
+          <span>Digital Provisioning Engine Live • 60s Delivery</span>
+        </div>
+
+        <h1 class="hero-title">
+          Premium Digital Subscriptions. <br>
+          <span class="gradient-text">At a Fraction of the Cost.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Unlock genuine access to verified software subscriptions and digital tools. Pick the exact device
+          tier you need with complete replacement warranties and instant digital delivery.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#catalog" class="btn-hero-primary">
+            <span>Explore All Products</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#why-us" class="btn-hero-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="10 8 16 12 10 16 10 8"></polygon>
+            </svg>
+            <span>How It Works</span>
+          </a>
+        </div>
+
+        <div class="hero-stats-strip">
+          <div class="stat-item">
+            <span class="stat-val">50,000+</span>
+            <span class="stat-desc">Active Subscribers</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val">&lt; 60s</span>
+            <span class="stat-desc">Instant Delivery</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val">100%</span>
+            <span class="stat-desc">Replacement Warranty</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val">4.9 / 5</span>
+            <span class="stat-desc">Customer Rating ⭐</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Interactive Showcase Card -->
+      <div class="hero-showcase-box">
+        <div class="floating-chip floating-chip-1">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>100% Verified License</span>
+        </div>
+
+        <div class="floating-chip floating-chip-2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span>Activated in 45 Seconds</span>
+        </div>
+
+        <div class="hero-featured-card">
+          <div class="hero-card-header">
+            <span class="hero-deal-badge">🔥 Featured Subscription</span>
+            <span id="heroCardStockTag" style="font-size: 0.76rem; color: var(--accent-emerald); font-weight: 700;">In Stock • Instant</span>
+          </div>
+
+          <div id="heroCardImgWrap" class="hero-card-img-wrap">
+            <div class="hero-card-icon-art">⚡</div>
+          </div>
+
+          <h3 id="heroCardTitle" class="hero-card-title">Featured Subscription</h3>
+          <p id="heroCardMeta" class="hero-card-meta">Select a plan tier to get started</p>
+
+          <!-- Interactive Plan Switcher in Hero (Populated from API) -->
+          <div class="hero-plan-switcher">
+            <div class="hero-plan-switcher-title">
+              <span>Choose Devices:</span>
+              <span id="heroPlanSelectedName" style="color: var(--primary);">1 Device Access</span>
+            </div>
+            <div id="heroTierPills" class="hero-tier-pills">
+              <div class="hero-tier-pill active">1 Device</div>
+              <div class="hero-tier-pill">2 Devices</div>
+              <div class="hero-tier-pill">Team</div>
+            </div>
+          </div>
+
+          <div class="hero-card-price-row">
+            <div>
+              <span id="heroCardPrice" class="hero-price-amount">৳0.00</span>
+              <span id="heroCardCycle" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">/ monthly</span>
+            </div>
+            <span id="heroCardWarranty" style="font-size: 0.72rem; color: var(--accent-amber); font-weight: 700;">🛡️ Verified Warranty</span>
+          </div>
+
+          <button id="heroSubscribeBtn" class="hero-card-btn" onclick="scrollToCatalog()">
+            Browse All Subscriptions
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       PRODUCT CATALOG SECTION (THE CORE)
+       ========================================================================== -->
+  <section id="catalog" class="catalog-section">
+    <div class="section-title-wrap">
+      <span class="section-subtitle-tag">Subscription Catalog</span>
+      <h2 class="section-title">Available Subscriptions</h2>
+      <p class="section-desc">
+        Select a subscription below, choose your preferred device tier, and get instant access credentials in under a minute.
+      </p>
+    </div>
+
+    <!-- Filter & Search Toolbar -->
+    <div class="catalog-toolbar">
+      <div class="toolbar-top-row">
+        <div class="search-box-wrap">
+          <svg class="search-box-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="catalogSearchInput" class="search-box-input"
+            placeholder="Search subscriptions by title, features, or keyword...">
+        </div>
+
+        <div class="sort-select-wrap">
+          <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 600;">Sort By:</span>
+          <select id="catalogSortSelect" class="sort-select">
+            <option value="featured">Featured First</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="name_asc">Name: A to Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div id="categoryPillsRow" class="category-pills-row">
+        <button class="cat-filter-pill active" onclick="filterByCategory('')">All Subscriptions</button>
+      </div>
+    </div>
+
+    <!-- Live Products Grid -->
+    <div id="productsGrid" class="products-grid">
+      <!-- Dynamically Rendered by JavaScript -->
+    </div>
+
+    <!-- Empty Catalog State -->
+    <div id="emptyCatalogState" class="empty-catalog-state">
+      <div style="font-size: 3rem; margin-bottom: 12px;">🔍</div>
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 6px;">No Products Found</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">Try adjusting your search terms or selecting another category.</p>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       WHY CHOOSE US / 4 PILLARS
+       ========================================================================== */ -->
+  <section id="why-us" class="features-section">
+    <div class="section-title-wrap">
+      <span class="section-subtitle-tag">Guaranteed Reliability</span>
+      <h2 class="section-title">Why 50,000+ Customers Trust Subverse</h2>
+      <p class="section-desc">Experience zero downtime, rock-solid warranties, and dedicated customer support.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon-box icon-emerald">⚡</div>
+        <h3 class="feature-title">Instant 60s Delivery</h3>
+        <p class="feature-desc">Our automated provisioning delivers login credentials or activation links to your screen and email immediately after checkout.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box icon-amber">🛡️</div>
+        <h3 class="feature-title">Bulletproof Warranty</h3>
+        <p class="feature-desc">Every purchase includes a dedicated replacement guarantee. If any disruption occurs, our automated system restores your account immediately.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box icon-indigo">📱</div>
+        <h3 class="feature-title">Flexible Device Tiers</h3>
+        <p class="feature-desc">Never overpay for unused seats. Choose 1 Device, 2 Devices, or Family Tiers tailored precisely to your personal or team requirements.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box icon-purple">💬</div>
+        <h3 class="feature-title">24/7 Human Support</h3>
+        <p class="feature-desc">Dedicated human support via WhatsApp and live chat. We are always online to resolve any queries and guide your setup.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       CUSTOMER REVIEWS
+       ========================================================================== -->
+  <section id="reviews" class="reviews-section">
+    <div class="section-title-wrap">
+      <span class="section-subtitle-tag">Social Proof</span>
+      <h2 class="section-title">Loved by Creators, Coders & Teams</h2>
+      <p class="section-desc">Real feedback from verified purchasers around the globe.</p>
+    </div>
+
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div>
+          <div class="stars-row">★★★★★</div>
+          <p class="review-text">"Got my subscription access within 40 seconds of payment. Everything works flawlessly with instant credentials delivery and active guarantee. Incredible service!"</p>
+        </div>
+        <div class="review-user-row">
+          <div class="review-avatar">TH</div>
+          <div>
+            <div class="review-user-name">Tanvir Hasan</div>
+            <div class="review-user-meta">Verified Buyer • Instant Delivery</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div>
+          <div class="stars-row">★★★★★</div>
+          <p class="review-text">"The account profile is completely private and stable. Saved a lot compared to international card charges. Instant delivery directly to my dashboard and email."</p>
+        </div>
+        <div class="review-user-row">
+          <div class="review-avatar">SA</div>
+          <div>
+            <div class="review-user-name">Sarah Ahmed</div>
+            <div class="review-user-meta">Verified Buyer • Replacement Warranty</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div>
+          <div class="stars-row">★★★★★</div>
+          <p class="review-text">"The device plan selection is brilliant — we only pay for the exact devices we use. Dedicated customer support helped us immediately with setup."</p>
+        </div>
+        <div class="review-user-row">
+          <div class="review-avatar">RK</div>
+          <div>
+            <div class="review-user-name">Rashed Karim</div>
+            <div class="review-user-meta">Verified Buyer • Multi-Device Plan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FAQ SECTION
+       ========================================================================== -->
+  <section id="faq" class="faq-section">
+    <div class="section-title-wrap">
+      <span class="section-subtitle-tag">Common Questions</span>
+      <h2 class="section-title">Frequently Asked Questions</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item open">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>How fast do I receive my subscription credentials?</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="faq-answer">
+          Delivery is automated and instant! Within 60 seconds after your checkout is confirmed, your login credentials, profile pin, or invitation link will appear directly on screen and will be emailed to your inbox.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What does the Replacement Warranty cover?</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="faq-answer">
+          Every subscription includes our verified replacement guarantee for the full duration of your chosen plan. If any account issue or password reset occurs, our support team will replace or fix your profile with zero questions asked.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Can I switch between 1 Device and 2 Devices later?</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="faq-answer">
+          Yes! You can choose your initial device tier right on each product card, and easily upgrade or add more devices at any time by contacting our 24/7 support desk.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>What payment methods are supported?</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="faq-answer">
+          We accept bKash, Nagad, Rocket, local Visa/MasterCard debit/credit cards, and international crypto payments with instant verification.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       FOOTER
+       ========================================================================== -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <div class="brand-wrap" style="margin-bottom: 14px;">
+          <div class="brand-logo-icon">
+            <svg viewBox="0 0 24 24">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+              <polyline points="2 17 12 22 22 17"></polyline>
+              <polyline points="2 12 12 17 22 12"></polyline>
+            </svg>
+          </div>
+          <div class="brand-name">Sub<span>verse</span></div>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; max-width: 320px;">
+          The #1 marketplace for premium digital licenses, cloud software, and streaming access with automated 60s delivery and replacement guarantees.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#catalog">All Subscriptions</a></li>
+          <li><a href="#why-us">Why Choose Us</a></li>
+          <li><a href="#reviews">Customer Reviews</a></li>
+          <li><a href="#faq">Frequently Asked Questions</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Trust & Support</h4>
+        <ul class="footer-links">
+          <li><a href="#why-us">Replacement Guarantee</a></li>
+          <li><a href="#why-us">Delivery Policy</a></li>
+          <li><a href="#faq">FAQ & Assistance</a></li>
+          <li><a href="#faq">Terms of Service</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Portals</h4>
+        <ul class="footer-links">
+          <li><a href="/super-admin/login/">Super Admin Login</a></li>
+          <li><a href="/super-admin/products/">Manage Products</a></li>
+          <li><a href="/super-admin/dashboard/">Metrics Dashboard</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div>&copy; 2026 Subverse Marketplace Inc. All rights reserved.</div>
+      <div style="display: flex; gap: 16px;">
+        <span>🔒 256-Bit SSL Secured</span>
+        <span>⚡ Automated Delivery</span>
+        <span>🛡️ 100% Guaranteed</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       PRODUCT DETAIL MODAL
+       ========================================================================== -->
+  <div id="productDetailModal" class="modal-backdrop">
+    <div class="modal-card">
+      <button class="modal-close-btn" onclick="closeDetailModal()">&times;</button>
+
+      <div id="detailModalContent">
+        <!-- Rendered Dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       INSTANT CHECKOUT MODAL
+       ========================================================================== -->
+  <div id="checkoutModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 540px;">
+      <button class="modal-close-btn" onclick="closeCheckoutModal()">&times;</button>
+
+      <div style="margin-bottom: 20px;">
+        <span style="font-size: 0.72rem; font-weight: 800; color: var(--accent-emerald); text-transform: uppercase;">Instant Digital Checkout</span>
+        <h3 id="checkoutTitle" style="font-size: 1.35rem; font-weight: 800; margin-top: 4px;">Confirm Your Order</h3>
+      </div>
+
+      <!-- Order Summary Card -->
+      <div style="background: var(--panel-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 18px; margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+          <span style="color: var(--text-muted); font-size: 0.9rem;">Product:</span>
+          <span id="checkoutProductName" style="font-weight: 700;">—</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+          <span style="color: var(--text-muted); font-size: 0.9rem;">Selected Plan:</span>
+          <span id="checkoutPlanName" style="font-weight: 700; color: var(--primary);">—</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+          <span style="color: var(--text-muted); font-size: 0.9rem;">Device Tier:</span>
+          <span id="checkoutDeviceCount" style="font-weight: 700;">1 Device</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 1px dashed var(--border-subtle);">
+          <span style="font-weight: 800; font-size: 1.05rem;">Total Amount:</span>
+          <span id="checkoutTotalAmount" style="font-weight: 800; font-size: 1.25rem; color: var(--accent-emerald);">৳0.00</span>
+        </div>
+      </div>
+
+      <!-- Checkout Form -->
+      <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Email Address for Delivery</label>
+          <input type="email" id="checkoutEmail" required placeholder="your.email@example.com"
+            style="width: 100%; background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text-main); font-family: inherit; font-size: 0.9rem; outline: none;">
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Payment Method</label>
+          <select id="checkoutPaymentMethod" style="width: 100%; background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text-main); font-family: inherit; font-size: 0.9rem; outline: none; cursor: pointer;">
+            <option value="bkash">bKash Personal / Merchant (Instant)</option>
+            <option value="nagad">Nagad Instant Gateway</option>
+            <option value="card">Visa / MasterCard (Debit & Credit)</option>
+            <option value="crypto">USDT / Crypto (Binance Pay)</option>
+          </select>
+        </div>
+
+        <button type="submit" id="checkoutSubmitBtn" class="btn-card-buy" style="width: 100%; padding: 14px; font-size: 1rem; border-radius: var(--radius-md);">
+          <span>Confirm & Receive Instant Access</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- ==========================================================================
+       CLIENT-SIDE JAVASCRIPT LOGIC & API INTEGRATION
+       ========================================================================== -->
+  <script>
+    // State
+    let productsList = [];
+    let categoriesList = [];
+    let activeCategory = '';
+    let cartItems = [];
+    let activeSelectedPlans = {}; // Map of productId -> planId chosen on card
+
+    // Initialize Storefront
+    async function initStore() {
+      initTheme();
+      await fetchCategories();
+      await fetchProducts();
+    }
+
+    // Theme Management (Dark / Light)
+    function initTheme() {
+      const saved = localStorage.getItem('store_theme') || 'dark';
+      applyTheme(saved);
+
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+      });
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('store_theme', theme);
+      const icon = document.getElementById('themeIconSvg');
+      if (theme === 'light') {
+        icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+      } else {
+        icon.innerHTML = `
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        `;
+      }
+    }
+
+    // Fetch Categories from API
+    async function fetchCategories() {
+      try {
+        const res = await fetch('/api/products/categories/');
+        if (res.ok) {
+          const data = await res.json();
+          categoriesList = data.categories || [];
+          renderCategoryPills();
+        }
+      } catch (err) {
+        console.warn('Could not load categories:', err);
+      }
+    }
+
+    function renderCategoryPills() {
+      const container = document.getElementById('categoryPillsRow');
+      container.innerHTML = `<button class="cat-filter-pill ${activeCategory === '' ? 'active' : ''}" onclick="filterByCategory('')">All Subscriptions</button>`;
+
+      categoriesList.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = `cat-filter-pill ${activeCategory === cat.name ? 'active' : ''}`;
+        btn.textContent = `${cat.name} (${cat.products_count || 0})`;
+        btn.onclick = () => filterByCategory(cat.name);
+        container.appendChild(btn);
+      });
+    }
+
+    function filterByCategory(catName) {
+      activeCategory = catName;
+      renderCategoryPills();
+      filterAndRenderCatalog();
+    }
+
+    // Fetch Products from API
+    async function fetchProducts() {
+      const gridEl = document.getElementById('productsGrid');
+
+      if (gridEl && productsList.length === 0) {
+        // Show aesthetic loading skeleton cards
+        gridEl.innerHTML = Array(3).fill(0).map(() => `
+          <div class="store-product-card" style="opacity: 0.5; pointer-events: none;">
+            <div class="card-banner-wrap" style="background: rgba(255, 255, 255, 0.05); animation: pulse 1.5s infinite;"></div>
+            <div style="height: 22px; width: 70%; background: rgba(255, 255, 255, 0.08); border-radius: 6px; margin-bottom: 10px;"></div>
+            <div style="height: 14px; width: 40%; background: rgba(255, 255, 255, 0.05); border-radius: 4px; margin-bottom: 16px;"></div>
+            <div style="height: 38px; background: rgba(255, 255, 255, 0.06); border-radius: 8px; margin-bottom: 14px;"></div>
+            <div style="height: 30px; width: 50%; background: rgba(255, 255, 255, 0.08); border-radius: 6px;"></div>
+          </div>
+        `).join('');
+      }
+
+      try {
+        const res = await fetch('/api/products/');
+        if (res.ok) {
+          const data = await res.json();
+          productsList = data.products || [];
+
+          // Initialize active plan for each product to its default selected_plan
+          productsList.forEach(p => {
+            if (p.selected_plan && p.selected_plan.id) {
+              activeSelectedPlans[p.id] = p.selected_plan.id;
+            } else if (p.plans && p.plans.length > 0) {
+              activeSelectedPlans[p.id] = p.plans[0].id;
+            }
+          });
+
+          // Populate Hero Featured Showcase Card from the first real product
+          if (productsList.length > 0) {
+            populateHeroCard(productsList[0]);
+          }
+
+          filterAndRenderCatalog();
+        } else {
+          showToast('Failed to load products', 'error');
+        }
+      } catch (err) {
+        console.error('Failed to fetch products:', err);
+        showToast('Network error loading products', 'error');
+      }
+    }
+
+    // Populate Hero Featured Showcase Card using the first product from /api/products/
+    function populateHeroCard(firstProduct) {
+      if (!firstProduct) return;
+
+      const titleEl = document.getElementById('heroCardTitle');
+      const metaEl = document.getElementById('heroCardMeta');
+      const imgWrap = document.getElementById('heroCardImgWrap');
+      const pillsWrap = document.getElementById('heroTierPills');
+      const priceEl = document.getElementById('heroCardPrice');
+      const cycleEl = document.getElementById('heroCardCycle');
+      const planNameEl = document.getElementById('heroPlanSelectedName');
+      const warrantyEl = document.getElementById('heroCardWarranty');
+      const buyBtn = document.getElementById('heroSubscribeBtn');
+
+      if (titleEl) titleEl.textContent = firstProduct.name;
+      const desc = typeof firstProduct.description === 'string' 
+        ? firstProduct.description 
+        : (firstProduct.localized_description || (firstProduct.description && firstProduct.description.en) || 'Premium verified digital subscription.');
+      if (metaEl) metaEl.textContent = desc;
+
+      if (imgWrap) {
+        if (firstProduct.image) {
+          imgWrap.innerHTML = `<img src="${firstProduct.image}" alt="${firstProduct.name}" style="width: 100%; height: 100%; object-fit: cover;">`;
+        } else {
+          imgWrap.innerHTML = `<div class="hero-card-icon-art">${firstProduct.name.charAt(0)}</div>`;
+        }
+      }
+
+      if (warrantyEl && firstProduct.warranty) {
+        warrantyEl.textContent = `🛡️ ${firstProduct.warranty}`;
+      }
+
+      // Populate hero plan pills from product plans
+      if (Array.isArray(firstProduct.plans) && firstProduct.plans.length > 0 && pillsWrap) {
+        pillsWrap.innerHTML = '';
+        const sym = firstProduct.plans[0].currency_symbol || firstProduct.currency_symbol || '৳';
+
+        firstProduct.plans.forEach((pl, idx) => {
+          const pill = document.createElement('div');
+          pill.className = `hero-tier-pill ${idx === 0 ? 'active' : ''}`;
+          pill.textContent = `${pl.devices || 1} Device${(pl.devices || 1) > 1 ? 's' : ''}`;
+          pill.onclick = () => {
+            pillsWrap.querySelectorAll('.hero-tier-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            if (planNameEl) planNameEl.textContent = `${pl.name}`;
+            if (priceEl) priceEl.textContent = `${sym}${parseFloat(pl.price).toFixed(2)}`;
+            if (cycleEl) cycleEl.textContent = `/ ${pl.billing_cycle}`;
+          };
+          pillsWrap.appendChild(pill);
+        });
+
+        const defPlan = firstProduct.selected_plan || firstProduct.plans[0];
+        const defSym = defPlan.currency_symbol || sym;
+        if (planNameEl) planNameEl.textContent = `${defPlan.name}`;
+        if (priceEl) priceEl.textContent = `${defSym}${parseFloat(defPlan.price).toFixed(2)}`;
+        if (cycleEl) cycleEl.textContent = `/ ${defPlan.billing_cycle}`;
+      }
+
+      if (buyBtn) {
+        buyBtn.onclick = () => openCheckoutModal(firstProduct.id);
+        buyBtn.textContent = `Subscribe to ${firstProduct.name}`;
+      }
+    }
+
+    // Filter & Render Catalog Cards
+    function filterAndRenderCatalog() {
+      const search = document.getElementById('catalogSearchInput').value.trim().toLowerCase();
+      const sortVal = document.getElementById('catalogSortSelect').value;
+
+      let filtered = productsList.filter(p => {
+        // Category filter
+        if (activeCategory) {
+          const pCatName = p.category ? p.category.name : '';
+          if (pCatName.toLowerCase() !== activeCategory.toLowerCase()) return false;
+        }
+
+        // Search filter
+        if (search) {
+          const desc = typeof p.description === 'string' ? p.description : (p.localized_description || JSON.stringify(p.description));
+          const matchName = (p.name || '').toLowerCase().includes(search);
+          const matchSku = (p.sku || '').toLowerCase().includes(search);
+          const matchWarranty = (p.warranty || '').toLowerCase().includes(search);
+          const matchDelivery = (p.delivery || '').toLowerCase().includes(search);
+          const matchDesc = desc.toLowerCase().includes(search);
+          if (!matchName && !matchSku && !matchWarranty && !matchDelivery && !matchDesc) return false;
+        }
+
+        return true;
+      });
+
+      // Sorting
+      if (sortVal === 'price_asc') {
+        filtered.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
+      } else if (sortVal === 'price_desc') {
+        filtered.sort((a, b) => parseFloat(b.price || 0) - parseFloat(a.price || 0));
+      } else if (sortVal === 'name_asc') {
+        filtered.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+      }
+
+      const gridEl = document.getElementById('productsGrid');
+      const emptyEl = document.getElementById('emptyCatalogState');
+
+      if (filtered.length === 0) {
+        gridEl.innerHTML = '';
+        emptyEl.style.display = 'block';
+        return;
+      }
+
+      emptyEl.style.display = 'none';
+      gridEl.innerHTML = '';
+      filtered.forEach(p => {
+        gridEl.appendChild(createProductCard(p));
+      });
+    }
+
+    // Create E-Commerce Product Card Element with interactive device plan selector
+    function createProductCard(p) {
+      const card = document.createElement('div');
+      card.className = 'store-product-card';
+      card.id = `product-card-${p.id}`;
+
+      const catName = p.category ? p.category.name : 'Subscription';
+      const descText = typeof p.description === 'string' 
+        ? p.description 
+        : (p.localized_description || (p.description && p.description.en) || 'Instant premium access.');
+
+      // Find current selected plan for this card
+      const activePlanId = activeSelectedPlans[p.id];
+      const activePlan = (p.plans && p.plans.find(pl => pl.id === activePlanId)) || p.selected_plan || (p.plans && p.plans[0]);
+
+      const sym = (activePlan && activePlan.currency_symbol) || p.currency_symbol || '৳';
+      const priceDisplay = activePlan ? `${sym}${parseFloat(activePlan.price).toFixed(2)}` : `${sym}${parseFloat(p.price || 0).toFixed(2)}`;
+      const cycleDisplay = activePlan ? `/ ${activePlan.billing_cycle}` : '/ monthly';
+      const deviceCount = (activePlan && activePlan.devices) ? activePlan.devices : 1;
+      const deviceBadgeText = `${deviceCount} Device${deviceCount > 1 ? 's' : ''}`;
+
+      // Card Banner / Image
+      const bannerMarkup = p.image
+        ? `<img src="${p.image}" alt="${p.name}" class="card-banner-img">`
+        : `<div class="card-banner-placeholder">${p.name.charAt(0)}</div>`;
+
+      // Multi-Plan Selector Pills (The Star Feature)
+      let planPillsMarkup = '';
+      if (Array.isArray(p.plans) && p.plans.length > 0) {
+        const pills = p.plans.map(pl => {
+          const isSelected = activePlan && activePlan.id === pl.id;
+          const plSym = pl.currency_symbol || sym;
+          const plDev = pl.devices ? `${pl.devices}D • ` : '';
+          return `
+            <div class="card-plan-pill ${isSelected ? 'active' : ''}" 
+                 onclick="switchCardPlan(${p.id}, ${pl.id})"
+                 title="${pl.name} - ${plSym}${parseFloat(pl.price).toFixed(2)}">
+              ${isSelected ? '● ' : ''}${plDev}${plSym}${parseFloat(pl.price).toFixed(0)}
+            </div>
+          `;
+        }).join('');
+
+        planPillsMarkup = `
+          <div class="card-plan-selector-box">
+            <div class="card-plan-header">
+              <span>Choose Device Tier:</span>
+              <span style="color: var(--primary); font-size: 0.68rem;">${activePlan ? activePlan.name : ''}</span>
+            </div>
+            <div class="card-plan-pills">
+              ${pills}
+            </div>
+          </div>
+        `;
+      }
+
+      card.innerHTML = `
+        <div>
+          <div class="card-banner-wrap">
+            <span class="card-category-badge">${catName}</span>
+            <span class="card-instant-tag">⚡ Instant Access</span>
+            ${bannerMarkup}
+          </div>
+
+          <div class="card-title-row">
+            <h3 class="card-product-title">${p.name}</h3>
+            <span class="card-sku-code">${p.sku || 'PRD'}</span>
+          </div>
+
+          <p class="card-desc" title="${descText}">${descText}</p>
+
+          ${planPillsMarkup}
+
+          <div class="card-price-section">
+            <div class="card-price-wrap">
+              <span id="price-amount-${p.id}" class="card-price-amount">${priceDisplay}</span>
+              <span id="price-cycle-${p.id}" class="card-price-cycle">${cycleDisplay}</span>
+            </div>
+            <span id="device-badge-${p.id}" class="card-device-badge">📱 ${deviceBadgeText}</span>
+          </div>
+
+          <div class="card-trust-chips">
+            <div class="trust-chip-row trust-chip-warranty">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>${p.warranty || 'Replacement Warranty Guaranteed'}</span>
+            </div>
+            <div class="trust-chip-row trust-chip-delivery">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <span>${p.delivery || 'Instant 60s Credentials Delivery'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions-grid">
+          <button class="btn-card-outline" onclick="openProductDetailModal(${p.id})">
+            Details
+          </button>
+          <button class="btn-card-buy" onclick="openCheckoutModal(${p.id})">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            Subscribe
+          </button>
+        </div>
+      `;
+
+      return card;
+    }
+
+    // Switch Plan directly on a Product Card
+    window.switchCardPlan = function(productId, planId) {
+      activeSelectedPlans[productId] = planId;
+      const product = productsList.find(p => p.id === productId);
+      if (!product) return;
+
+      const plan = product.plans.find(pl => pl.id === planId);
+      if (!plan) return;
+
+      // Update price and device badge on DOM with micro-animation
+      const priceEl = document.getElementById(`price-amount-${productId}`);
+      const cycleEl = document.getElementById(`price-cycle-${productId}`);
+      const devBadge = document.getElementById(`device-badge-${productId}`);
+
+      const sym = plan.currency_symbol || product.currency_symbol || '৳';
+      if (priceEl) priceEl.textContent = `${sym}${parseFloat(plan.price).toFixed(2)}`;
+      if (cycleEl) cycleEl.textContent = `/ ${plan.billing_cycle}`;
+      if (devBadge) devBadge.textContent = `📱 ${plan.devices || 1} Device${(plan.devices || 1) > 1 ? 's' : ''}`;
+
+      // Update active pill state
+      const cardEl = document.getElementById(`product-card-${productId}`);
+      if (cardEl) {
+        cardEl.querySelectorAll('.card-plan-pill').forEach(pill => pill.classList.remove('active'));
+        const pills = cardEl.querySelectorAll('.card-plan-pill');
+        const planIdx = product.plans.findIndex(pl => pl.id === planId);
+        if (pills[planIdx]) pills[planIdx].classList.add('active');
+      }
+
+      showToast(`Selected: ${plan.name} (${sym}${parseFloat(plan.price).toFixed(2)})`, 'info');
+    };
+
+    // Hero plan switcher simulation
+    window.switchHeroPlan = function(tierName, price, pillEl) {
+      document.querySelectorAll('.hero-tier-pill').forEach(p => p.classList.remove('active'));
+      pillEl.classList.add('active');
+      document.getElementById('heroPlanSelectedName').textContent = `${tierName} Access`;
+      document.getElementById('heroCardPrice').textContent = price;
+    };
+
+    window.scrollToCatalog = function() {
+      document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Open Detailed Product Modal
+    window.openProductDetailModal = function(productId) {
+      const p = productsList.find(item => item.id === productId);
+      if (!p) return;
+
+      const activePlanId = activeSelectedPlans[p.id];
+      const activePlan = (p.plans && p.plans.find(pl => pl.id === activePlanId)) || p.selected_plan || (p.plans && p.plans[0]);
+      const sym = (activePlan && activePlan.currency_symbol) || p.currency_symbol || '৳';
+      const priceVal = activePlan ? `${sym}${parseFloat(activePlan.price).toFixed(2)}` : 'N/A';
+
+      // Features list
+      let featuresMarkup = '';
+      if (Array.isArray(p.features) && p.features.length > 0) {
+        featuresMarkup = p.features.map(f => `
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--text-main); margin-bottom: 6px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>${f}</span>
+          </div>
+        `).join('');
+      } else {
+        featuresMarkup = '<div style="color: var(--text-muted); font-size: 0.85rem;">Full feature access included.</div>';
+      }
+
+      // Plans comparison table
+      let plansTable = '';
+      if (Array.isArray(p.plans) && p.plans.length > 0) {
+        const rows = p.plans.map(pl => {
+          const isSelected = activePlan && activePlan.id === pl.id;
+          return `
+            <tr style="border-bottom: 1px solid var(--border-subtle); background: ${isSelected ? 'rgba(99, 102, 241, 0.12)' : 'transparent'};">
+              <td style="padding: 10px; font-weight: 700;">${pl.name}</td>
+              <td style="padding: 10px;">${pl.devices || 1} Device${(pl.devices || 1) > 1 ? 's' : ''}</td>
+              <td style="padding: 10px; font-weight: 800; color: var(--primary);">${sym}${parseFloat(pl.price).toFixed(2)}</td>
+              <td style="padding: 10px; text-align: right;">
+                <button type="button" onclick="switchCardPlan(${p.id}, ${pl.id}); openProductDetailModal(${p.id});" 
+                        style="padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; border: 1px solid var(--primary); background: ${isSelected ? 'var(--primary)' : 'transparent'}; color: #fff;">
+                  ${isSelected ? 'Selected' : 'Choose'}
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        plansTable = `
+          <div style="margin: 20px 0;">
+            <h4 style="font-size: 0.88rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; color: var(--text-subtle);">Available Plan Tiers</h4>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem;">
+              <thead>
+                <tr style="border-bottom: 2px solid var(--border-subtle); text-align: left; color: var(--text-muted);">
+                  <th style="padding: 8px 10px;">Plan Tier</th>
+                  <th style="padding: 8px 10px;">Devices</th>
+                  <th style="padding: 8px 10px;">Price</th>
+                  <th style="padding: 8px 10px; text-align: right;">Action</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      const desc = typeof p.description === 'string' ? p.description : (p.localized_description || JSON.stringify(p.description));
+
+      const content = document.getElementById('detailModalContent');
+      content.innerHTML = `
+        <div style="margin-bottom: 16px;">
+          <span style="font-size: 0.72rem; font-weight: 800; color: var(--primary); text-transform: uppercase;">${p.category ? p.category.name : 'Subscription'}</span>
+          <h2 style="font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">${p.name}</h2>
+          <div style="font-size: 0.75rem; color: var(--text-subtle); font-family: 'JetBrains Mono', monospace;">SKU: ${p.sku || 'N/A'}</div>
+        </div>
+
+        <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">${desc}</p>
+
+        <div style="background: var(--panel-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+          <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-subtle); margin-bottom: 10px;">Key Features Included</div>
+          ${featuresMarkup}
+        </div>
+
+        ${plansTable}
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
+          <div style="background: var(--panel-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px;">
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--accent-amber); text-transform: uppercase;">🛡️ Guarantee</div>
+            <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-main); margin-top: 2px;">${p.warranty || 'Replacement Warranty'}</div>
+          </div>
+          <div style="background: var(--panel-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px;">
+            <div style="font-size: 0.7rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">⚡ Delivery</div>
+            <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-main); margin-top: 2px;">${p.delivery || 'Instant Provisioning'}</div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+          <div>
+            <div style="font-size: 0.72rem; color: var(--text-subtle); font-weight: 700; text-transform: uppercase;">Active Plan Price</div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-emerald);">${priceVal}</div>
+          </div>
+          <button class="btn-card-buy" style="padding: 12px 24px; font-size: 0.95rem;" onclick="closeDetailModal(); openCheckoutModal(${p.id});">
+            Proceed to Checkout
+          </button>
+        </div>
+      `;
+
+      document.getElementById('productDetailModal').style.display = 'flex';
+    };
+
+    window.closeDetailModal = function() {
+      document.getElementById('productDetailModal').style.display = 'none';
+    };
+
+    // Open Instant Checkout Modal
+    let pendingCheckoutProduct = null;
+    let pendingCheckoutPlan = null;
+
+    window.openCheckoutModal = function(productId) {
+      const p = productsList.find(item => item.id === productId);
+      if (!p) return;
+
+      const activePlanId = activeSelectedPlans[p.id];
+      const activePlan = (p.plans && p.plans.find(pl => pl.id === activePlanId)) || p.selected_plan || (p.plans && p.plans[0]);
+      if (!activePlan) return;
+
+      pendingCheckoutProduct = p;
+      pendingCheckoutPlan = activePlan;
+
+      const sym = activePlan.currency_symbol || p.currency_symbol || '৳';
+
+      document.getElementById('checkoutProductName').textContent = p.name;
+      document.getElementById('checkoutPlanName').textContent = activePlan.name;
+      document.getElementById('checkoutDeviceCount').textContent = `${activePlan.devices || 1} Device${(activePlan.devices || 1) > 1 ? 's' : ''}`;
+      document.getElementById('checkoutTotalAmount').textContent = `${sym}${parseFloat(activePlan.price).toFixed(2)}`;
+
+      document.getElementById('checkoutModal').style.display = 'flex';
+    };
+
+    window.closeCheckoutModal = function() {
+      document.getElementById('checkoutModal').style.display = 'none';
+    };
+
+    // Checkout Submission Simulation
+    window.handleCheckoutSubmit = function(e) {
+      e.preventDefault();
+      const email = document.getElementById('checkoutEmail').value;
+      const method = document.getElementById('checkoutPaymentMethod').value;
+      const btn = document.getElementById('checkoutSubmitBtn');
+
+      btn.disabled = true;
+      btn.textContent = 'Processing Instant License...';
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Confirm & Receive Instant Access</span>';
+        closeCheckoutModal();
+
+        // Update cart badge
+        cartItems.push({ product: pendingCheckoutProduct, plan: pendingCheckoutPlan });
+        document.getElementById('cartCountBadge').textContent = cartItems.length;
+
+        showToast(`🎉 Order confirmed! Access credentials sent to ${email}`, 'success');
+      }, 1200);
+    };
+
+    // Cart Drawer Click
+    document.getElementById('cartDrawerBtn').addEventListener('click', () => {
+      if (cartItems.length === 0) {
+        showToast('Your subscriptions list is currently empty. Choose a product to subscribe!', 'info');
+      } else {
+        showToast(`You have ${cartItems.length} active subscription orders queued.`, 'success');
+      }
+    });
+
+    // FAQ Accordion Toggle
+    window.toggleFaq = function(el) {
+      const parent = el.closest('.faq-item');
+      parent.classList.toggle('open');
+    };
+
+    // Search and Sort Event Listeners
+    document.getElementById('catalogSearchInput').addEventListener('input', filterAndRenderCatalog);
+    document.getElementById('catalogSortSelect').addEventListener('change', filterAndRenderCatalog);
+
+    // Toast Utility
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast-pill ${type}`;
+      toast.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>${msg}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(30px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Initialize Store on DOM ready
+    document.addEventListener('DOMContentLoaded', initStore);
+  </script>
+</body>
+
+</html>

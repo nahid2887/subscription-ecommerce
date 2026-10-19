@@ -1,0 +1,1975 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile — Subscription Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ----------------------------------------------------
+       THEME VARIABLES: Dark & Day Modes
+    ---------------------------------------------------- */
+    :root, [data-theme="dark"] {
+      --bg-base: #090d16;
+      --header-bg: rgba(13, 17, 30, 0.85);
+      --card-bg: rgba(16, 22, 38, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      --text-main: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --panel-bg: rgba(11, 15, 27, 0.7);
+      --panel-border: rgba(255, 255, 255, 0.06);
+      --input-bg: #05070d;
+      --input-border: rgba(255, 255, 255, 0.1);
+      --btn-secondary-bg: rgba(255, 255, 255, 0.06);
+      --btn-secondary-hover: rgba(255, 255, 255, 0.12);
+      --btn-secondary-text: #cbd5e1;
+      --btn-secondary-border: rgba(255, 255, 255, 0.1);
+      --theme-toggle-bg: rgba(255, 255, 255, 0.08);
+      --theme-toggle-border: rgba(255, 255, 255, 0.12);
+      --theme-toggle-text: #fbbf24;
+      --glow-1: rgba(99, 102, 241, 0.15);
+      --glow-2: rgba(168, 85, 247, 0.12);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f4f6fb;
+      --header-bg: rgba(255, 255, 255, 0.9);
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --card-border: rgba(226, 232, 240, 0.95);
+      --card-shadow: 0 10px 30px rgba(99, 102, 241, 0.07), 0 2px 6px rgba(0, 0, 0, 0.03);
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --panel-bg: #f8fafc;
+      --panel-border: #e2e8f0;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --btn-secondary-bg: #ffffff;
+      --btn-secondary-hover: #f1f5f9;
+      --btn-secondary-text: #334155;
+      --btn-secondary-border: #cbd5e1;
+      --theme-toggle-bg: #ffffff;
+      --theme-toggle-border: #cbd5e1;
+      --theme-toggle-text: #475569;
+      --glow-1: rgba(99, 102, 241, 0.12);
+      --glow-2: rgba(56, 189, 248, 0.12);
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.35);
+      --accent-purple: #a855f7;
+      --accent-cyan: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      overflow-x: hidden;
+    }
+
+    /* Ambient background glows */
+    .ambient-glow-1 {
+      position: fixed;
+      top: -160px;
+      left: -160px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--glow-1) 0%, rgba(99, 102, 241, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(70px);
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -160px;
+      right: -160px;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, var(--glow-2) 0%, rgba(168, 85, 247, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(75px);
+    }
+
+    /* ----------------------------------------------------
+       DASHBOARD HEADER
+    ---------------------------------------------------- */
+    .dash-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--header-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition-smooth);
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-logo-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    .brand-title-group h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-version {
+      font-size: 0.68rem;
+      padding: 2px 7px;
+      background: rgba(99, 102, 241, 0.14);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: var(--primary);
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    /* Header Nav Links */
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link {
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--text-main);
+      background: var(--btn-secondary-hover);
+    }
+
+    .nav-link.active {
+      color: var(--primary);
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+    }
+
+    /* Header Actions */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .theme-toggle-btn {
+      background: var(--theme-toggle-bg);
+      border: 1px solid var(--theme-toggle-border);
+      color: var(--theme-toggle-text);
+      padding: 7px 12px;
+      border-radius: 9999px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: var(--transition-smooth);
+    }
+
+    .theme-toggle-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* User Profile Pill */
+    .user-profile-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--btn-secondary-bg);
+      border: 1px solid var(--btn-secondary-border);
+      padding: 5px 14px 5px 6px;
+      border-radius: 9999px;
+      cursor: pointer;
+      user-select: none;
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition-smooth);
+      outline: none;
+    }
+
+    .user-profile-pill:hover, .user-profile-pill.active {
+      border-color: rgba(99, 102, 241, 0.5);
+      background: var(--btn-secondary-hover);
+      box-shadow: 0 4px 18px rgba(99, 102, 241, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .user-avatar-sm {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      box-shadow: 0 2px 8px var(--primary-glow);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .user-avatar-sm img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 50%;
+    }
+
+    .user-pill-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .user-pill-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .user-pill-role {
+      font-size: 0.7rem;
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    .btn-signout-header {
+      background: var(--btn-secondary-bg);
+      border: 1px solid var(--btn-secondary-border);
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 9999px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+      outline: none;
+    }
+
+    .btn-signout-header:hover {
+      color: var(--danger);
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.35);
+      transform: translateY(-1px);
+    }
+
+    /* ----------------------------------------------------
+       PAGE CONTAINER
+    ---------------------------------------------------- */
+    .page-container {
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 20px;
+      flex: 1;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Breadcrumbs */
+    .breadcrumb-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .breadcrumb-bar a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .breadcrumb-bar a:hover {
+      color: var(--primary);
+    }
+
+    .breadcrumb-separator {
+      opacity: 0.5;
+    }
+
+    /* Toast Notification */
+    .toast-notification {
+      position: fixed;
+      top: 80px;
+      right: 28px;
+      z-index: 1200;
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      animation: slideIn 0.3s ease;
+    }
+
+    .toast-notification.success {
+      background: rgba(16, 185, 129, 0.95);
+      color: #fff;
+    }
+
+    .toast-notification.error {
+      background: rgba(239, 68, 68, 0.95);
+      color: #fff;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* ----------------------------------------------------
+       HERO PROFILE CARD
+    ---------------------------------------------------- */
+    .profile-hero-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--accent-purple));
+    }
+
+    .hero-identity-group {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .hero-avatar-wrap {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .hero-avatar-lg {
+      width: 78px;
+      height: 78px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: #fff;
+      box-shadow: 0 10px 25px var(--primary-glow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-avatar-lg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 20px;
+    }
+
+    .hero-avatar-edit-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      opacity: 0;
+      transition: var(--transition-smooth);
+      color: #fff;
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      z-index: 2;
+    }
+
+    .hero-avatar-wrap:hover .hero-avatar-edit-overlay {
+      opacity: 1;
+    }
+
+    .hero-badge-shield {
+      position: absolute;
+      bottom: -3px;
+      right: -3px;
+      background: var(--success);
+      color: #fff;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px var(--success);
+      border: 2px solid var(--card-bg);
+    }
+
+    .hero-info-text h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .hero-username-handle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 3px;
+    }
+
+    .hero-badges-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .role-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+    }
+
+    .role-superuser {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: var(--primary);
+    }
+
+    .role-status {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--success);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background-color: var(--success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-action {
+      background: var(--btn-secondary-bg);
+      border: 1px solid var(--btn-secondary-border);
+      color: var(--btn-secondary-text);
+      padding: 9px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-action:hover {
+      background: var(--btn-secondary-hover);
+      color: var(--text-main);
+      transform: translateY(-1px);
+    }
+
+    .btn-action.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      border: none;
+      color: #fff;
+      box-shadow: 0 4px 15px var(--primary-glow);
+    }
+
+    .btn-action.primary:hover {
+      box-shadow: 0 6px 20px var(--primary-glow);
+    }
+
+    /* ----------------------------------------------------
+       SIMPLE PROFILE INFORMATION CARD
+    ---------------------------------------------------- */
+    .profile-details-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 24px;
+    }
+
+    .card-title-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--panel-border);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .card-title-header h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(99, 102, 241, 0.12);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .info-field-box {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field-label {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .field-value {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--text-main);
+      word-break: break-all;
+    }
+
+    .email-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .copy-pill-btn {
+      background: var(--btn-secondary-bg);
+      border: 1px solid var(--btn-secondary-border);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: var(--transition-smooth);
+      white-space: nowrap;
+    }
+
+    .copy-pill-btn:hover {
+      color: var(--primary);
+      background: var(--btn-secondary-hover);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+
+    /* ----------------------------------------------------
+       EDIT PROFILE MODAL
+    ---------------------------------------------------- */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .edit-modal-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 540px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      overflow: hidden;
+      transform: scale(0.92);
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-overlay.open .edit-modal-card {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--panel-border);
+    }
+
+    .modal-header h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      transition: var(--transition-smooth);
+    }
+
+    .modal-close-btn:hover {
+      background: var(--btn-secondary-hover);
+      color: var(--text-main);
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .edit-notice-banner {
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 520px) {
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lock-pill {
+      font-size: 0.68rem;
+      color: var(--warning);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 600;
+      text-transform: none;
+    }
+
+    .form-input {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.92rem;
+      outline: none;
+      transition: var(--transition-smooth);
+      width: 100%;
+    }
+
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .form-input:disabled {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      border-style: dashed;
+    }
+
+    .password-section-toggle {
+      border-top: 1px solid var(--panel-border);
+      padding-top: 14px;
+      margin-top: 16px;
+      margin-bottom: 14px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .checkbox-container input {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .password-inputs-wrap {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
+      gap: 12px;
+      flex-direction: column;
+    }
+
+    .password-inputs-wrap.open {
+      display: flex;
+    }
+
+    .form-alert {
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .form-alert.error {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #f87171;
+    }
+
+    .form-alert.success {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+    }
+
+    /* Modal Avatar Upload Group */
+    .avatar-upload-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-md);
+    }
+
+    .avatar-preview-box {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 4px 14px var(--primary-glow);
+      position: relative;
+    }
+
+    .avatar-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 16px;
+    }
+
+    .avatar-upload-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .avatar-upload-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .avatar-upload-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-upload-avatar {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+      user-select: none;
+    }
+
+    .btn-upload-avatar:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 3px 10px var(--primary-glow);
+    }
+
+    .btn-remove-avatar {
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-remove-avatar:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: var(--danger);
+    }
+
+    .avatar-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--panel-border);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* ----------------------------------------------------
+       FOOTER
+    ---------------------------------------------------- */
+    .dash-footer {
+      border-top: 1px solid var(--card-border);
+      background: var(--header-bg);
+      backdrop-filter: blur(16px);
+      padding: 20px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-top: auto;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Toast Notification -->
+  <div class="toast-notification success" id="toastNotification">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="toastMessage">Profile updated successfully!</span>
+  </div>
+
+  <!-- ----------------- TOP HEADER ----------------- -->
+  <header class="dash-header">
+    <a href="/super-admin/dashboard/" class="brand-section">
+      <div class="brand-logo-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
+      <div class="brand-title-group">
+        <h1>Subscription Admin <span class="brand-version">v1.0</span></h1>
+      </div>
+    </a>
+
+    <nav class="header-nav">
+      <a href="/super-admin/dashboard/" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Overview
+      </a>
+      <a href="/super-admin/dashboard/#subscribersSection" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        Subscribers
+      </a>
+      <a href="/super-admin/dashboard/#plansSection" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+        Plans
+      </a>
+      <a href="/super-admin/products/" class="nav-link">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+          <line x1="12" y1="22.08" x2="12" y2="12"></line>
+        </svg>
+        Products
+      </a>
+      <a href="/super-admin/profile/" class="nav-link active">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        Profile
+      </a>
+    </nav>
+
+    <div class="header-actions">
+      <!-- Dark and Day Mode toggle -->
+      <button class="theme-toggle-btn" id="themeToggleBtn" type="button" title="Switch Theme">
+        <span id="themeIcon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </span>
+        <span id="themeLabel">Day Mode</span>
+      </button>
+
+      <!-- Superuser Profile Pill (Active on Profile Page) -->
+      <a href="/super-admin/profile/" class="user-profile-pill active" id="userProfileBtn" title="Current Profile Page">
+        <div class="user-avatar-sm" id="userAvatarSm">N</div>
+        <div class="user-pill-text">
+          <span class="user-pill-name" id="userPillName">nahid</span>
+          <span class="user-pill-role">Superuser</span>
+        </div>
+      </a>
+
+      <!-- Sign Out Button -->
+      <button class="btn-signout-header" id="logoutBtn" type="button" title="Sign Out">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        <span>Logout</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ----------------- MAIN BODY ----------------- -->
+  <main class="page-container">
+    <!-- Breadcrumbs -->
+    <div class="breadcrumb-bar">
+      <a href="/super-admin/dashboard/">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+        Dashboard
+      </a>
+      <span class="breadcrumb-separator">/</span>
+      <span style="color: var(--text-main); font-weight: 600;">My Profile</span>
+    </div>
+
+    <!-- Hero Profile Card -->
+    <div class="profile-hero-card">
+      <div class="hero-identity-group">
+        <div class="hero-avatar-wrap" id="heroAvatarWrap" title="Click to change profile picture">
+          <div class="hero-avatar-lg" id="profileAvatarLg">N</div>
+          <div class="hero-avatar-edit-overlay">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            <span>Change</span>
+          </div>
+          <div class="hero-badge-shield" title="Verified Superuser">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="hero-info-text">
+          <h2 id="profileDisplayName">nahid</h2>
+          <div class="hero-username-handle" id="profileHandle">@nahid</div>
+          <div class="hero-badges-row">
+            <span class="role-badge role-superuser">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              Super Administrator
+            </span>
+            <span class="role-badge role-status">
+              <span class="pulse-dot"></span>
+              Active Account
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn-action primary" id="openEditModalBtn" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Edit Profile
+        </button>
+        <a href="/super-admin/dashboard/" class="btn-action">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          Dashboard
+        </a>
+      </div>
+    </div>
+
+    <!-- Simple Profile Information Card -->
+    <div class="profile-details-card">
+      <div class="card-title-header">
+        <h3>
+          <div class="card-icon-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          Profile Information
+        </h3>
+        <span style="font-size: 0.74rem; color: var(--text-muted); font-weight: 600;">Personal Details</span>
+      </div>
+
+      <div class="details-grid">
+        <div class="info-field-box">
+          <span class="field-label">User ID</span>
+          <span class="field-value" id="fieldUserId" style="font-family: 'JetBrains Mono', monospace;">#1</span>
+        </div>
+
+        <div class="info-field-box">
+          <span class="field-label">Username</span>
+          <span class="field-value" id="fieldUsername">nahid</span>
+        </div>
+
+        <div class="info-field-box">
+          <span class="field-label">First Name</span>
+          <span class="field-value" id="fieldFirstName" style="color: var(--text-secondary);">&mdash;</span>
+        </div>
+
+        <div class="info-field-box">
+          <span class="field-label">Last Name</span>
+          <span class="field-value" id="fieldLastName" style="color: var(--text-secondary);">&mdash;</span>
+        </div>
+
+        <div class="info-field-box">
+          <span class="field-label">Full Display Name</span>
+          <span class="field-value" id="fieldFullName">Super Admin</span>
+        </div>
+
+        <div class="info-field-box">
+          <span class="field-label">Account Role</span>
+          <span class="field-value" id="fieldRole" style="color: var(--primary);">Super Administrator</span>
+        </div>
+
+        <div class="info-field-box" style="grid-column: span 2;">
+          <span class="field-label">Email Address</span>
+          <div class="email-container">
+            <span class="field-value" id="fieldEmail" style="color: var(--primary);">nahid2887@gmail.com</span>
+            <button class="copy-pill-btn" id="copyEmailBtn" type="button" title="Copy Email">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span id="copyEmailText">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="info-field-box">
+          <span class="field-label">Staff Member</span>
+          <span class="field-value" id="fieldStaff">Yes (Staff Access)</span>
+        </div>
+
+        <div class="info-field-box">
+          <span class="field-label">Account Status</span>
+          <span class="field-value" id="fieldActive" style="color: var(--success); display: flex; align-items: center; gap: 6px;">
+            <span class="pulse-dot"></span> Active
+          </span>
+        </div>
+
+        <div class="info-field-box" style="grid-column: span 2;">
+          <span class="field-label">Date Joined</span>
+          <span class="field-value" id="fieldDateJoined">Oct 16, 2026</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ----------------- EDIT PROFILE MODAL ----------------- -->
+  <div class="modal-overlay" id="editProfileModal" aria-hidden="true">
+    <div class="edit-modal-card" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+      <div class="modal-header">
+        <h3 id="editModalTitle">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+          Edit Profile Information
+        </h3>
+        <button class="modal-close-btn" id="closeEditModalBtn" type="button" aria-label="Close modal">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <form id="editProfileForm">
+        <div class="modal-body">
+          <div class="edit-notice-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink: 0; color: var(--primary);">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Username and email are protected system identifiers and cannot be modified.</span>
+          </div>
+
+          <div id="editAlertBox" class="form-alert"></div>
+
+          <!-- Profile Picture Upload Field -->
+          <div class="avatar-upload-group">
+            <div class="avatar-preview-box" id="editAvatarPreview">
+              <span id="editAvatarInitial">N</span>
+            </div>
+            <div class="avatar-upload-controls">
+              <div class="avatar-upload-label">Profile Picture</div>
+              <div class="avatar-upload-buttons">
+                <label for="editAvatarInput" class="btn-upload-avatar">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                  </svg>
+                  <span>Upload Image</span>
+                </label>
+                <input type="file" id="editAvatarInput" accept="image/png, image/jpeg, image/webp, image/gif" style="display: none;">
+                <button type="button" class="btn-remove-avatar" id="editAvatarRemoveBtn" style="display: none;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                  <span>Remove Photo</span>
+                </button>
+              </div>
+              <span class="avatar-hint" id="avatarUploadStatus">PNG, JPG, WebP or GIF (max. 5MB)</span>
+            </div>
+          </div>
+
+          <!-- Locked Username & Email (Disabled) -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="editUsername">
+                <span>Username</span>
+                <span class="lock-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  Locked
+                </span>
+              </label>
+              <input type="text" id="editUsername" class="form-input" disabled readonly>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editEmail">
+                <span>Email Address</span>
+                <span class="lock-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  Locked
+                </span>
+              </label>
+              <input type="email" id="editEmail" class="form-input" disabled readonly>
+            </div>
+          </div>
+
+          <!-- Editable First & Last Name -->
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="editFirstName">First Name</label>
+              <input type="text" id="editFirstName" class="form-input" placeholder="e.g. Nahid">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editLastName">Last Name</label>
+              <input type="text" id="editLastName" class="form-input" placeholder="e.g. Hasan">
+            </div>
+          </div>
+
+          <!-- Password Change Collapsible Toggle -->
+          <div class="password-section-toggle">
+            <label class="checkbox-container">
+              <input type="checkbox" id="changePasswordCheckbox">
+              <span>Change account password</span>
+            </label>
+
+            <div class="password-inputs-wrap" id="passwordInputsWrap">
+              <div class="form-group" style="margin-bottom: 8px;">
+                <label class="form-label" for="editCurrentPassword">Current Password</label>
+                <input type="password" id="editCurrentPassword" class="form-input" placeholder="Enter current password to verify">
+              </div>
+
+              <div class="form-row" style="margin-bottom: 0;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="editNewPassword">New Password</label>
+                  <input type="password" id="editNewPassword" class="form-input" placeholder="Min. 6 characters">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="editConfirmPassword">Confirm Password</label>
+                  <input type="password" id="editConfirmPassword" class="form-input" placeholder="Repeat new password">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-action" id="cancelEditBtn">Cancel</button>
+          <button type="submit" class="btn-action primary" id="saveProfileBtn">
+            <span id="saveProfileBtnText">Save Changes</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ----------------- FOOTER ----------------- -->
+  <footer class="dash-footer">
+    <div>
+      <strong>Subscription Admin Portal</strong> &bull; User Profile Information
+    </div>
+    <div class="footer-links">
+      <a href="/super-admin/dashboard/">Dashboard</a>
+      <a href="/super-admin/dashboard/#subscribersSection">Subscribers</a>
+      <a href="/super-admin/dashboard/#plansSection">Plans</a>
+      <span style="opacity: 0.5;">&bull;</span>
+      <span>System Status: 100% Operational</span>
+    </div>
+  </footer>
+
+  <script>
+    /**
+     * ----------------------------------------------------
+     * Theme Switcher (Dark & Day Mode)
+     * ----------------------------------------------------
+     */
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeLabel = document.getElementById('themeLabel');
+
+    const sunSvg = `
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+    `;
+
+    const moonSvg = `
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    `;
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('superadmin_theme', theme);
+
+      if (theme === 'light') {
+        themeIcon.innerHTML = moonSvg;
+        themeLabel.textContent = 'Dark Mode';
+      } else {
+        themeIcon.innerHTML = sunSvg;
+        themeLabel.textContent = 'Day Mode';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('superadmin_theme') || 'dark';
+    applyTheme(savedTheme);
+
+    themeToggleBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    /**
+     * ----------------------------------------------------
+     * Auth Guard & Profile Data Population
+     * ----------------------------------------------------
+     */
+    let authSession = null;
+
+    function getStoredAuth() {
+      try {
+        const raw = localStorage.getItem('superadmin_auth');
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function renderProfileData(user) {
+      if (!user) return;
+
+      const username = user.username || 'nahid';
+      const initial = username.charAt(0).toUpperCase();
+      const firstName = user.first_name !== undefined ? user.first_name : (user.firstName || '');
+      const lastName = user.last_name !== undefined ? user.last_name : (user.lastName || '');
+      const fullName = (firstName || lastName) ? `${firstName} ${lastName}`.trim() : username;
+      const email = user.email || 'nahid2887@gmail.com';
+      const isSuper = (user.isSuperuser !== undefined) ? user.isSuperuser : (user.is_superuser !== undefined ? user.is_superuser : true);
+      const isStaff = (user.isStaff !== undefined) ? user.isStaff : (user.is_staff !== undefined ? user.is_staff : true);
+      const isActive = (user.isActive !== undefined) ? user.isActive : (user.is_active !== undefined ? user.is_active : true);
+      const dateJoinedRaw = user.dateJoined || user.date_joined;
+
+      // Header Pill & Hero
+      const userAvatarSm = document.getElementById('userAvatarSm');
+      const profileAvatarLg = document.getElementById('profileAvatarLg');
+
+      if (user.avatar) {
+        userAvatarSm.innerHTML = `<img src="${user.avatar}" alt="${username}">`;
+        profileAvatarLg.innerHTML = `<img src="${user.avatar}" alt="${username}">`;
+      } else {
+        userAvatarSm.textContent = initial;
+        profileAvatarLg.textContent = initial;
+      }
+
+      document.getElementById('userPillName').textContent = username;
+      document.getElementById('profileDisplayName').textContent = fullName;
+      document.getElementById('profileHandle').textContent = `@${username}`;
+
+      // Card Fields
+      document.getElementById('fieldUserId').textContent = `#${user.id || 1}`;
+      document.getElementById('fieldUsername').textContent = username;
+      document.getElementById('fieldFirstName').textContent = firstName || '—';
+      document.getElementById('fieldLastName').textContent = lastName || '—';
+      document.getElementById('fieldFullName').textContent = fullName;
+      document.getElementById('fieldEmail').textContent = email;
+      document.getElementById('fieldRole').textContent = isSuper ? 'Super Administrator' : 'Staff User';
+      document.getElementById('fieldStaff').textContent = isStaff ? 'Yes (Staff Access)' : 'Standard User';
+      document.getElementById('fieldActive').innerHTML = isActive ? '<span class="pulse-dot"></span> Active' : '<span style="color: var(--danger);">Disabled</span>';
+
+      if (dateJoinedRaw) {
+        const d = new Date(dateJoinedRaw);
+        document.getElementById('fieldDateJoined').textContent = isNaN(d.getTime()) ? dateJoinedRaw : d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      } else {
+        document.getElementById('fieldDateJoined').textContent = 'Oct 16, 2026';
+      }
+    }
+
+    function initProfilePage() {
+      authSession = getStoredAuth();
+
+      if (!authSession || !authSession.accessToken) {
+        window.location.href = '/super-admin/login/';
+        return;
+      }
+
+      renderProfileData(authSession.user);
+
+      // Refresh data from server profile API in background
+      if (authSession.accessToken) {
+        fetch('/api/superuser/profile/', {
+          method: 'GET',
+          headers: {
+            'Authorization': `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`,
+            'Accept': 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then(resData => {
+          if (resData && resData.user) {
+            authSession.user = Object.assign({}, authSession.user, resData.user);
+            localStorage.setItem('superadmin_auth', JSON.stringify(authSession));
+            renderProfileData(authSession.user);
+          }
+        })
+        .catch(err => console.warn('Could not fetch updated profile:', err));
+      }
+    }
+
+    // Toast Notification Helper
+    const toastNotification = document.getElementById('toastNotification');
+    const toastMessage = document.getElementById('toastMessage');
+    let toastTimeout = null;
+
+    function showToast(message, type = 'success') {
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastMessage.textContent = message;
+      toastNotification.className = `toast-notification ${type}`;
+      toastNotification.style.display = 'flex';
+      toastTimeout = setTimeout(() => {
+        toastNotification.style.display = 'none';
+      }, 3500);
+    }
+
+    // Copy Email Helper
+    const copyEmailBtn = document.getElementById('copyEmailBtn');
+    const copyEmailText = document.getElementById('copyEmailText');
+    copyEmailBtn.addEventListener('click', () => {
+      const email = document.getElementById('fieldEmail').textContent;
+      if (email) {
+        navigator.clipboard.writeText(email).then(() => {
+          copyEmailText.textContent = 'Copied!';
+          setTimeout(() => {
+            copyEmailText.textContent = 'Copy';
+          }, 2000);
+        }).catch(() => {
+          copyEmailText.textContent = 'Copied!';
+          setTimeout(() => {
+            copyEmailText.textContent = 'Copy';
+          }, 2000);
+        });
+      }
+    });
+
+    /**
+     * ----------------------------------------------------
+     * Edit Profile Modal & PATCH Request Logic
+     * ----------------------------------------------------
+     */
+    const editProfileModal = document.getElementById('editProfileModal');
+    const heroAvatarWrap = document.getElementById('heroAvatarWrap');
+    const openEditModalBtn = document.getElementById('openEditModalBtn');
+    const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const editProfileForm = document.getElementById('editProfileForm');
+    const editAlertBox = document.getElementById('editAlertBox');
+    const saveProfileBtn = document.getElementById('saveProfileBtn');
+    const saveProfileBtnText = document.getElementById('saveProfileBtnText');
+
+    const editUsername = document.getElementById('editUsername');
+    const editEmail = document.getElementById('editEmail');
+    const editFirstName = document.getElementById('editFirstName');
+    const editLastName = document.getElementById('editLastName');
+    const changePasswordCheckbox = document.getElementById('changePasswordCheckbox');
+    const passwordInputsWrap = document.getElementById('passwordInputsWrap');
+    const editCurrentPassword = document.getElementById('editCurrentPassword');
+    const editNewPassword = document.getElementById('editNewPassword');
+    const editConfirmPassword = document.getElementById('editConfirmPassword');
+
+    // Avatar upload controls
+    const editAvatarInput = document.getElementById('editAvatarInput');
+    const editAvatarPreview = document.getElementById('editAvatarPreview');
+    const editAvatarRemoveBtn = document.getElementById('editAvatarRemoveBtn');
+    const avatarUploadStatus = document.getElementById('avatarUploadStatus');
+    let pendingAvatarFile = null;
+    let removeAvatarFlag = false;
+
+    function showEditAlert(message, type = 'error') {
+      editAlertBox.textContent = message;
+      editAlertBox.className = `form-alert ${type}`;
+      editAlertBox.style.display = 'block';
+    }
+
+    function hideEditAlert() {
+      editAlertBox.style.display = 'none';
+      editAlertBox.textContent = '';
+    }
+
+    function openEditModal() {
+      hideEditAlert();
+      const user = (authSession && authSession.user) ? authSession.user : {};
+
+      // Fill in locked fields
+      editUsername.value = user.username || 'nahid';
+      editEmail.value = user.email || 'nahid2887@gmail.com';
+
+      // Fill in editable name fields
+      editFirstName.value = user.first_name || user.firstName || '';
+      editLastName.value = user.last_name || user.lastName || '';
+
+      // Reset avatar upload state
+      pendingAvatarFile = null;
+      removeAvatarFlag = false;
+      editAvatarInput.value = '';
+
+      if (user.avatar) {
+        editAvatarPreview.innerHTML = `<img src="${user.avatar}" alt="${user.username || 'Avatar'}">`;
+        editAvatarRemoveBtn.style.display = 'inline-flex';
+        avatarUploadStatus.textContent = 'Current profile photo active';
+      } else {
+        const init = (user.username || 'N').charAt(0).toUpperCase();
+        editAvatarPreview.innerHTML = `<span>${init}</span>`;
+        editAvatarRemoveBtn.style.display = 'none';
+        avatarUploadStatus.textContent = 'PNG, JPG, WebP or GIF (max. 5MB)';
+      }
+
+      // Reset password fields
+      changePasswordCheckbox.checked = false;
+      passwordInputsWrap.classList.remove('open');
+      editCurrentPassword.value = '';
+      editNewPassword.value = '';
+      editConfirmPassword.value = '';
+
+      editProfileModal.classList.add('open');
+      editProfileModal.setAttribute('aria-hidden', 'false');
+      editFirstName.focus();
+    }
+
+    function closeEditModal() {
+      editProfileModal.classList.remove('open');
+      editProfileModal.setAttribute('aria-hidden', 'true');
+    }
+
+    if (heroAvatarWrap) {
+      heroAvatarWrap.addEventListener('click', openEditModal);
+    }
+    openEditModalBtn.addEventListener('click', openEditModal);
+    closeEditModalBtn.addEventListener('click', closeEditModal);
+    cancelEditBtn.addEventListener('click', closeEditModal);
+
+    editProfileModal.addEventListener('click', (e) => {
+      if (e.target === editProfileModal) {
+        closeEditModal();
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && editProfileModal.classList.contains('open')) {
+        closeEditModal();
+      }
+    });
+
+    // File input change: Instant preview
+    editAvatarInput.addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        showEditAlert('Selected image exceeds the 5MB size limit.');
+        editAvatarInput.value = '';
+        return;
+      }
+
+      pendingAvatarFile = file;
+      removeAvatarFlag = false;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        editAvatarPreview.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+        editAvatarRemoveBtn.style.display = 'inline-flex';
+        avatarUploadStatus.textContent = file.name;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Remove avatar handler
+    editAvatarRemoveBtn.addEventListener('click', () => {
+      pendingAvatarFile = null;
+      removeAvatarFlag = true;
+      editAvatarInput.value = '';
+      const user = (authSession && authSession.user) ? authSession.user : {};
+      const init = (user.username || 'N').charAt(0).toUpperCase();
+      editAvatarPreview.innerHTML = `<span>${init}</span>`;
+      editAvatarRemoveBtn.style.display = 'none';
+      avatarUploadStatus.textContent = 'Photo will be removed on save';
+    });
+
+    // Toggle password fields
+    changePasswordCheckbox.addEventListener('change', () => {
+      if (changePasswordCheckbox.checked) {
+        passwordInputsWrap.classList.add('open');
+        editCurrentPassword.focus();
+      } else {
+        passwordInputsWrap.classList.remove('open');
+        editCurrentPassword.value = '';
+        editNewPassword.value = '';
+        editConfirmPassword.value = '';
+      }
+    });
+
+    // Handle Form Submit: PATCH Request
+    editProfileForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideEditAlert();
+
+      if (!authSession || !authSession.accessToken) {
+        showEditAlert('Authentication expired. Please log in again.');
+        return;
+      }
+
+      const firstNameVal = editFirstName.value.trim();
+      const lastNameVal = editLastName.value.trim();
+
+      // Build FormData payload (supports both JSON fields & binary image uploads)
+      const formData = new FormData();
+      formData.append('first_name', firstNameVal);
+      formData.append('last_name', lastNameVal);
+
+      // Include avatar if selected or removed
+      if (pendingAvatarFile) {
+        formData.append('avatar', pendingAvatarFile);
+      } else if (removeAvatarFlag) {
+        formData.append('avatar', 'remove');
+      }
+
+      // If user chose to change password
+      if (changePasswordCheckbox.checked) {
+        const currentPass = editCurrentPassword.value;
+        const newPass = editNewPassword.value;
+        const confPass = editConfirmPassword.value;
+
+        if (!currentPass) {
+          showEditAlert('Current password is required to change password.');
+          editCurrentPassword.focus();
+          return;
+        }
+
+        if (!newPass || newPass.length < 6) {
+          showEditAlert('New password must be at least 6 characters long.');
+          editNewPassword.focus();
+          return;
+        }
+
+        if (newPass !== confPass) {
+          showEditAlert('New passwords do not match. Please re-enter.');
+          editConfirmPassword.focus();
+          return;
+        }
+
+        formData.append('current_password', currentPass);
+        formData.append('new_password', newPass);
+        formData.append('confirm_password', confPass);
+      }
+
+      // UI loading state
+      saveProfileBtn.disabled = true;
+      saveProfileBtnText.textContent = 'Saving Changes...';
+
+      try {
+        const response = await fetch('/api/superuser/profile/', {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`,
+            'Accept': 'application/json'
+          },
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          let errDetail = 'Failed to update profile.';
+          if (data && data.detail) {
+            errDetail = data.detail;
+          } else if (data && typeof data === 'object') {
+            const firstKey = Object.keys(data)[0];
+            const val = data[firstKey];
+            const errStr = Array.isArray(val) ? val[0] : val;
+            errDetail = `${firstKey}: ${errStr}`;
+          }
+          showEditAlert(errDetail, 'error');
+          saveProfileBtn.disabled = false;
+          saveProfileBtnText.textContent = 'Save Changes';
+          return;
+        }
+
+        // Successfully updated
+        if (data.user) {
+          authSession.user = Object.assign({}, authSession.user, data.user);
+        }
+
+        // If password was changed, update tokens in session
+        if (data.access_token) {
+          authSession.accessToken = data.access_token;
+          authSession.refreshToken = data.refresh_token;
+        }
+
+        // Persist updated auth session
+        localStorage.setItem('superadmin_auth', JSON.stringify(authSession));
+
+        // Re-render profile data on the page
+        renderProfileData(authSession.user);
+
+        // Feedback & Close
+        showEditAlert('Profile updated successfully!', 'success');
+        showToast('Profile updated successfully!');
+
+        setTimeout(() => {
+          closeEditModal();
+          saveProfileBtn.disabled = false;
+          saveProfileBtnText.textContent = 'Save Changes';
+        }, 800);
+
+      } catch (networkError) {
+        console.error('PATCH profile error:', networkError);
+        showEditAlert('Network error: Unable to contact profile update API.');
+        saveProfileBtn.disabled = false;
+        saveProfileBtnText.textContent = 'Save Changes';
+      }
+    });
+
+    // Logout Handler
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('superadmin_auth');
+      window.location.href = '/super-admin/login/';
+    });
+
+    // Multi-tab logout sync
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'superadmin_auth' && !e.newValue) {
+        window.location.href = '/super-admin/login/';
+      }
+    });
+
+    // Run on startup
+    initProfilePage();
+  </script>
+</body>
+</html>
