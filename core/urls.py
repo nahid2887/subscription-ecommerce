@@ -12,11 +12,13 @@ from superuser.views import (
     SuperAdminProductsPageView,
 )
 from product.views import StorefrontHomeView
+from customer.views import CustomerProfilePageView
 
 urlpatterns = [
     # Public E-Commerce Storefront
     path('', StorefrontHomeView.as_view(), name='home'),
     path('store/', StorefrontHomeView.as_view(), name='store'),
+    path('profile/', CustomerProfilePageView.as_view(), name='customer-profile-page'),
 
     # Admin
     path('admin/', admin.site.urls),

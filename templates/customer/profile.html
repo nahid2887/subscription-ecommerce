@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Profile & Account Details — Subscription Store</title>
+  <meta name="description" content="Manage your customer account details, update profile photo, shipping and contact details for digital subscriptions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       DESIGN SYSTEM TOKENS (Dark & Light Themes)
+       ========================================================================== */
+    :root, [data-theme="dark"] {
+      --bg-base: #07090e;
+      --bg-surface: #0e131f;
+      --bg-card: rgba(17, 24, 39, 0.78);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+      --text-main: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --panel-bg: rgba(14, 19, 31, 0.7);
+      --panel-border: rgba(255, 255, 255, 0.06);
+      --input-bg: #0b0f19;
+      --input-border: rgba(255, 255, 255, 0.12);
+      --header-bg: rgba(7, 9, 14, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --glow-purple: rgba(99, 102, 241, 0.16);
+      --glow-cyan: rgba(6, 182, 212, 0.12);
+    }
+
+    [data-theme="light"] {
+      --bg-base: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.92);
+      --card-border: rgba(226, 232, 240, 0.9);
+      --card-shadow: 0 16px 40px rgba(99, 102, 241, 0.08);
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --panel-bg: #f1f5f9;
+      --panel-border: #e2e8f0;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --header-bg: rgba(255, 255, 255, 0.9);
+      --border-subtle: rgba(226, 232, 240, 0.9);
+      --glow-purple: rgba(99, 102, 241, 0.12);
+      --glow-cyan: rgba(6, 182, 212, 0.1);
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.4);
+      --accent-purple: #a855f7;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --radius-xl: 22px;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+      --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Ambient Glow Accents */
+    .ambient-glow-1 {
+      position: fixed;
+      top: -160px;
+      left: -160px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--glow-purple) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(60px);
+    }
+
+    .ambient-glow-2 {
+      position: fixed;
+      bottom: -160px;
+      right: -160px;
+      width: 650px;
+      height: 650px;
+      background: radial-gradient(circle, var(--glow-cyan) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(60px);
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION
+       ========================================================================== */
+    header.site-header {
+      background: var(--header-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: var(--transition-smooth);
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-name span {
+      background: linear-gradient(135deg, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: var(--transition-smooth);
+    }
+
+    .back-store-btn:hover {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.35);
+      color: var(--primary);
+      transform: translateX(-2px);
+    }
+
+    .theme-toggle-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    .theme-toggle-btn:hover {
+      transform: rotate(15deg);
+      border-color: var(--primary);
+    }
+
+    .logout-btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      color: var(--accent-rose);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .logout-btn-nav:hover {
+      background: var(--accent-rose);
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       MAIN CONTAINER & HERO PROFILE CARD
+       ========================================================================== */
+    main.profile-main-wrap {
+      flex: 1;
+      max-width: 1040px;
+      width: 100%;
+      margin: 32px auto 60px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Profile Hero Card */
+    .profile-hero-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary), var(--accent-purple), var(--accent-cyan));
+    }
+
+    .profile-hero-layout {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    /* Avatar Upload Circle */
+    .avatar-upload-wrap {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .avatar-ring {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple), var(--accent-cyan));
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--bg-surface);
+      display: block;
+    }
+
+    .avatar-edit-overlay {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 2px solid var(--bg-surface);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      transition: var(--transition-smooth);
+    }
+
+    .avatar-edit-overlay:hover {
+      background: var(--primary-hover);
+      transform: scale(1.1);
+    }
+
+    .profile-meta-info {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .profile-name-title {
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .verified-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: var(--accent-emerald);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.9);
+      animation: pulseGlow 1.8s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .profile-email-text {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .profile-stats-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================================================
+       FORM SECTIONS & CARDS
+       ========================================================================== */
+    .profile-form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .settings-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .settings-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .section-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: rgba(99, 102, 241, 0.14);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .section-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .form-row-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 7px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.92rem;
+      transition: var(--transition-smooth);
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .input-field:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* Save & Discard Buttons */
+    .form-actions-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .btn-save-profile {
+      padding: 13px 28px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-save-profile:hover {
+      box-shadow: 0 8px 26px rgba(99, 102, 241, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .btn-save-profile:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-discard {
+      padding: 13px 22px;
+      border-radius: var(--radius-md);
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-discard:hover {
+      background: var(--panel-bg);
+      color: var(--text-main);
+    }
+
+    /* Subscriptions List in Profile */
+    .sub-item-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .license-badge-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-subtle);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .license-badge-pill:hover {
+      background: rgba(99, 102, 241, 0.15);
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      border-radius: 9999px;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-size: 0.88rem;
+      font-weight: 700;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      animation: toastIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .toast-pill.success {
+      border-color: rgba(16, 185, 129, 0.4);
+      color: var(--accent-emerald);
+    }
+
+    .toast-pill.error {
+      border-color: rgba(244, 63, 94, 0.4);
+      color: var(--accent-rose);
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Guest Unauthenticated Guard */
+    .unauth-card {
+      text-align: center;
+      padding: 60px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--card-shadow);
+      max-width: 520px;
+      margin: 80px auto;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Ambient Glow Effects -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Header Bar -->
+  <header class="site-header">
+    <div class="header-container">
+      <a href="/" class="brand-wrap">
+        <div class="brand-logo-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+        <div class="brand-name">Sub<span>Store</span></div>
+      </a>
+
+      <div class="header-actions">
+        <a href="/" class="back-store-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+          <span>Back to Store</span>
+        </a>
+
+        <button id="themeToggleBtn" class="theme-toggle-btn" title="Toggle Dark/Light Mode">
+          <svg id="themeIconSvg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+
+        <button id="navLogoutBtn" onclick="handleLogout()" class="logout-btn-nav">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Profile Content Wrap -->
+  <main class="profile-main-wrap">
+    <!-- Unauthenticated Guest Guard -->
+    <div id="unauthStateCard" class="unauth-card" style="display: none;">
+      <div style="width: 68px; height: 68px; border-radius: 50%; background: rgba(99, 102, 241, 0.15); color: var(--primary); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+      <h2 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">Please Sign In to Access Profile</h2>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 24px;">You must be logged into your customer account to view and update your personal details and digital subscriptions.</p>
+      <a href="/?login=true" class="btn-save-profile" style="text-decoration: none;">
+        <span>Go to Store & Sign In</span>
+      </a>
+    </div>
+
+    <!-- Authenticated Customer Profile Form Container -->
+    <div id="profileContainer" style="display: none;">
+      <!-- Hero Header Card -->
+      <div class="profile-hero-card">
+        <div class="profile-hero-layout">
+          <!-- Avatar with Live Upload Overlay -->
+          <div class="avatar-upload-wrap">
+            <div class="avatar-ring">
+              <img id="profileAvatarPreview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='40' fill='%236366f1'/%3E%3Ccircle cx='40' cy='32' r='14' fill='%23ffffff'/%3E%3Cpath d='M16 68 C16 52, 28 48, 40 48 C52 48, 64 52, 64 68 Z' fill='%23ffffff'/%3E%3C/svg%3E" 
+                   alt="Customer Avatar" class="avatar-img">
+            </div>
+            <label for="avatarFileInput" class="avatar-edit-overlay" title="Upload new profile photo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </label>
+            <input type="file" id="avatarFileInput" accept="image/*" style="display: none;">
+          </div>
+
+          <!-- Metadata -->
+          <div class="profile-meta-info">
+            <h1 class="profile-name-title">
+              <span id="heroDisplayName">Customer Profile</span>
+              <span class="verified-badge">
+                <span class="pulse-dot"></span>
+                <span>Verified Customer</span>
+              </span>
+            </h1>
+            <div id="heroEmail" class="profile-email-text">customer@gmail.com</div>
+
+            <div class="profile-stats-row">
+              <div class="stat-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--accent-emerald);">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>Digital Delivery: Instant</span>
+              </div>
+              <div class="stat-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--primary);">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span id="statOrdersCount">0 Active Subscriptions</span>
+              </div>
+              <button type="button" onclick="document.getElementById('avatarFileInput').click()" style="background: none; border: none; color: var(--primary); font-size: 0.78rem; font-weight: 700; cursor: pointer; text-decoration: underline;">
+                Upload Photo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Form -->
+      <form id="profileUpdateForm" onsubmit="handleProfileSubmit(event)">
+        <div class="profile-form-grid">
+          <!-- 1. Personal & Contact Information -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <div class="section-icon-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div>
+                <h2 class="section-title">Personal & Contact Information</h2>
+                <p class="section-desc">Update your primary identity, registered email, and contact details</p>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="input-group">
+                <label class="input-label" for="firstNameInput">First Name</label>
+                <input type="text" id="firstNameInput" class="input-field" placeholder="e.g. John">
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="lastNameInput">Last Name</label>
+                <input type="text" id="lastNameInput" class="input-field" placeholder="e.g. Doe">
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="input-group">
+                <label class="input-label" for="usernameInput">Username</label>
+                <input type="text" id="usernameInput" class="input-field" placeholder="username">
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="emailInput" style="display: flex; align-items: center; justify-content: space-between;">
+                  <span>Email Address (Gmail / Account Email)</span>
+                  <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--accent-rose);"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>Permanent / Cannot change</span>
+                  </span>
+                </label>
+                <input type="email" id="emailInput" class="input-field" placeholder="customer@gmail.com" readonly disabled style="opacity: 0.7; cursor: not-allowed; background: var(--bg-surface); border-color: var(--border-subtle);" title="Account email address cannot be changed">
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label class="input-label" for="phoneInput">Phone Number (SMS / WhatsApp Delivery)</label>
+              <input type="tel" id="phoneInput" class="input-field" placeholder="+8801700000000">
+            </div>
+          </div>
+
+          <!-- 2. Security & Password Update -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <div class="section-icon-box" style="background: rgba(244, 63, 94, 0.14); color: var(--accent-rose);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+              </div>
+              <div>
+                <h2 class="section-title">Security & Password</h2>
+                <p class="section-desc">Change your password or leave blank to keep your current credentials</p>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="input-group">
+                <label class="input-label" for="newPasswordInput">New Password</label>
+                <input type="password" id="newPasswordInput" class="input-field" placeholder="Min. 6 characters (optional)">
+              </div>
+              <div class="input-group">
+                <label class="input-label" for="confirmPasswordInput">Confirm New Password</label>
+                <input type="password" id="confirmPasswordInput" class="input-field" placeholder="Re-type new password">
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Active Subscriptions & Licenses -->
+          <div class="settings-card">
+            <div class="settings-card-header">
+              <div class="section-icon-box" style="background: rgba(6, 182, 212, 0.14); color: var(--accent-cyan);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                  <line x1="8" y1="21" x2="16" y2="21"></line>
+                  <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+              </div>
+              <div>
+                <h2 class="section-title">My Digital Subscriptions</h2>
+                <p class="section-desc">Active subscription credentials and license activations</p>
+              </div>
+            </div>
+
+            <div id="profileSubscriptionsList">
+              <!-- Dynamically populated or empty state -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticky Save Changes Action Bar -->
+        <div class="form-actions-wrap">
+          <button type="button" onclick="populateFieldsFromState()" class="btn-discard">
+            <span>Reset Changes</span>
+          </button>
+          <button type="submit" id="saveProfileBtn" class="btn-save-profile">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span id="saveBtnText">Save All Changes</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- Realtime Toast Notifications -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- JavaScript Application Logic -->
+  <script>
+    // State
+    let customerState = {
+      token: localStorage.getItem('customer_access_token') || localStorage.getItem('customer_token'),
+      user: null,
+      selectedAvatarFile: null,
+      cartItems: []
+    };
+
+    try {
+      const storedUser = localStorage.getItem('customer_user');
+      if (storedUser) customerState.user = JSON.parse(storedUser);
+      const storedCart = localStorage.getItem('customer_cart');
+      if (storedCart) customerState.cartItems = JSON.parse(storedCart);
+    } catch (e) {
+      console.warn('Could not parse stored customer profile', e);
+    }
+
+    // Initialize Page
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      checkAuthAndLoad();
+      initAvatarUpload();
+    });
+
+    // Theme Management
+    function initTheme() {
+      const saved = localStorage.getItem('store_theme') || 'dark';
+      applyTheme(saved);
+
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+      });
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('store_theme', theme);
+      const icon = document.getElementById('themeIconSvg');
+      if (theme === 'light') {
+        icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
+      } else {
+        icon.innerHTML = `
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        `;
+      }
+    }
+
+    // Check Auth and Load Profile Data
+    async function checkAuthAndLoad() {
+      const unauthCard = document.getElementById('unauthStateCard');
+      const profileContainer = document.getElementById('profileContainer');
+
+      if (!customerState.token) {
+        unauthCard.style.display = 'block';
+        profileContainer.style.display = 'none';
+        return;
+      }
+
+      unauthCard.style.display = 'none';
+      profileContainer.style.display = 'block';
+
+      // Pre-fill immediately from cached user data
+      if (customerState.user) {
+        populateFieldsFromState();
+      }
+
+      // Fetch fresh profile from API
+      try {
+        const res = await fetch('/api/customer/profile/', {
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+
+        if (res.ok) {
+          const freshUser = await res.json();
+          customerState.user = freshUser;
+          localStorage.setItem('customer_user', JSON.stringify(freshUser));
+          populateFieldsFromState();
+        } else if (res.status === 401) {
+          // Token expired
+          handleLogout();
+        }
+      } catch (err) {
+        console.error('Failed to fetch profile', err);
+      }
+    }
+
+    // Populate Form Fields
+    function populateFieldsFromState() {
+      const u = customerState.user;
+      if (!u) return;
+
+      const fullName = (u.first_name || u.last_name) ? `${u.first_name || ''} ${u.last_name || ''}`.trim() : (u.username || u.email);
+      document.getElementById('heroDisplayName').textContent = fullName;
+      document.getElementById('heroEmail').textContent = u.email || 'customer@gmail.com';
+
+      document.getElementById('firstNameInput').value = u.first_name || '';
+      document.getElementById('lastNameInput').value = u.last_name || '';
+      document.getElementById('usernameInput').value = u.username || '';
+      document.getElementById('emailInput').value = u.email || '';
+      document.getElementById('phoneInput').value = u.phone_number || '';
+
+      // Avatar
+      const previewImg = document.getElementById('profileAvatarPreview');
+      if (u.avatar) {
+        previewImg.src = u.avatar;
+      } else {
+        previewImg.src = `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(fullName)}&backgroundColor=6366f1,a855f7`;
+      }
+
+      renderSubscriptionsList();
+    }
+
+    // Avatar Upload & Live Preview
+    function initAvatarUpload() {
+      const fileInput = document.getElementById('avatarFileInput');
+      const previewImg = document.getElementById('profileAvatarPreview');
+
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Size check (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          showToast('Image size exceeds 5MB. Please choose a smaller photo.', 'error');
+          return;
+        }
+
+        customerState.selectedAvatarFile = file;
+
+        // Live preview
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          previewImg.src = ev.target.result;
+          showToast('New photo selected. Click "Save All Changes" to update.', 'success');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Handle Profile Form Submission
+    async function handleProfileSubmit(e) {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveProfileBtn');
+      const saveBtnText = document.getElementById('saveBtnText');
+
+      const newPass = document.getElementById('newPasswordInput').value;
+      const confirmPass = document.getElementById('confirmPasswordInput').value;
+
+      if (newPass && newPass !== confirmPass) {
+        showToast('New passwords do not match. Please verify.', 'error');
+        return;
+      }
+
+      saveBtn.disabled = true;
+      saveBtnText.textContent = 'Saving Changes...';
+
+      try {
+        const formData = new FormData();
+        formData.append('first_name', document.getElementById('firstNameInput').value.trim());
+        formData.append('last_name', document.getElementById('lastNameInput').value.trim());
+        formData.append('username', document.getElementById('usernameInput').value.trim());
+        formData.append('email', document.getElementById('emailInput').value.trim());
+        formData.append('phone_number', document.getElementById('phoneInput').value.trim());
+
+        if (newPass) {
+          formData.append('password', newPass);
+        }
+
+        if (customerState.selectedAvatarFile) {
+          formData.append('avatar', customerState.selectedAvatarFile);
+        }
+
+        const res = await fetch('/api/customer/profile/', {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          },
+          body: formData
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          customerState.user = data.user;
+          customerState.selectedAvatarFile = null;
+          localStorage.setItem('customer_user', JSON.stringify(data.user));
+
+          // Clear password inputs
+          document.getElementById('newPasswordInput').value = '';
+          document.getElementById('confirmPasswordInput').value = '';
+
+          populateFieldsFromState();
+          showToast('🎉 Profile details and photo updated successfully!', 'success');
+        } else {
+          let errorMsg = 'Failed to update profile.';
+          if (typeof data === 'object') {
+            const firstKey = Object.keys(data)[0];
+            if (firstKey) {
+              const val = data[firstKey];
+              errorMsg = Array.isArray(val) ? `${firstKey}: ${val[0]}` : `${firstKey}: ${val}`;
+            }
+          }
+          showToast(errorMsg, 'error');
+        }
+      } catch (err) {
+        console.error('Error saving profile', err);
+        showToast('Network error while saving profile. Please try again.', 'error');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtnText.textContent = 'Save All Changes';
+      }
+    }
+
+    // Render Subscriptions List
+    function renderSubscriptionsList() {
+      const container = document.getElementById('profileSubscriptionsList');
+      const statOrdersCount = document.getElementById('statOrdersCount');
+      const items = customerState.cartItems || [];
+
+      if (statOrdersCount) statOrdersCount.textContent = `${items.length} Active Subscription${items.length === 1 ? '' : 's'}`;
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 24px 16px; background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">You do not have any active subscription licenses queued yet.</p>
+            <a href="/#catalog" style="font-size: 0.82rem; font-weight: 700; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+              <span>Explore Subscriptions Catalog</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      items.forEach((item) => {
+        const p = item.product || {};
+        const pl = item.plan || {};
+        const key = item.licenseKey || 'SUB-DIGITAL-KEY-ACTIVE';
+
+        html += `
+          <div class="sub-item-card">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center; color: var(--primary); flex-shrink: 0;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+              </div>
+              <div>
+                <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">${p.name || 'Digital Subscription'}</div>
+                <div style="font-size: 0.76rem; color: var(--text-muted);">${pl.name || 'Premium Plan'} • <span style="color: var(--accent-emerald); font-weight: 700;">● Active</span></div>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="license-badge-pill" onclick="copyToClipboard('${key}')" title="Click to copy license key">
+                <span>Key: ${key}</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </span>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // Copy to clipboard helper
+    window.copyToClipboard = function(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('License key copied to clipboard!', 'success');
+      }).catch(() => {
+        showToast('Key: ' + text, 'info');
+      });
+    };
+
+    // Logout Helper
+    function handleLogout() {
+      localStorage.removeItem('customer_access_token');
+      localStorage.removeItem('customer_token');
+      localStorage.removeItem('customer_refresh_token');
+      localStorage.removeItem('customer_refresh');
+      localStorage.removeItem('customer_user');
+      window.location.href = '/';
+    }
+
+    // Toast Utility
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast-pill ${type}`;
+      toast.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>${msg}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 250);
+      }, 3500);
+    }
+  </script>
+</body>
+
+</html>

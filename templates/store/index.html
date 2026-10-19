@@ -320,26 +320,36 @@
     /* Profile Avatar & Dropdown */
     .profile-menu-wrap {
       position: relative;
+      z-index: 1000;
+      display: inline-flex;
+      align-items: center;
     }
 
     .profile-avatar-btn {
       position: relative;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       padding: 0;
       background: transparent;
-      border: none;
+      border: 2px solid transparent;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: var(--transition-smooth);
       outline: none;
+      user-select: none;
     }
 
-    .profile-avatar-btn:hover {
-      transform: translateY(-1px);
+    .profile-avatar-btn * {
+      pointer-events: none;
+    }
+
+    .profile-avatar-btn:hover,
+    .profile-avatar-btn.is-active {
+      transform: scale(1.08);
+      border-color: rgba(99, 102, 241, 0.4);
     }
 
     .profile-avatar-ring {
@@ -355,9 +365,10 @@
       transition: var(--transition-smooth);
     }
 
-    .profile-avatar-btn:hover .profile-avatar-ring {
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.55);
-      transform: scale(1.05);
+    .profile-avatar-btn:hover .profile-avatar-ring,
+    .profile-avatar-btn.is-active .profile-avatar-ring {
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.65);
+      transform: rotate(6deg);
     }
 
     .profile-avatar-img {
@@ -380,28 +391,31 @@
       background: #10b981;
       border: 2px solid var(--bg-surface);
       box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+      transition: var(--transition-smooth);
     }
 
     /* Profile Dropdown Menu */
     .profile-dropdown-menu {
       position: absolute;
-      top: calc(100% + 12px);
+      top: calc(100% + 14px);
       right: 0;
-      width: 250px;
+      width: 320px;
+      max-width: 90vw;
       background: var(--bg-card);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 10px;
-      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
-      z-index: 1000;
+      padding: 16px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      z-index: 999999;
       display: none;
-      animation: profileDropdownIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: auto;
     }
 
     .profile-dropdown-menu.active {
-      display: block;
+      display: block !important;
+      animation: profileDropdownIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
     @keyframes profileDropdownIn {
@@ -507,6 +521,97 @@
       height: 1px;
       background: var(--border-subtle);
       margin: 6px 0;
+    }
+
+    /* Customer Auth Modal Tabs & Inputs */
+    .auth-tabs-header {
+      display: flex;
+      background: var(--tag-bg);
+      border-radius: var(--radius-md);
+      padding: 4px;
+      margin-bottom: 22px;
+      gap: 4px;
+    }
+
+    .auth-tab-btn {
+      flex: 1;
+      padding: 10px 14px;
+      background: transparent;
+      border: none;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .auth-tab-btn.active {
+      background: var(--bg-card);
+      color: var(--text-main);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .auth-form-panel {
+      display: none;
+    }
+
+    .auth-form-panel.active {
+      display: block;
+      animation: modalSlide 0.25s ease;
+    }
+
+    .auth-input-group {
+      margin-bottom: 15px;
+    }
+
+    .auth-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .auth-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 11px 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.92rem;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+
+    .auth-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .auth-error-box {
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: #fb7185;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .profile-field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 520px) {
+      .profile-field-row {
+        grid-template-columns: 1fr;
+      }
     }
 
     /* ==========================================================================
@@ -1863,78 +1968,91 @@
           <span id="cartCountBadge" class="cart-badge">0</span>
         </div>
 
-        <!-- User Profile Avatar & Dropdown -->
+        <!-- Customer Profile & Auth Trigger -->
         <div class="profile-menu-wrap" id="profileMenuWrap">
-          <button id="profileDropdownBtn" class="profile-avatar-btn" title="Account & Profile" onclick="toggleProfileDropdown(event)" aria-haspopup="true" aria-expanded="false">
-            <div class="profile-avatar-ring">
-              {% if request.user.is_authenticated and request.user.profile.avatar %}
-                <img src="{{ request.user.profile.avatar.url }}" alt="{{ request.user.username }}" class="profile-avatar-img">
-              {% else %}
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Profile" class="profile-avatar-img" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 80 80\'%3E%3Cdefs%3E%3ClinearGradient id=\'g\' x1=\'0%25\' y1=\'0%25\' x2=\'100%25\' y2=\'100%25\'%3E%3Cstop offset=\'0%25\' stop-color=\'%236366f1\'/%3E%3Cstop offset=\'100%25\' stop-color=\'%23ec4899\'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx=\'40\' cy=\'40\' r=\'40\' fill=\'url(%23g)\'/%3E%3Ccircle cx=\'40\' cy=\'32\' r=\'14\' fill=\'%23ffffff\'/%3E%3Cpath d=\'M16 68 C16 52, 28 48, 40 48 C52 48, 64 52, 64 68 Z\' fill=\'%23ffffff\'/%3E%3C/svg%3E';">
-              {% endif %}
-            </div>
-            <span class="profile-online-badge"></span>
+          <button type="button" id="navSignInBtn" class="nav-signin-pill" onclick="openCustomerAuthModal('login')" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 9999px; background: var(--bg-card); border: 1px solid var(--border-subtle); color: var(--text-main); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: var(--transition-smooth); margin-right: 8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--primary);">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+            <span>Sign In</span>
           </button>
 
-          <!-- Profile Dropdown Popup -->
-          <div id="profileDropdownMenu" class="profile-dropdown-menu">
-            <div class="profile-dropdown-header">
-              <div class="profile-user-info">
-                <div class="profile-dropdown-avatar-sm">
-                  {% if request.user.is_authenticated and request.user.profile.avatar %}
-                    <img src="{{ request.user.profile.avatar.url }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                  {% else %}
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                  {% endif %}
+          <button type="button" id="profileDropdownBtn" class="profile-avatar-btn" title="Customer Account & Subscriptions" aria-haspopup="true" aria-expanded="false" onclick="toggleProfileDropdown(event)">
+            <div class="profile-avatar-ring">
+              <img id="navProfileAvatarImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='40' cy='40' r='40' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='32' r='14' fill='%23ffffff'/%3E%3Cpath d='M16 68 C16 52, 28 48, 40 48 C52 48, 64 52, 64 68 Z' fill='%23ffffff'/%3E%3C/svg%3E" 
+                   alt="Customer Profile" class="profile-avatar-img">
+            </div>
+            <span id="navProfileOnlineDot" class="profile-online-badge"></span>
+          </button>
+
+          <!-- Customer Dropdown Popup with E-Commerce Options -->
+          <div id="profileDropdownMenu" class="profile-dropdown-menu" onclick="event.stopPropagation()">
+            <!-- Dropdown User Banner -->
+            <div class="profile-dropdown-header" style="padding: 4px 4px 12px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 10px;">
+              <div class="profile-user-info" style="display: flex; align-items: center; gap: 12px;">
+                <div class="profile-dropdown-avatar-sm" style="width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--primary); overflow: hidden; flex-shrink: 0; box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);">
+                  <img id="dropdownProfileAvatarImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='40' cy='40' r='40' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='32' r='14' fill='%23ffffff'/%3E%3Cpath d='M16 68 C16 52, 28 48, 40 48 C52 48, 64 52, 64 68 Z' fill='%23ffffff'/%3E%3C/svg%3E" 
+                       alt="Profile" style="width: 100%; height: 100%; object-fit: cover;">
                 </div>
-                <div>
-                  <div class="profile-user-name">{% if request.user.is_authenticated %}{{ request.user.username }}{% else %}Super Admin{% endif %}</div>
-                  <div class="profile-user-role">
-                    <span class="role-dot"></span>
-                    {% if request.user.is_authenticated and request.user.is_superuser %}Verified Administrator{% else %}Active Account{% endif %}
+                <div style="min-width: 0; flex: 1;">
+                  <div id="dropdownProfileName" class="profile-user-name" style="font-size: 0.95rem; font-weight: 800; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Guest Customer</div>
+                  <div id="dropdownProfileRole" class="profile-user-role" style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 5px; margin-top: 2px;">
+                    <span class="role-dot" id="dropdownRoleDot" style="width: 7px; height: 7px; border-radius: 50%; background: #94a3b8;"></span>
+                    <span id="dropdownProfileRoleText">Sign in to track orders</span>
                   </div>
                 </div>
               </div>
+
+              <!-- Quick Login / Register Buttons for Guests -->
+              <div id="dropdownGuestActionButtons" style="display: flex; gap: 8px; margin-top: 12px;">
+                <button type="button" onclick="closeProfileDropdown(); openCustomerAuthModal('login');" style="flex: 1; padding: 9px 12px; font-size: 0.8rem; font-weight: 700; border-radius: var(--radius-sm); border: none; background: linear-gradient(135deg, var(--primary), var(--accent-purple)); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                  <span>Sign In</span>
+                </button>
+                <button type="button" onclick="closeProfileDropdown(); openCustomerAuthModal('register');" style="flex: 1; padding: 9px 12px; font-size: 0.8rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: var(--bg-surface); color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--accent-emerald);"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                  <span>Register</span>
+                </button>
+              </div>
             </div>
 
+            <!-- Profile Dropdown Links -->
             <div class="profile-menu-items">
-              <a href="/super-admin/dashboard/" class="profile-dropdown-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="3" width="7" height="9"></rect>
-                  <rect x="14" y="3" width="7" height="5"></rect>
-                  <rect x="14" y="12" width="7" height="9"></rect>
-                  <rect x="3" y="16" width="7" height="5"></rect>
-                </svg>
-                <span>Analytics Dashboard</span>
-              </a>
+              <!-- When Logged In -->
+              <div id="customerLoggedInLinks" style="display: none; flex-direction: column; gap: 8px;">
+                <a href="/profile/" class="profile-dropdown-link" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.25); color: var(--primary); font-weight: 800; text-decoration: none; transition: var(--transition-smooth);">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width: 18px; height: 18px;">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>My Profile & Account Details</span>
+                </a>
 
-              <a href="/super-admin/profile/" class="profile-dropdown-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <span>My Profile & Settings</span>
-              </a>
+                <div class="profile-dropdown-divider"></div>
 
-              <a href="/super-admin/products/" class="profile-dropdown-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
-                <span>Manage Products</span>
-              </a>
+                <button type="button" onclick="logoutCustomer(true)" class="profile-dropdown-link link-login" style="width: 100%; background: none; border: none; text-align: left; cursor: pointer; padding: 10px 14px; display: flex; align-items: center; gap: 10px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                    <polyline points="16 17 21 12 16 7"></polyline>
+                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                  </svg>
+                  <span>Sign Out of Account</span>
+                </button>
+              </div>
 
-              <div class="profile-dropdown-divider"></div>
-
-              <a href="/super-admin/login/" class="profile-dropdown-link link-login">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                  <polyline points="10 17 15 12 10 7"></polyline>
-                  <line x1="15" y1="12" x2="3" y2="12"></line>
-                </svg>
-                <span>Sign In / Portal</span>
-              </a>
+              <!-- When Logged Out (Guest) -->
+              <div id="customerLoggedOutGuestInfo" style="display: flex; flex-direction: column; gap: 8px; padding: 4px 0;">
+                <button type="button" onclick="openCustomerAuthModal('login')" class="profile-dropdown-link" style="width: 100%; background: none; border: none; text-align: left; cursor: pointer; font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; color: var(--primary);">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  <span>Sign in to manage your profile & photo</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -2388,6 +2506,183 @@
     </div>
   </div>
 
+  <!-- ==========================================================================
+       CUSTOMER AUTH MODAL (SIGN IN / CREATE ACCOUNT)
+       ========================================================================== -->
+  <div id="customerAuthModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 480px;">
+      <button class="modal-close-btn" onclick="closeCustomerAuthModal()">&times;</button>
+
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="display: inline-flex; align-items: center; justify-content: center; width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent-purple)); margin-bottom: 12px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </div>
+        <h3 id="authModalTitle" style="font-size: 1.4rem; font-weight: 800; margin-bottom: 4px;">Customer Account</h3>
+        <p style="color: var(--text-muted); font-size: 0.86rem;">Sign in or create an account for instant digital access.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs-header">
+        <button id="tabBtnLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Sign In</button>
+        <button id="tabBtnRegister" class="auth-tab-btn" onclick="switchAuthTab('register')">Create Account</button>
+      </div>
+
+      <!-- Error box -->
+      <div id="custAuthErrorBox" class="auth-error-box"></div>
+
+      <!-- Sign In Form Panel -->
+      <div id="custLoginFormPanel" class="auth-form-panel active">
+        <form onsubmit="handleCustomerLogin(event)">
+          <div class="auth-input-group">
+            <label class="auth-label">Email Address (Gmail)</label>
+            <input type="email" id="custLoginEmail" required placeholder="your.name@gmail.com" class="auth-input">
+          </div>
+
+          <div class="auth-input-group">
+            <label class="auth-label">Password</label>
+            <input type="password" id="custLoginPassword" required placeholder="••••••••" class="auth-input">
+          </div>
+
+          <button type="submit" id="custLoginBtn" class="btn-card-buy" style="width: 100%; padding: 13px; font-size: 0.96rem; border-radius: var(--radius-md); margin-top: 8px;">
+            <span>Sign In to Account</span>
+          </button>
+        </form>
+
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.84rem; margin-top: 18px;">
+          Don't have an account? <a href="javascript:void(0)" onclick="switchAuthTab('register')" style="color: var(--primary); font-weight: 700; text-decoration: none;">Create one now</a>
+        </p>
+      </div>
+
+      <!-- Register Form Panel -->
+      <div id="custRegisterFormPanel" class="auth-form-panel">
+        <form onsubmit="handleCustomerRegister(event)">
+          <div class="profile-field-row auth-input-group">
+            <div>
+              <label class="auth-label">First Name</label>
+              <input type="text" id="custRegFirstName" placeholder="Rahim" class="auth-input">
+            </div>
+            <div>
+              <label class="auth-label">Last Name</label>
+              <input type="text" id="custRegLastName" placeholder="Uddin" class="auth-input">
+            </div>
+          </div>
+
+          <div class="auth-input-group">
+            <label class="auth-label">Email Address (Gmail)</label>
+            <input type="email" id="custRegEmail" required placeholder="your.name@gmail.com" class="auth-input">
+          </div>
+
+          <div class="auth-input-group">
+            <label class="auth-label">Password (Min 6 chars)</label>
+            <input type="password" id="custRegPassword" required minlength="6" placeholder="Create secure password" class="auth-input">
+          </div>
+
+          <div class="auth-input-group">
+            <label class="auth-label">Phone Number (Optional)</label>
+            <input type="tel" id="custRegPhone" placeholder="+880 17XXXXXXXX" class="auth-input">
+          </div>
+
+          <button type="submit" id="custRegisterBtn" class="btn-card-buy" style="width: 100%; padding: 13px; font-size: 0.96rem; border-radius: var(--radius-md); margin-top: 8px;">
+            <span>Create Account & Get Tokens</span>
+          </button>
+        </form>
+
+        <p style="text-align: center; color: var(--text-muted); font-size: 0.84rem; margin-top: 18px;">
+          Already have an account? <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: var(--primary); font-weight: 700; text-decoration: none;">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CUSTOMER PROFILE MODAL (VIEW & UPDATE DETAILS)
+       ========================================================================== -->
+  <div id="customerProfileModal" class="modal-backdrop">
+    <div class="modal-card" style="max-width: 520px;">
+      <button class="modal-close-btn" onclick="closeCustomerProfileModal()">&times;</button>
+
+      <div style="margin-bottom: 20px;">
+        <span style="font-size: 0.72rem; font-weight: 800; color: var(--accent-emerald); text-transform: uppercase;">Customer Dashboard</span>
+        <h3 style="font-size: 1.35rem; font-weight: 800; margin-top: 4px;">My Customer Profile</h3>
+      </div>
+
+      <div id="custProfileFeedback" class="auth-error-box" style="display: none;"></div>
+
+      <form onsubmit="handleCustomerProfileSave(event)">
+        <!-- Email (Read Only) -->
+        <div class="auth-input-group">
+          <label class="auth-label">Registered Email</label>
+          <input type="email" id="profileEmailInput" readonly class="auth-input" style="opacity: 0.7; cursor: not-allowed; background: var(--bg-card);">
+        </div>
+
+        <div class="profile-field-row auth-input-group">
+          <div>
+            <label class="auth-label">First Name</label>
+            <input type="text" id="profileFirstNameInput" class="auth-input" placeholder="First Name">
+          </div>
+          <div>
+            <label class="auth-label">Last Name</label>
+            <input type="text" id="profileLastNameInput" class="auth-input" placeholder="Last Name">
+          </div>
+        </div>
+
+        <div class="auth-input-group">
+          <label class="auth-label">Phone Number</label>
+          <input type="tel" id="profilePhoneInput" class="auth-input" placeholder="+8801700000000">
+        </div>
+
+        <div class="profile-field-row auth-input-group">
+          <div>
+            <label class="auth-label">City</label>
+            <input type="text" id="profileCityInput" class="auth-input" placeholder="Dhaka">
+          </div>
+          <div>
+            <label class="auth-label">Address</label>
+            <input type="text" id="profileAddressInput" class="auth-input" placeholder="Road, House, Area">
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 24px;">
+          <button type="submit" id="saveProfileBtn" class="btn-card-buy" style="flex: 1; padding: 12px; border-radius: var(--radius-md);">
+            <span>Save Changes</span>
+          </button>
+          <button type="button" onclick="logoutCustomer()" class="btn-card-details" style="padding: 12px 18px; border-radius: var(--radius-md); color: var(--accent-rose); border-color: rgba(244, 63, 94, 0.3);">
+            <span>Log Out</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CUSTOMER ORDERS & SUBSCRIPTIONS MODAL
+       ========================================================================== -->
+  <div id="customerOrdersModal" class="modal-backdrop" onclick="if(event.target===this) closeCustomerOrdersModal();">
+    <div class="modal-card" style="max-width: 600px; width: 92%; max-height: 90vh; overflow-y: auto;">
+      <button type="button" class="modal-close-btn" onclick="closeCustomerOrdersModal()">&times;</button>
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+        <div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(99, 102, 241, 0.15); color: var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0;">My Subscriptions & Orders</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin: 3px 0 0 0;">Manage your purchased digital licenses, status, and renewals</p>
+        </div>
+      </div>
+
+      <div id="customerOrdersContent">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Container -->
   <div id="toastContainer" class="toast-container"></div>
 
@@ -2405,6 +2700,7 @@
     // Initialize Storefront
     async function initStore() {
       initTheme();
+      initCustomerAuth();
       await fetchCategories();
       await fetchProducts();
     }
@@ -2917,6 +3213,12 @@
       document.getElementById('checkoutDeviceCount').textContent = `${activePlan.devices || 1} Device${(activePlan.devices || 1) > 1 ? 's' : ''}`;
       document.getElementById('checkoutTotalAmount').textContent = `${sym}${parseFloat(activePlan.price).toFixed(2)}`;
 
+      // Auto-fill customer email if logged in
+      const emailInput = document.getElementById('checkoutEmail');
+      if (emailInput && customerState && customerState.user && customerState.user.email) {
+        emailInput.value = customerState.user.email;
+      }
+
       document.getElementById('checkoutModal').style.display = 'flex';
     };
 
@@ -2939,9 +3241,18 @@
         btn.innerHTML = '<span>Confirm & Receive Instant Access</span>';
         closeCheckoutModal();
 
-        // Update cart badge
-        cartItems.push({ product: pendingCheckoutProduct, plan: pendingCheckoutPlan });
+        // Update cart badge and order records
+        cartItems.push({ 
+          product: pendingCheckoutProduct, 
+          plan: pendingCheckoutPlan,
+          licenseKey: 'SUB-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
+          date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        });
         document.getElementById('cartCountBadge').textContent = cartItems.length;
+        const ordBadge = document.getElementById('dropdownOrdersBadge');
+        if (ordBadge) ordBadge.textContent = cartItems.length;
+        const crtBadge = document.getElementById('dropdownCartBadge');
+        if (crtBadge) crtBadge.textContent = `${cartItems.length} items`;
 
         showToast(`🎉 Order confirmed! Access credentials sent to ${email}`, 'success');
       }, 1200);
@@ -2952,7 +3263,7 @@
       if (cartItems.length === 0) {
         showToast('Your subscriptions list is currently empty. Choose a product to subscribe!', 'info');
       } else {
-        showToast(`You have ${cartItems.length} active subscription orders queued.`, 'success');
+        openCustomerOrdersModal();
       }
     });
 
@@ -2985,30 +3296,475 @@
       }, 3500);
     }
 
-    // Profile Dropdown Toggle
+    // ==========================================================================
+    // CUSTOMER AUTHENTICATION & PROFILE CONTROLLER
+    // ==========================================================================
+    const customerState = {
+      token: localStorage.getItem('customer_access_token'),
+      refresh: localStorage.getItem('customer_refresh_token'),
+      user: null
+    };
+
+    try {
+      customerState.user = JSON.parse(localStorage.getItem('customer_user') || 'null');
+    } catch (e) {
+      customerState.user = null;
+    }
+
+    // Initialize Customer Auth State
+    async function initCustomerAuth() {
+      updateCustomerUI();
+      if (customerState.token) {
+        await refreshCustomerProfile();
+      }
+    }
+
+    // Update Customer Header & Dropdown UI
+    function updateCustomerUI() {
+      const nameEl = document.getElementById('dropdownProfileName');
+      const roleTextEl = document.getElementById('dropdownProfileRoleText');
+      const roleDotEl = document.getElementById('dropdownRoleDot');
+      const guestButtons = document.getElementById('dropdownGuestActionButtons');
+      const loggedInLinks = document.getElementById('customerLoggedInLinks');
+      const navAvatar = document.getElementById('navProfileAvatarImg');
+      const dropAvatar = document.getElementById('dropdownProfileAvatarImg');
+      const onlineDot = document.getElementById('navProfileOnlineDot');
+      const ordersBadge = document.getElementById('dropdownOrdersBadge');
+      const cartBadge = document.getElementById('dropdownCartBadge');
+
+      if (ordersBadge) ordersBadge.textContent = cartItems.length;
+      if (cartBadge) cartBadge.textContent = `${cartItems.length} items`;
+
+      if (customerState.token && customerState.user) {
+        const u = customerState.user;
+        const displayName = (u.first_name || u.last_name) ? `${u.first_name || ''} ${u.last_name || ''}`.trim() : (u.username || u.email);
+        
+        if (nameEl) nameEl.textContent = displayName;
+        if (roleTextEl) roleTextEl.textContent = u.email || 'Verified Customer';
+        if (roleDotEl) roleDotEl.style.background = '#10b981';
+
+        const navSignIn = document.getElementById('navSignInBtn');
+        if (navSignIn) navSignIn.style.display = 'none';
+
+        if (guestButtons) guestButtons.style.display = 'none';
+        const guestInfo = document.getElementById('customerLoggedOutGuestInfo');
+        if (guestInfo) guestInfo.style.display = 'none';
+        if (loggedInLinks) loggedInLinks.style.display = 'flex';
+        if (onlineDot) onlineDot.style.background = '#10b981';
+
+        // Avatar
+        const avatarUrl = u.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(displayName)}&backgroundColor=6366f1,a855f7`;
+        if (navAvatar) navAvatar.src = avatarUrl;
+        if (dropAvatar) dropAvatar.src = avatarUrl;
+      } else {
+        if (nameEl) nameEl.textContent = 'Guest Customer';
+        if (roleTextEl) roleTextEl.textContent = 'Sign in to track orders';
+        if (roleDotEl) roleDotEl.style.background = '#94a3b8';
+
+        const navSignIn = document.getElementById('navSignInBtn');
+        if (navSignIn) navSignIn.style.display = 'inline-flex';
+
+        if (guestButtons) guestButtons.style.display = 'flex';
+        const guestInfo = document.getElementById('customerLoggedOutGuestInfo');
+        if (guestInfo) guestInfo.style.display = 'flex';
+        if (loggedInLinks) loggedInLinks.style.display = 'none';
+        if (onlineDot) onlineDot.style.background = '#94a3b8';
+
+        const guestAvatar = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='40' cy='40' r='40' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='32' r='14' fill='%23ffffff'/%3E%3Cpath d='M16 68 C16 52, 28 48, 40 48 C52 48, 64 52, 64 68 Z' fill='%23ffffff'/%3E%3C/svg%3E`;
+        if (navAvatar) navAvatar.src = guestAvatar;
+        if (dropAvatar) dropAvatar.src = guestAvatar;
+      }
+    }
+
+    // Refresh Customer Profile from API
+    async function refreshCustomerProfile() {
+      if (!customerState.token) return;
+      try {
+        const res = await fetch('/api/customer/profile/', {
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          customerState.user = data;
+          localStorage.setItem('customer_user', JSON.stringify(data));
+          updateCustomerUI();
+        } else if (res.status === 401) {
+          // Token expired or invalid
+          logoutCustomer(false);
+        }
+      } catch (err) {
+        console.warn('Could not refresh customer profile:', err);
+      }
+    }
+
+    // Modal Toggles
+    window.openCustomerAuthModal = function(tab = 'login') {
+      closeProfileDropdown();
+      switchAuthTab(tab);
+      const modal = document.getElementById('customerAuthModal');
+      if (modal) modal.style.display = 'flex';
+      hideAuthError();
+    };
+
+    window.closeCustomerAuthModal = function() {
+      const modal = document.getElementById('customerAuthModal');
+      if (modal) modal.style.display = 'none';
+      hideAuthError();
+    };
+
+    window.switchAuthTab = function(tab) {
+      hideAuthError();
+      const loginTabBtn = document.getElementById('tabBtnLogin');
+      const regTabBtn = document.getElementById('tabBtnRegister');
+      const loginPanel = document.getElementById('custLoginFormPanel');
+      const regPanel = document.getElementById('custRegisterFormPanel');
+      const title = document.getElementById('authModalTitle');
+
+      if (tab === 'register') {
+        if (loginTabBtn) loginTabBtn.classList.remove('active');
+        if (regTabBtn) regTabBtn.classList.add('active');
+        if (loginPanel) loginPanel.classList.remove('active');
+        if (regPanel) regPanel.classList.add('active');
+        if (title) title.textContent = 'Create Customer Account';
+      } else {
+        if (loginTabBtn) loginTabBtn.classList.add('active');
+        if (regTabBtn) regTabBtn.classList.remove('active');
+        if (loginPanel) loginPanel.classList.add('active');
+        if (regPanel) regPanel.classList.remove('active');
+        if (title) title.textContent = 'Customer Sign In';
+      }
+    };
+
+    function showAuthError(msg) {
+      const errBox = document.getElementById('custAuthErrorBox');
+      if (errBox) {
+        errBox.textContent = msg;
+        errBox.style.display = 'block';
+      }
+    }
+
+    function hideAuthError() {
+      const errBox = document.getElementById('custAuthErrorBox');
+      if (errBox) errBox.style.display = 'none';
+    }
+
+    // Handle Customer Login
+    window.handleCustomerLogin = async function(e) {
+      e.preventDefault();
+      hideAuthError();
+      const email = document.getElementById('custLoginEmail').value.trim();
+      const password = document.getElementById('custLoginPassword').value;
+      const btn = document.getElementById('custLoginBtn');
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Verifying Credentials...';
+      }
+
+      try {
+        const res = await fetch('/api/customer/login/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          customerState.token = data.access_token;
+          customerState.refresh = data.refresh_token;
+          customerState.user = data.user;
+
+          localStorage.setItem('customer_access_token', data.access_token);
+          localStorage.setItem('customer_refresh_token', data.refresh_token);
+          localStorage.setItem('customer_user', JSON.stringify(data.user));
+
+          updateCustomerUI();
+          closeCustomerAuthModal();
+
+          const name = data.user.first_name || data.user.email;
+          showToast(`Welcome back, ${name}! Logged in successfully.`, 'success');
+        } else {
+          const errMsg = data.non_field_errors 
+            ? data.non_field_errors.join(' ') 
+            : (data.detail || data.email || 'Invalid email or password.');
+          showAuthError(errMsg);
+        }
+      } catch (err) {
+        showAuthError('Network error connecting to login server.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>Sign In to Account</span>';
+        }
+      }
+    };
+
+    // Handle Customer Registration
+    window.handleCustomerRegister = async function(e) {
+      e.preventDefault();
+      hideAuthError();
+
+      const email = document.getElementById('custRegEmail').value.trim();
+      const password = document.getElementById('custRegPassword').value;
+      const firstName = document.getElementById('custRegFirstName').value.trim();
+      const lastName = document.getElementById('custRegLastName').value.trim();
+      const phone = document.getElementById('custRegPhone').value.trim();
+      const btn = document.getElementById('custRegisterBtn');
+
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Creating Your Account...';
+      }
+
+      try {
+        const res = await fetch('/api/customer/register/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            password,
+            first_name: firstName,
+            last_name: lastName,
+            phone_number: phone
+          })
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          customerState.token = data.access_token;
+          customerState.refresh = data.refresh_token;
+          customerState.user = data.user;
+
+          localStorage.setItem('customer_access_token', data.access_token);
+          localStorage.setItem('customer_refresh_token', data.refresh_token);
+          localStorage.setItem('customer_user', JSON.stringify(data.user));
+
+          updateCustomerUI();
+          closeCustomerAuthModal();
+
+          const name = data.user.first_name || data.user.email;
+          showToast(`Welcome, ${name}! Account created & logged in.`, 'success');
+        } else {
+          let errText = 'Registration failed.';
+          if (data.email) errText = Array.isArray(data.email) ? data.email.join(' ') : data.email;
+          else if (data.password) errText = Array.isArray(data.password) ? data.password.join(' ') : data.password;
+          else if (data.non_field_errors) errText = data.non_field_errors.join(' ');
+          showAuthError(errText);
+        }
+      } catch (err) {
+        showAuthError('Network error creating customer account.');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>Create Account & Get Tokens</span>';
+        }
+      }
+    };
+
+    // Open Customer Profile Modal
+    window.openCustomerProfileModal = function() {
+      closeProfileDropdown();
+      const u = customerState.user;
+      if (!u) {
+        openCustomerAuthModal('login');
+        return;
+      }
+
+      document.getElementById('profileEmailInput').value = u.email || '';
+      document.getElementById('profileFirstNameInput').value = u.first_name || '';
+      document.getElementById('profileLastNameInput').value = u.last_name || '';
+      document.getElementById('profilePhoneInput').value = u.phone_number || '';
+      document.getElementById('profileCityInput').value = u.city || '';
+      document.getElementById('profileAddressInput').value = u.address || '';
+
+      const feedback = document.getElementById('custProfileFeedback');
+      if (feedback) feedback.style.display = 'none';
+
+      const modal = document.getElementById('customerProfileModal');
+      if (modal) modal.style.display = 'flex';
+    };
+
+    window.closeCustomerProfileModal = function() {
+      const modal = document.getElementById('customerProfileModal');
+      if (modal) modal.style.display = 'none';
+    };
+
+    // Save Customer Profile Changes
+    window.handleCustomerProfileSave = async function(e) {
+      e.preventDefault();
+      if (!customerState.token) return;
+
+      const btn = document.getElementById('saveProfileBtn');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Saving Changes...';
+      }
+
+      const payload = {
+        first_name: document.getElementById('profileFirstNameInput').value.trim(),
+        last_name: document.getElementById('profileLastNameInput').value.trim(),
+        phone_number: document.getElementById('profilePhoneInput').value.trim(),
+        city: document.getElementById('profileCityInput').value.trim(),
+        address: document.getElementById('profileAddressInput').value.trim()
+      };
+
+      try {
+        const res = await fetch('/api/customer/profile/', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${customerState.token}`
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          customerState.user = data.user;
+          localStorage.setItem('customer_user', JSON.stringify(data.user));
+          updateCustomerUI();
+          closeCustomerProfileModal();
+          showToast('Profile updated successfully!', 'success');
+        } else {
+          showToast('Failed to update profile.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error saving profile.', 'error');
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span>Save Changes</span>';
+        }
+      }
+    };
+
+    // Customer Logout
+    window.logoutCustomer = function(notify = true) {
+      localStorage.removeItem('customer_access_token');
+      localStorage.removeItem('customer_refresh_token');
+      localStorage.removeItem('customer_user');
+      customerState.token = null;
+      customerState.refresh = null;
+      customerState.user = null;
+
+      updateCustomerUI();
+      closeProfileDropdown();
+      closeCustomerProfileModal();
+
+      if (notify) {
+        showToast('You have signed out of your customer account.', 'info');
+      }
+    };
+
+    // Profile Dropdown Open / Close / Toggle
     window.toggleProfileDropdown = function(e) {
       if (e) {
-        e.preventDefault();
-        e.stopPropagation();
+        if (e.stopPropagation) e.stopPropagation();
       }
       const menu = document.getElementById('profileDropdownMenu');
       const btn = document.getElementById('profileDropdownBtn');
-      if (menu) {
-        const isOpen = menu.classList.toggle('active');
-        if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (!menu) return;
+
+      const isCurrentlyActive = menu.classList.contains('active');
+      if (isCurrentlyActive) {
+        menu.classList.remove('active');
+        if (btn) {
+          btn.setAttribute('aria-expanded', 'false');
+          btn.classList.remove('is-active');
+        }
+      } else {
+        menu.classList.add('active');
+        if (btn) {
+          btn.setAttribute('aria-expanded', 'true');
+          btn.classList.add('is-active');
+        }
+      }
+    };
+
+    window.closeProfileDropdown = function() {
+      const menu = document.getElementById('profileDropdownMenu');
+      const btn = document.getElementById('profileDropdownBtn');
+      if (menu) menu.classList.remove('active');
+      if (btn) {
+        btn.setAttribute('aria-expanded', 'false');
+        btn.classList.remove('is-active');
       }
     };
 
     // Close Profile Dropdown on Click Outside
     document.addEventListener('click', (e) => {
       const wrap = document.getElementById('profileMenuWrap');
-      const menu = document.getElementById('profileDropdownMenu');
-      const btn = document.getElementById('profileDropdownBtn');
-      if (wrap && menu && !wrap.contains(e.target)) {
-        menu.classList.remove('active');
-        if (btn) btn.setAttribute('aria-expanded', 'false');
+      if (wrap && wrap.contains(e.target)) {
+        return; // Click is inside profile avatar or dropdown, do not close
       }
+      closeProfileDropdown();
     });
+
+    // Global helper for opening cart drawer
+    window.openCartDrawer = function() {
+      const cartBtn = document.getElementById('cartDrawerBtn');
+      if (cartBtn) cartBtn.click();
+    };
+
+    // Customer Orders & Subscriptions Modal Management
+    window.openCustomerOrdersModal = function() {
+      const modal = document.getElementById('customerOrdersModal');
+      const content = document.getElementById('customerOrdersContent');
+      if (!modal || !content) return;
+
+      if (cartItems.length === 0) {
+        content.innerHTML = `
+          <div style="text-align: center; padding: 36px 16px;">
+            <div style="width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main);">No Active Subscriptions Yet</h4>
+            <p style="font-size: 0.84rem; color: var(--text-muted); max-width: 380px; margin: 0 auto 20px;">You haven't ordered any subscription plans yet. Explore our top software & streaming licenses with instant digital delivery!</p>
+            <a href="#catalog" onclick="closeCustomerOrdersModal();" class="btn-primary-glow" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 700; text-decoration: none; color: #fff; background: linear-gradient(135deg, var(--primary), var(--accent-purple));">
+              Explore Catalog Now
+            </a>
+          </div>
+        `;
+      } else {
+        let html = `<div style="display: flex; flex-direction: column; gap: 12px;">`;
+        cartItems.forEach((item, idx) => {
+          const prod = item.product || {};
+          const plan = item.plan || {};
+          const license = item.licenseKey || ('SUB-' + Math.random().toString(36).substring(2, 10).toUpperCase());
+          html += `
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
+                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(99, 102, 241, 0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;">
+                  ${prod.image ? `<img src="${prod.image}" alt="${prod.name}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect></svg>`}
+                </div>
+                <div style="min-width: 0;">
+                  <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${prod.name || 'Subscription License'}</div>
+                  <div style="font-size: 0.78rem; color: var(--text-muted);">${plan.name || 'Standard Tier'} • <span style="color: var(--accent-emerald); font-weight: 700;">● Active License</span></div>
+                </div>
+              </div>
+              <div style="text-align: right; flex-shrink: 0;">
+                <div style="font-weight: 800; color: var(--primary); font-size: 0.95rem;">${plan.currency_symbol || '৳'}${plan.price || '0.00'}</div>
+                <div style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace; background: var(--bg-card); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-subtle); margin-top: 4px;">Key: ${license}</div>
+              </div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+        content.innerHTML = html;
+      }
+      modal.style.display = 'flex';
+    };
+
+    window.closeCustomerOrdersModal = function() {
+      const modal = document.getElementById('customerOrdersModal');
+      if (modal) modal.style.display = 'none';
+    };
 
     // Initialize Store on DOM ready
     document.addEventListener('DOMContentLoaded', initStore);

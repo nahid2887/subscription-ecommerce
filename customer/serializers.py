@@ -196,10 +196,13 @@ class CustomerLoginSerializer(serializers.Serializer):
 
 class CustomerProfileUpdateSerializer(serializers.Serializer):
     """
-    Update Customer profile details including name, phone, address, and avatar.
+    Update Customer profile details including name, username, email, password, phone, address, and avatar.
     """
     first_name = serializers.CharField(required=False, allow_blank=True)
     last_name = serializers.CharField(required=False, allow_blank=True)
+    username = serializers.CharField(required=False, allow_blank=True)
+    email = serializers.EmailField(read_only=True)
+    password = serializers.CharField(write_only=True, required=False, allow_blank=True, min_length=6)
     phone_number = serializers.CharField(required=False, allow_blank=True)
     avatar = CustomerAvatarField(required=False, allow_null=True)
     address = serializers.CharField(required=False, allow_blank=True)
@@ -207,12 +210,26 @@ class CustomerProfileUpdateSerializer(serializers.Serializer):
     country = serializers.CharField(required=False, allow_blank=True)
     postal_code = serializers.CharField(required=False, allow_blank=True)
 
+    def validate_username(self, value):
+        val = value.strip()
+        if not val:
+            return val
+        user = self.instance
+        if User.objects.filter(username__iexact=val).exclude(pk=user.pk if user else None).exists():
+            raise serializers.ValidationError("This username is already taken.")
+        return val
+
     def update(self, instance, validated_data):
         # Update User model fields
         if 'first_name' in validated_data:
             instance.first_name = validated_data['first_name']
         if 'last_name' in validated_data:
             instance.last_name = validated_data['last_name']
+        if 'username' in validated_data and validated_data['username']:
+            instance.username = validated_data['username']
+        # Email cannot be changed (immutable account identity)
+        if 'password' in validated_data and validated_data['password']:
+            instance.set_password(validated_data['password'])
         instance.save()
 
         # Update CustomerProfile model fields

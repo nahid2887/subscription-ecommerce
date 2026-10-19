@@ -198,3 +198,36 @@ class CustomerAuthTests(APITestCase):
         refresh_res = self.client.post(self.refresh_url, {"refresh": refresh_token}, format='json')
         self.assertEqual(refresh_res.status_code, status.HTTP_200_OK)
         self.assertTrue('access' in refresh_res.data)
+
+    def test_customer_profile_web_page_renders(self):
+        """Verify that the dedicated /profile/ page loads with HTTP 200."""
+        res = self.client.get('/profile/')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertContains(res, "Customer Profile & Account Details")
+
+    def test_customer_email_cannot_be_changed_and_password_can_be_updated(self):
+        """Verify authenticated customer email cannot be changed while password/username can."""
+        initial_email = "initial.email@gmail.com"
+        user = User.objects.create_user(
+            username="creduser",
+            email=initial_email,
+            password=self.valid_password
+        )
+        self.client.force_authenticate(user=user)
+
+        attempted_new_email = "hacker.email@gmail.com"
+        new_password = "NewSecurePassword456!"
+
+        res = self.client.patch(self.profile_url, {
+            "email": attempted_new_email,
+            "username": "updated_username",
+            "password": new_password
+        }, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        user.refresh_from_db()
+        # Email MUST remain unchanged
+        self.assertEqual(user.email, initial_email)
+        # Username and password MUST be updated
+        self.assertEqual(user.username, "updated_username")
+        self.assertTrue(user.check_password(new_password))
