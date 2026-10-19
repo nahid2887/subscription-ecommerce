@@ -317,25 +317,196 @@
       box-shadow: 0 2px 6px rgba(244, 63, 94, 0.5);
     }
 
-    .admin-link-btn {
-      display: inline-flex;
+    /* Profile Avatar & Dropdown */
+    .profile-menu-wrap {
+      position: relative;
+    }
+
+    .profile-avatar-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      padding: 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      border-radius: 9999px;
-      border: 1px solid var(--border-subtle);
-      background: var(--bg-card);
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      font-weight: 600;
-      text-decoration: none;
+      justify-content: center;
+      transition: var(--transition-smooth);
+      outline: none;
+    }
+
+    .profile-avatar-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .profile-avatar-ring {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      padding: 2px;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple), var(--accent-rose));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
       transition: var(--transition-smooth);
     }
 
-    .admin-link-btn:hover {
+    .profile-avatar-btn:hover .profile-avatar-ring {
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.55);
+      transform: scale(1.05);
+    }
+
+    .profile-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--bg-card);
+      border: 1.5px solid var(--bg-surface);
+      display: block;
+    }
+
+    .profile-online-badge {
+      position: absolute;
+      bottom: 1px;
+      right: 1px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #10b981;
+      border: 2px solid var(--bg-surface);
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+    }
+
+    /* Profile Dropdown Menu */
+    .profile-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 250px;
+      background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 10px;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
+      z-index: 1000;
+      display: none;
+      animation: profileDropdownIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .profile-dropdown-menu.active {
+      display: block;
+    }
+
+    @keyframes profileDropdownIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .profile-dropdown-header {
+      padding: 10px 12px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 8px;
+    }
+
+    .profile-user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .profile-dropdown-avatar-sm {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .profile-user-name {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-user-role {
+      font-size: 0.72rem;
+      color: var(--accent-emerald);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+    }
+
+    .role-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 5px rgba(16, 185, 129, 0.8);
+    }
+
+    .profile-menu-items {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .profile-dropdown-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+      transition: var(--transition-smooth);
+    }
+
+    .profile-dropdown-link:hover {
+      background: var(--tag-bg);
+      color: var(--text-main);
+      transform: translateX(3px);
+    }
+
+    .profile-dropdown-link svg {
       color: var(--primary);
-      border-color: var(--primary);
-      background: var(--primary-light);
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .profile-dropdown-link.link-login {
+      color: var(--accent-rose);
+    }
+
+    .profile-dropdown-link.link-login svg {
+      color: var(--accent-rose);
+    }
+
+    .profile-dropdown-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 6px 0;
     }
 
     /* ==========================================================================
@@ -1692,14 +1863,81 @@
           <span id="cartCountBadge" class="cart-badge">0</span>
         </div>
 
-        <!-- Super Admin Portal Link -->
-        <a href="/super-admin/login/" class="admin-link-btn" title="Super Admin Portal">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-          </svg>
-          Admin Portal
-        </a>
+        <!-- User Profile Avatar & Dropdown -->
+        <div class="profile-menu-wrap" id="profileMenuWrap">
+          <button id="profileDropdownBtn" class="profile-avatar-btn" title="Account & Profile" onclick="toggleProfileDropdown(event)" aria-haspopup="true" aria-expanded="false">
+            <div class="profile-avatar-ring">
+              {% if request.user.is_authenticated and request.user.profile.avatar %}
+                <img src="{{ request.user.profile.avatar.url }}" alt="{{ request.user.username }}" class="profile-avatar-img">
+              {% else %}
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Profile" class="profile-avatar-img" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 80 80\'%3E%3Cdefs%3E%3ClinearGradient id=\'g\' x1=\'0%25\' y1=\'0%25\' x2=\'100%25\' y2=\'100%25\'%3E%3Cstop offset=\'0%25\' stop-color=\'%236366f1\'/%3E%3Cstop offset=\'100%25\' stop-color=\'%23ec4899\'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx=\'40\' cy=\'40\' r=\'40\' fill=\'url(%23g)\'/%3E%3Ccircle cx=\'40\' cy=\'32\' r=\'14\' fill=\'%23ffffff\'/%3E%3Cpath d=\'M16 68 C16 52, 28 48, 40 48 C52 48, 64 52, 64 68 Z\' fill=\'%23ffffff\'/%3E%3C/svg%3E';">
+              {% endif %}
+            </div>
+            <span class="profile-online-badge"></span>
+          </button>
+
+          <!-- Profile Dropdown Popup -->
+          <div id="profileDropdownMenu" class="profile-dropdown-menu">
+            <div class="profile-dropdown-header">
+              <div class="profile-user-info">
+                <div class="profile-dropdown-avatar-sm">
+                  {% if request.user.is_authenticated and request.user.profile.avatar %}
+                    <img src="{{ request.user.profile.avatar.url }}" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                  {% else %}
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80" alt="Profile" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                  {% endif %}
+                </div>
+                <div>
+                  <div class="profile-user-name">{% if request.user.is_authenticated %}{{ request.user.username }}{% else %}Super Admin{% endif %}</div>
+                  <div class="profile-user-role">
+                    <span class="role-dot"></span>
+                    {% if request.user.is_authenticated and request.user.is_superuser %}Verified Administrator{% else %}Active Account{% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-menu-items">
+              <a href="/super-admin/dashboard/" class="profile-dropdown-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="9"></rect>
+                  <rect x="14" y="3" width="7" height="5"></rect>
+                  <rect x="14" y="12" width="7" height="9"></rect>
+                  <rect x="3" y="16" width="7" height="5"></rect>
+                </svg>
+                <span>Analytics Dashboard</span>
+              </a>
+
+              <a href="/super-admin/profile/" class="profile-dropdown-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>My Profile & Settings</span>
+              </a>
+
+              <a href="/super-admin/products/" class="profile-dropdown-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span>Manage Products</span>
+              </a>
+
+              <div class="profile-dropdown-divider"></div>
+
+              <a href="/super-admin/login/" class="profile-dropdown-link link-login">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                  <polyline points="10 17 15 12 10 7"></polyline>
+                  <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                <span>Sign In / Portal</span>
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -2746,6 +2984,31 @@
         setTimeout(() => toast.remove(), 300);
       }, 3500);
     }
+
+    // Profile Dropdown Toggle
+    window.toggleProfileDropdown = function(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      const menu = document.getElementById('profileDropdownMenu');
+      const btn = document.getElementById('profileDropdownBtn');
+      if (menu) {
+        const isOpen = menu.classList.toggle('active');
+        if (btn) btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+    };
+
+    // Close Profile Dropdown on Click Outside
+    document.addEventListener('click', (e) => {
+      const wrap = document.getElementById('profileMenuWrap');
+      const menu = document.getElementById('profileDropdownMenu');
+      const btn = document.getElementById('profileDropdownBtn');
+      if (wrap && menu && !wrap.contains(e.target)) {
+        menu.classList.remove('active');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      }
+    });
 
     // Initialize Store on DOM ready
     document.addEventListener('DOMContentLoaded', initStore);

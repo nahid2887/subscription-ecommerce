@@ -34,6 +34,9 @@ urlpatterns = [
     # Product & Subscription Plans API Endpoints
     path('api/products/', include('product.urls')),
 
+    # Customer Authentication & Profile API Endpoints
+    path('api/customer/', include('customer.urls')),
+
     # Swagger / OpenAPI 3.0 Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
