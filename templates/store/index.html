@@ -1254,10 +1254,42 @@
       letter-spacing: 0.04em;
     }
 
+    .card-bookmark-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(10, 14, 25, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 5;
+      transition: var(--transition-smooth);
+    }
+
+    .card-bookmark-btn:hover {
+      background: rgba(244, 63, 94, 0.2);
+      border-color: rgba(244, 63, 94, 0.5);
+      color: var(--accent-rose);
+      transform: scale(1.12);
+    }
+
+    .card-bookmark-btn.active {
+      background: rgba(244, 63, 94, 0.25);
+      border-color: rgba(244, 63, 94, 0.6);
+      color: var(--accent-rose);
+    }
+
     .card-instant-tag {
       position: absolute;
       top: 12px;
-      right: 12px;
+      right: 52px;
       background: rgba(16, 185, 129, 0.2);
       border: 1px solid rgba(16, 185, 129, 0.45);
       color: #34d399;
@@ -1900,7 +1932,418 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+
+    /* ==========================================================================
+       SHOPPING CART MODAL & DRAWER STYLES
+       ========================================================================== */
+    .cart-items-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 10px;
+      max-height: 52vh;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .cart-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      transition: var(--transition-smooth);
+    }
+
+    .cart-item-row:hover {
+      border-color: var(--border-hover);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    .cart-item-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .cart-item-thumb {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-item-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cart-item-details {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 800;
+      font-size: 0.94rem;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cart-item-tier {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .cart-item-tier-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(99, 102, 241, 0.12);
+      color: var(--primary);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+    }
+
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-shrink: 0;
+    }
+
+    .cart-qty-control {
+      display: inline-flex;
+      align-items: center;
+      background: var(--input-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .cart-qty-btn {
+      width: 28px;
+      height: 28px;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 700;
+      transition: var(--transition-smooth);
+    }
+
+    .cart-qty-btn:hover {
+      background: rgba(99, 102, 241, 0.25);
+      color: var(--primary);
+    }
+
+    .cart-qty-value {
+      min-width: 26px;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .cart-item-price-col {
+      text-align: right;
+      min-width: 72px;
+    }
+
+    .cart-item-subtotal {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--accent-emerald);
+    }
+
+    .cart-item-unit-price {
+      font-size: 0.72rem;
+      color: var(--text-subtle);
+    }
+
+    .cart-remove-btn {
+      background: none;
+      border: none;
+      color: var(--text-subtle);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    .cart-remove-btn:hover {
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--accent-rose);
+      transform: scale(1.08);
+    }
+
+    .cart-footer-summary {
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .cart-summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.86rem;
+      color: var(--text-muted);
+    }
+
+    .cart-summary-total {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    .cart-total-amount {
+      color: var(--accent-emerald);
+      font-size: 1.35rem;
+    }
+
+    .cart-action-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .cart-badge-bounce {
+      animation: badgeBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes badgeBounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+
+    /* ==========================================================================
+       MFS PAYMENT METHOD SELECTION & ORDER VERIFICATION STYLES
+       ========================================================================== */
+    .mfs-selector-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 480px) {
+      .mfs-selector-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .mfs-card {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+    .mfs-card:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: var(--bg-card-hover);
+      transform: translateY(-1px);
+    }
+    .mfs-card.selected {
+      border-color: var(--method-color, var(--primary));
+      background: rgba(99, 102, 241, 0.08);
+      box-shadow: 0 0 0 1px var(--method-color, var(--primary)), 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+    .mfs-card.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--method-color, var(--primary));
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mfs-logo-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .mfs-logo-wrap svg, .mfs-logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .mfs-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .mfs-name {
+      font-weight: 800;
+      font-size: 0.94rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .mfs-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+    .mfs-instruction-panel {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 16px;
+      transition: all 0.25s ease;
+    }
+    .mfs-number-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: var(--input-bg);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      margin: 10px 0 12px 0;
+    }
+    .mfs-number-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: 0.8px;
+      color: var(--text-main);
+    }
+    .mfs-copy-btn {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: var(--primary);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: var(--transition-smooth);
+    }
+    .mfs-copy-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .mfs-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin: 0;
+      padding-left: 18px;
+    }
+    .mfs-steps-list li strong {
+      color: var(--text-main);
+    }
+    .trx-input-group {
+      margin-bottom: 14px;
+    }
+    .trx-input-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .trx-input-field {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 11px 14px;
+      color: var(--text-main);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+    .trx-input-field:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .order-filter-tab {
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .order-filter-tab:hover {
+      color: var(--text-main);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    .order-filter-tab.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.2);
+    }
   </style>
+
 </head>
 
 <body>
@@ -1934,6 +2377,10 @@
 
       <nav class="main-nav">
         <a href="#catalog" class="nav-item">Catalog</a>
+        <a href="javascript:void(0)" onclick="openCustomerOrdersModal()" class="nav-item" style="display: inline-flex; align-items: center; gap: 6px;">
+          <span>My Orders</span>
+          <span id="navOrdersNavBadge" style="display: none; font-size: 0.68rem; padding: 1px 7px; border-radius: 9999px; background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.35);">0</span>
+        </a>
         <a href="#why-us" class="nav-item">Why Choose Us</a>
         <a href="#reviews" class="nav-item">Reviews</a>
         <a href="#faq" class="nav-item">FAQ</a>
@@ -1956,7 +2403,19 @@
           </svg>
         </button>
 
-        <!-- Cart / Orders Button -->
+        <!-- Customer Orders Button -->
+        <div class="orders-btn-wrap" style="position: relative;">
+          <button id="navOrdersBtn" class="btn-icon-circle" title="My Orders & MFS Payment Verification" onclick="openCustomerOrdersModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </button>
+          <span id="navOrdersBadge" class="cart-badge" style="background: linear-gradient(135deg, #10b981, #059669); display: none;">0</span>
+        </div>
+
+        <!-- Cart Button -->
         <div class="cart-btn-wrap">
           <button id="cartDrawerBtn" class="btn-icon-circle" title="View Selected Subscriptions">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -2022,13 +2481,37 @@
             <div class="profile-menu-items">
               <!-- When Logged In -->
               <div id="customerLoggedInLinks" style="display: none; flex-direction: column; gap: 8px;">
-                <a href="/profile/" class="profile-dropdown-link" style="display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.25); color: var(--primary); font-weight: 800; text-decoration: none; transition: var(--transition-smooth);">
+                <button type="button" onclick="closeProfileDropdown(); openCustomerOrdersModal();" class="profile-dropdown-link" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; font-weight: 800; width: 100%; text-align: left; cursor: pointer; transition: var(--transition-smooth);">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width: 18px; height: 18px; color: #10b981;">
+                      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                      <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    <span>My Orders & Transactions</span>
+                  </div>
+                  <span id="dropdownOrdersBadge" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 9999px; background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 800;">0 orders</span>
+                </button>
+
+                <a href="/profile/" class="profile-dropdown-link" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.22); color: var(--primary); font-weight: 700; text-decoration: none; transition: var(--transition-smooth);">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width: 18px; height: 18px;">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                     <circle cx="12" cy="7" r="4"></circle>
                   </svg>
                   <span>My Profile & Account Details</span>
                 </a>
+
+                <button type="button" onclick="closeProfileDropdown(); openShoppingCartModal();" class="profile-dropdown-link" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); background: none; border: none; color: var(--text-main); font-weight: 700; width: 100%; text-align: left; cursor: pointer; transition: var(--transition-smooth);">
+                  <div style="display: flex; align-items: center; gap: 10px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width: 18px; height: 18px; color: var(--accent-cyan);">
+                      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                      <line x1="3" y1="6" x2="21" y2="6"></line>
+                      <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span>My Shopping Cart</span>
+                  </div>
+                  <span id="dropdownCartBadge" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 9999px; background: rgba(99, 102, 241, 0.15); color: var(--primary); font-weight: 800;">0 items</span>
+                </button>
 
                 <div class="profile-dropdown-divider"></div>
 
@@ -2450,61 +2933,169 @@
   </div>
 
   <!-- ==========================================================================
-       INSTANT CHECKOUT MODAL
+       INSTANT CHECKOUT MODAL (MFS: bKash, Nagad, Rocket, Bangla QR)
        ========================================================================== -->
-  <div id="checkoutModal" class="modal-backdrop">
-    <div class="modal-card" style="max-width: 540px;">
-      <button class="modal-close-btn" onclick="closeCheckoutModal()">&times;</button>
+  <div id="checkoutModal" class="modal-backdrop" onclick="if(event.target===this) closeCheckoutModal();">
+    <div class="modal-card" style="max-width: 600px; width: 94%; max-height: 92vh; overflow-y: auto; padding: 24px;">
+      <button type="button" class="modal-close-btn" onclick="closeCheckoutModal()">&times;</button>
 
-      <div style="margin-bottom: 20px;">
-        <span style="font-size: 0.72rem; font-weight: 800; color: var(--accent-emerald); text-transform: uppercase;">Instant Digital Checkout</span>
-        <h3 id="checkoutTitle" style="font-size: 1.35rem; font-weight: 800; margin-top: 4px;">Confirm Your Order</h3>
+      <div style="margin-bottom: 16px;">
+        <span style="font-size: 0.72rem; font-weight: 800; color: var(--accent-emerald); text-transform: uppercase; letter-spacing: 0.6px;">Secure MFS Digital Checkout</span>
+        <h3 id="checkoutTitle" style="font-size: 1.35rem; font-weight: 800; margin-top: 4px; color: var(--text-main);">Confirm Your Order & Pay</h3>
       </div>
 
       <!-- Order Summary Card -->
-      <div style="background: var(--panel-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 18px; margin-bottom: 20px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-          <span style="color: var(--text-muted); font-size: 0.9rem;">Product:</span>
-          <span id="checkoutProductName" style="font-weight: 700;">—</span>
+      <div style="background: var(--panel-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; margin-bottom: 18px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted); font-size: 0.88rem;">Subscription / Product:</span>
+          <span id="checkoutProductName" style="font-weight: 700; color: var(--text-main); text-align: right; max-width: 65%;">—</span>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-          <span style="color: var(--text-muted); font-size: 0.9rem;">Selected Plan:</span>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted); font-size: 0.88rem;">Selected Plan / Tier:</span>
           <span id="checkoutPlanName" style="font-weight: 700; color: var(--primary);">—</span>
         </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-          <span style="color: var(--text-muted); font-size: 0.9rem;">Device Tier:</span>
-          <span id="checkoutDeviceCount" style="font-weight: 700;">1 Device</span>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+          <span style="color: var(--text-muted); font-size: 0.88rem;">Device Activation:</span>
+          <span id="checkoutDeviceCount" style="font-weight: 700; color: var(--text-main);">1 Device</span>
         </div>
-        <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 1px dashed var(--border-subtle);">
-          <span style="font-weight: 800; font-size: 1.05rem;">Total Amount:</span>
-          <span id="checkoutTotalAmount" style="font-weight: 800; font-size: 1.25rem; color: var(--accent-emerald);">৳0.00</span>
+        <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 1px dashed var(--border-subtle); align-items: center;">
+          <span style="font-weight: 800; font-size: 1rem; color: var(--text-main);">Payable Amount:</span>
+          <span id="checkoutTotalAmount" style="font-weight: 800; font-size: 1.3rem; color: var(--accent-emerald);">৳0.00</span>
         </div>
       </div>
 
       <!-- Checkout Form -->
       <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)">
-        <div style="margin-bottom: 14px;">
-          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Email Address for Delivery</label>
-          <input type="email" id="checkoutEmail" required placeholder="your.email@example.com"
-            style="width: 100%; background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text-main); font-family: inherit; font-size: 0.9rem; outline: none;">
+        <!-- Step 1: Select Payment Method -->
+        <div style="margin-bottom: 16px;">
+          <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">
+            <span>1. Select MFS Payment Method</span>
+            <span style="font-size: 0.72rem; color: var(--primary); font-weight: 600;">Direct Send Money / QR</span>
+          </label>
+          <div class="mfs-selector-grid">
+            <!-- bKash -->
+            <div class="mfs-card selected" id="mfsCard-bkash" onclick="selectPaymentMethod('bkash')" style="--method-color: #e2136e;">
+              <div class="mfs-logo-wrap" style="background: #e2136e;">
+                <svg viewBox="0 0 100 100" width="100%" height="100%"><rect width="100" height="100" rx="20" fill="#e2136e"/><path d="M22 68 L48 24 L56 46 L38 52 Z" fill="#ffffff"/><path d="M48 24 L78 38 L62 50 L56 46 Z" fill="#f9fafb"/><path d="M62 50 L78 38 L68 76 L52 64 Z" fill="#ffffff"/></svg>
+              </div>
+              <div class="mfs-info">
+                <div class="mfs-name" style="color: #e2136e;">bKash</div>
+                <div class="mfs-sub">Personal (Send Money)</div>
+              </div>
+            </div>
+
+            <!-- Nagad -->
+            <div class="mfs-card" id="mfsCard-nagad" onclick="selectPaymentMethod('nagad')" style="--method-color: #f97316;">
+              <div class="mfs-logo-wrap" style="background: #f97316;">
+                <svg viewBox="0 0 100 100" width="100%" height="100%"><rect width="100" height="100" rx="20" fill="#f97316"/><path d="M50 18 C32 18 24 32 24 48 C24 66 36 82 50 82 C64 82 76 66 76 48 C76 32 68 18 50 18 Z" fill="#ffffff"/><path d="M50 26 C42 26 36 34 36 46 C36 58 42 66 50 74 C58 66 64 58 64 46 C64 34 58 26 50 26 Z" fill="#ea580c"/></svg>
+              </div>
+              <div class="mfs-info">
+                <div class="mfs-name" style="color: #f97316;">Nagad</div>
+                <div class="mfs-sub">Personal (Send Money)</div>
+              </div>
+            </div>
+
+            <!-- Rocket -->
+            <div class="mfs-card" id="mfsCard-rocket" onclick="selectPaymentMethod('rocket')" style="--method-color: #8c3494;">
+              <div class="mfs-logo-wrap" style="background: #8c3494;">
+                <svg viewBox="0 0 100 100" width="100%" height="100%"><rect width="100" height="100" rx="20" fill="#8c3494"/><polygon points="50,15 65,45 55,45 55,75 45,75 45,45 35,45" fill="#ffffff"/><polygon points="45,75 50,85 55,75" fill="#f59e0b"/><circle cx="50" cy="35" r="5" fill="#8c3494"/></svg>
+              </div>
+              <div class="mfs-info">
+                <div class="mfs-name" style="color: #a855f7;">Rocket</div>
+                <div class="mfs-sub">Personal (DBBL Send Money)</div>
+              </div>
+            </div>
+
+            <!-- Bangla QR -->
+            <div class="mfs-card" id="mfsCard-bangla_qr" onclick="selectPaymentMethod('bangla_qr')" style="--method-color: #009688;">
+              <div class="mfs-logo-wrap" style="background: #009688;">
+                <svg viewBox="0 0 100 100" width="100%" height="100%"><rect width="100" height="100" rx="20" fill="#009688"/><rect x="22" y="22" width="22" height="22" rx="4" fill="#ffffff"/><rect x="27" y="27" width="12" height="12" fill="#009688"/><rect x="56" y="22" width="22" height="22" rx="4" fill="#ffffff"/><rect x="61" y="27" width="12" height="12" fill="#009688"/><rect x="22" y="56" width="22" height="22" rx="4" fill="#ffffff"/><rect x="27" y="61" width="12" height="12" fill="#009688"/><circle cx="67" cy="67" r="9" fill="#f97316"/></svg>
+              </div>
+              <div class="mfs-info">
+                <div class="mfs-name" style="color: #06b6d4;">Bangla QR</div>
+                <div class="mfs-sub">Interoperable Bank & MFS</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div style="margin-bottom: 18px;">
-          <label style="display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px;">Payment Method</label>
-          <select id="checkoutPaymentMethod" style="width: 100%; background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text-main); font-family: inherit; font-size: 0.9rem; outline: none; cursor: pointer;">
-            <option value="bkash">bKash Personal / Merchant (Instant)</option>
-            <option value="nagad">Nagad Instant Gateway</option>
-            <option value="card">Visa / MasterCard (Debit & Credit)</option>
-            <option value="crypto">USDT / Crypto (Binance Pay)</option>
-          </select>
+        <!-- Step 2: Dynamic Payment Instructions Panel -->
+        <div id="mfsInstructionPanel" class="mfs-instruction-panel">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div id="mfsActiveLogo" style="width: 24px; height: 24px; border-radius: 6px; overflow: hidden; display: flex; align-items: center; justify-content: center;"></div>
+              <strong id="mfsActiveName" style="font-size: 0.92rem; color: var(--text-main);">bKash Payment Details</strong>
+            </div>
+            <span id="mfsActiveBadge" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: rgba(99, 102, 241, 0.12); color: var(--primary); font-weight: 700;">Personal</span>
+          </div>
+
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px;">Recipient Account Number:</div>
+          <div class="mfs-number-box">
+            <span id="mfsAccountNumber" class="mfs-number-text">01712-345678</span>
+            <button type="button" class="mfs-copy-btn" onclick="copyMfsAccountNumber()" id="mfsCopyBtn">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span id="mfsCopyBtnText">Copy Number</span>
+            </button>
+          </div>
+
+          <!-- Step by Step instructions list -->
+          <ol class="mfs-steps-list" id="mfsStepsList">
+            <li>Open the bKash App or dial *247# on your phone.</li>
+            <li>Select the <strong>"Send Money"</strong> option.</li>
+            <li>Enter recipient number: <strong style="font-family: monospace;">01712-345678</strong>.</li>
+            <li>Enter the exact total amount in BDT (৳).</li>
+            <li>Enter your bKash PIN to complete the transfer.</li>
+            <li>Copy the 10-character <strong>Transaction ID (TrxID)</strong> from the confirmation SMS and enter it below.</li>
+          </ol>
         </div>
 
-        <button type="submit" id="checkoutSubmitBtn" class="btn-card-buy" style="width: 100%; padding: 14px; font-size: 1rem; border-radius: var(--radius-md);">
-          <span>Confirm & Receive Instant Access</span>
+        <!-- Step 3: Transaction Number & Verification Details -->
+        <div style="background: var(--panel-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; margin-bottom: 16px;">
+          <div style="font-size: 0.82rem; font-weight: 800; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-emerald)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            2. Enter Verification & Transaction Details
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+            <div>
+              <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 5px;">Delivery Email</label>
+              <input type="email" id="checkoutEmail" required placeholder="your.email@example.com"
+                style="width: 100%; background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text-main); font-family: inherit; font-size: 0.88rem; outline: none;">
+            </div>
+            <div>
+              <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 5px;">Your Sender Phone No. *</label>
+              <input type="tel" id="checkoutSenderNumber" required placeholder="017XXXXXXXX"
+                style="width: 100%; background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text-main); font-family: inherit; font-size: 0.88rem; outline: none;">
+            </div>
+          </div>
+
+          <div class="trx-input-group">
+            <label style="display: flex; align-items: center; justify-content: space-between;">
+              <span>MFS Transaction ID (TrxID) *</span>
+              <span style="font-size: 0.72rem; color: var(--accent-amber); font-weight: 700;">From SMS or App Receipt</span>
+            </label>
+            <input type="text" id="checkoutTrxId" required placeholder="e.g. BL83K99X4A" maxlength="35" class="trx-input-field"
+              oninput="this.value = this.value.toUpperCase().replace(/\s/g, '');">
+            <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 5px; line-height: 1.4;">
+              🛡️ <strong>Super Admin Verification</strong>: The Super Admin will verify this transaction number. Once approved, your subscription license key will be activated and confirmed in your account.
+            </div>
+          </div>
+
+          <div>
+            <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-muted); margin-bottom: 5px;">Customer Notes (Optional)</label>
+            <input type="text" id="checkoutNotes" placeholder="e.g. Preferred activation email or license invite notes"
+              style="width: 100%; background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 8px 12px; color: var(--text-main); font-family: inherit; font-size: 0.85rem; outline: none;">
+          </div>
+        </div>
+
+        <button type="submit" id="checkoutSubmitBtn" class="btn-card-buy" style="width: 100%; padding: 14px; font-size: 1rem; border-radius: var(--radius-md); box-shadow: 0 4px 18px rgba(99, 102, 241, 0.4);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span>Submit Order for Admin Verification</span>
         </button>
       </form>
     </div>
   </div>
+
 
   <!-- ==========================================================================
        CUSTOMER AUTH MODAL (SIGN IN / CREATE ACCOUNT)
@@ -2658,22 +3249,88 @@
   </div>
 
   <!-- ==========================================================================
+       SHOPPING CART MODAL
+       ========================================================================== -->
+  <div id="customerCartModal" class="modal-backdrop" onclick="if(event.target===this) closeShoppingCartModal();">
+    <div class="modal-card" style="max-width: 640px; width: 94%; max-height: 90vh; overflow-y: auto;">
+      <button type="button" class="modal-close-btn" onclick="closeShoppingCartModal()">&times;</button>
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.22), rgba(168, 85, 247, 0.22)); color: var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0;">My Shopping Cart</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 3px 0 0 0;">Review selected tiers, quantities, and digital licensing</p>
+          </div>
+        </div>
+        <span id="cartModalCountBadge" style="font-size: 0.8rem; font-weight: 800; padding: 4px 12px; border-radius: 9999px; background: rgba(99, 102, 241, 0.15); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.3);">
+          0 Items
+        </span>
+      </div>
+
+      <div id="shoppingCartContent">
+        <!-- Rendered dynamically by renderShoppingCartModal() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
        CUSTOMER ORDERS & SUBSCRIPTIONS MODAL
        ========================================================================== -->
   <div id="customerOrdersModal" class="modal-backdrop" onclick="if(event.target===this) closeCustomerOrdersModal();">
-    <div class="modal-card" style="max-width: 600px; width: 92%; max-height: 90vh; overflow-y: auto;">
+    <div class="modal-card" style="max-width: 800px; width: 95%; max-height: 90vh; overflow-y: auto;">
       <button type="button" class="modal-close-btn" onclick="closeCustomerOrdersModal()">&times;</button>
-      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
-        <div style="width: 46px; height: 46px; border-radius: 12px; background: rgba(99, 102, 241, 0.15); color: var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
+      
+      <!-- Modal Header -->
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(99, 102, 241, 0.18)); border: 1px solid rgba(16, 185, 129, 0.35); color: #10b981; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+          </div>
+          <div>
+            <h3 style="font-size: 1.32rem; font-weight: 800; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 8px;">
+              <span>My Orders & Transactions</span>
+              <span id="modalOrdersCountPill" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 9999px; background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.35);">0</span>
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 3px 0 0 0;">Track MFS payment verification, ordered subscription items, and live license credentials</p>
+          </div>
         </div>
-        <div>
-          <h3 style="font-size: 1.3rem; font-weight: 800; color: var(--text-main); margin: 0;">My Subscriptions & Orders</h3>
-          <p style="font-size: 0.8rem; color: var(--text-muted); margin: 3px 0 0 0;">Manage your purchased digital licenses, status, and renewals</p>
+
+        <button type="button" onclick="fetchCustomerOrders(true)" id="refreshOrdersModalBtn" style="padding: 7px 14px; font-size: 0.8rem; font-weight: 700; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); background: var(--bg-surface); color: var(--text-main); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: var(--transition-smooth);">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="refreshOrdersIcon">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          <span>Refresh Status</span>
+        </button>
+      </div>
+
+      <!-- Filter Controls & Search Bar (displayed when user has orders) -->
+      <div id="customerOrdersControls" style="display: none; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="customerOrdersFilterTabs">
+            <button type="button" class="order-filter-tab active" data-filter="ALL" onclick="setCustomerOrdersFilter('ALL')">All Orders (<span id="filterCountAll">0</span>)</button>
+            <button type="button" class="order-filter-tab" data-filter="PENDING" onclick="setCustomerOrdersFilter('PENDING')">⏳ Pending (<span id="filterCountPending">0</span>)</button>
+            <button type="button" class="order-filter-tab" data-filter="APPROVED" onclick="setCustomerOrdersFilter('APPROVED')">✅ Approved (<span id="filterCountApproved">0</span>)</button>
+            <button type="button" class="order-filter-tab" data-filter="REJECTED" onclick="setCustomerOrdersFilter('REJECTED')">❌ Rejected (<span id="filterCountRejected">0</span>)</button>
+          </div>
+          <div style="position: relative; flex: 1; min-width: 200px; max-width: 280px;">
+            <input type="text" id="customerOrdersSearchInput" oninput="handleCustomerOrdersSearch(this.value)" placeholder="Search by Order # or TrxID..." style="width: 100%; padding: 8px 12px 8px 32px; font-size: 0.82rem; border-radius: var(--radius-sm); background: var(--input-bg); border: 1px solid var(--border-subtle); color: var(--text-main); outline: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </div>
         </div>
       </div>
 
@@ -2696,13 +3353,18 @@
     let activeCategory = '';
     let cartItems = [];
     let activeSelectedPlans = {}; // Map of productId -> planId chosen on card
+    let pendingAddToCart = null; // Queued item if user clicks Add to Cart before logging in
 
     // Initialize Storefront
     async function initStore() {
+      try {
+        localStorage.removeItem('customer_guest_cart');
+      } catch (e) {}
       initTheme();
       initCustomerAuth();
       await fetchCategories();
       await fetchProducts();
+      await loadCustomerCart();
     }
 
     // Theme Management (Dark / Light)
@@ -2877,8 +3539,15 @@
       }
 
       if (buyBtn) {
-        buyBtn.onclick = () => openCheckoutModal(firstProduct.id);
-        buyBtn.textContent = `Subscribe to ${firstProduct.name}`;
+        buyBtn.onclick = () => addToCart(firstProduct.id);
+        buyBtn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 6px;">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          Add to Cart
+        `;
       }
     }
 
@@ -2993,6 +3662,14 @@
           <div class="card-banner-wrap">
             <span class="card-category-badge">${catName}</span>
             <span class="card-instant-tag">⚡ Instant Access</span>
+            <button class="card-bookmark-btn ${customerSavedIds.has(p.id) ? 'active' : ''}" 
+                    id="card-bookmark-${p.id}" 
+                    onclick="toggleProductSave(${p.id}, event)" 
+                    title="${customerSavedIds.has(p.id) ? 'Remove from Saved' : 'Save Product'}">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="${customerSavedIds.has(p.id) ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2.2">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </button>
             ${bannerMarkup}
           </div>
 
@@ -3029,9 +3706,13 @@
           <button class="btn-card-outline" onclick="openProductDetailModal(${p.id})">
             Details
           </button>
-          <button class="btn-card-buy" onclick="openCheckoutModal(${p.id})">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            Subscribe
+          <button class="btn-card-buy" id="card-add-cart-${p.id}" onclick="addToCart(${p.id})" title="${customerState.token ? 'Add selected tier to Cart' : 'Login required to add to Cart'}">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            Add to Cart
           </button>
         </div>
       `;
@@ -3173,14 +3854,24 @@
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--border-subtle); padding-top: 20px; flex-wrap: wrap;">
           <div>
             <div style="font-size: 0.72rem; color: var(--text-subtle); font-weight: 700; text-transform: uppercase;">Active Plan Price</div>
             <div style="font-size: 1.6rem; font-weight: 800; color: var(--accent-emerald);">${priceVal}</div>
           </div>
-          <button class="btn-card-buy" style="padding: 12px 24px; font-size: 0.95rem;" onclick="closeDetailModal(); openCheckoutModal(${p.id});">
-            Proceed to Checkout
-          </button>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <button class="btn-card-buy" style="padding: 12px 20px; font-size: 0.92rem;" onclick="addToCart(${p.id}); closeDetailModal();">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+              Add to Cart
+            </button>
+            <button class="btn-card-outline" style="padding: 12px 18px; font-size: 0.92rem;" onclick="closeDetailModal(); openCheckoutModal(${p.id});">
+              Instant Buy
+            </button>
+          </div>
         </div>
       `;
 
@@ -3191,33 +3882,198 @@
       document.getElementById('productDetailModal').style.display = 'none';
     };
 
-    // Open Instant Checkout Modal
+    // ==========================================================================
+    // MFS PAYMENT GATEWAY & SECURE ORDER SUBMISSION
+    // ==========================================================================
+    const MFS_METHODS = {
+      bkash: {
+        id: 'bkash',
+        name: 'bKash',
+        color: '#e2136e',
+        badge: 'Personal (Send Money)',
+        accountNumber: '01712-345678',
+        logoSvg: `<svg viewBox="0 0 100 100" width="100%" height="100%"><rect width="100" height="100" rx="20" fill="#e2136e"/><path d="M22 68 L48 24 L56 46 L38 52 Z" fill="#ffffff"/><path d="M48 24 L78 38 L62 50 L56 46 Z" fill="#f9fafb"/><path d="M62 50 L78 38 L68 76 L52 64 Z" fill="#ffffff"/></svg>`,
+        steps: [
+          'Open the bKash App or dial *247# on your mobile.',
+          'Tap or choose the <strong>"Send Money"</strong> option.',
+          'Enter recipient bKash number: <strong style="font-family: monospace;">01712-345678</strong>.',
+          'Enter the exact total amount in BDT (৳).',
+          'Enter your bKash PIN to confirm payment.',
+          'Copy the 10-character <strong>Transaction ID (TrxID)</strong> from the SMS and paste it below.'
+        ]
+      },
+      nagad: {
+        id: 'nagad',
+        name: 'Nagad',
+        color: '#f97316',
+        badge: 'Personal (Send Money)',
+        accountNumber: '01912-345678',
+        logoSvg: `<svg viewBox="0 0 100 100" width="100%" height="100%"><rect width="100" height="100" rx="20" fill="#f97316"/><path d="M50 18 C32 18 24 32 24 48 C24 66 36 82 50 82 C64 82 76 66 76 48 C76 32 68 18 50 18 Z" fill="#ffffff"/><path d="M50 26 C42 26 36 34 36 46 C36 58 42 66 50 74 C58 66 64 58 64 46 C64 34 58 26 50 26 Z" fill="#ea580c"/></svg>`,
+        steps: [
+          'Open the Nagad App or dial *167# on your mobile.',
+          'Select the <strong>"Send Money"</strong> option.',
+          'Enter recipient Nagad number: <strong style="font-family: monospace;">01912-345678</strong>.',
+          'Enter the exact total amount in BDT (৳).',
+          'Enter your Nagad PIN to confirm transfer.',
+          'Copy the 8-character <strong>Transaction ID (TrxID)</strong> from the SMS and paste it below.'
+        ]
+      },
+      rocket: {
+        id: 'rocket',
+        name: 'Rocket',
+        color: '#8c3494',
+        badge: 'Personal (DBBL Send Money)',
+        accountNumber: '01812-345678-9',
+        logoSvg: `<svg viewBox="0 0 100 100" width="100%" height="100%"><rect width="100" height="100" rx="20" fill="#8c3494"/><polygon points="50,15 65,45 55,45 55,75 45,75 45,45 35,45" fill="#ffffff"/><polygon points="45,75 50,85 55,75" fill="#f59e0b"/><circle cx="50" cy="35" r="5" fill="#8c3494"/></svg>`,
+        steps: [
+          'Open DBBL Rocket App or dial *322#.',
+          'Choose the <strong>"Send Money"</strong> option.',
+          'Enter recipient Rocket number: <strong style="font-family: monospace;">01812-345678-9</strong>.',
+          'Enter the exact total amount in BDT (৳).',
+          'Enter Rocket PIN to confirm transaction.',
+          'Copy the <strong>Transaction ID (TxnId)</strong> from SMS and paste it below.'
+        ]
+      },
+      bangla_qr: {
+        id: 'bangla_qr',
+        name: 'Bangla QR',
+        color: '#009688',
+        badge: 'Universal Bank & MFS QR',
+        accountNumber: 'MERCHANT: SUB-BD-QR01',
+        logoSvg: `<svg viewBox="0 0 100 100" width="100%" height="100%"><rect width="100" height="100" rx="20" fill="#009688"/><rect x="22" y="22" width="22" height="22" rx="4" fill="#ffffff"/><rect x="27" y="27" width="12" height="12" fill="#009688"/><rect x="56" y="22" width="22" height="22" rx="4" fill="#ffffff"/><rect x="61" y="27" width="12" height="12" fill="#009688"/><rect x="22" y="56" width="22" height="22" rx="4" fill="#ffffff"/><rect x="27" y="61" width="12" height="12" fill="#009688"/><circle cx="67" cy="67" r="9" fill="#f97316"/></svg>`,
+        steps: [
+          'Open any Bangladeshi Banking or MFS App (bKash, Nagad, Rocket, City Touch, etc.).',
+          'Tap <strong>"Bangla QR" / "Scan QR"</strong>.',
+          'Scan or enter recipient merchant code: <strong style="font-family: monospace;">SUB-BD-QR01</strong>.',
+          'Enter the payable total amount in BDT (৳).',
+          'Authorize with your PIN.',
+          'Enter the payment <strong>Transaction / Reference Number</strong> below.'
+        ]
+      }
+    };
+
+    let selectedPaymentMethod = 'bkash';
     let pendingCheckoutProduct = null;
     let pendingCheckoutPlan = null;
 
-    window.openCheckoutModal = function(productId) {
-      const p = productsList.find(item => item.id === productId);
-      if (!p) return;
+    // Switch active MFS payment method and display instructions
+    window.selectPaymentMethod = function(methodId) {
+      if (!MFS_METHODS[methodId]) return;
+      selectedPaymentMethod = methodId;
+      const m = MFS_METHODS[methodId];
 
-      const activePlanId = activeSelectedPlans[p.id];
-      const activePlan = (p.plans && p.plans.find(pl => pl.id === activePlanId)) || p.selected_plan || (p.plans && p.plans[0]);
-      if (!activePlan) return;
+      // Update card UI selections
+      document.querySelectorAll('.mfs-card').forEach(card => card.classList.remove('selected'));
+      const activeCard = document.getElementById(`mfsCard-${methodId}`);
+      if (activeCard) activeCard.classList.add('selected');
 
-      pendingCheckoutProduct = p;
-      pendingCheckoutPlan = activePlan;
+      // Update instruction panel
+      const logoEl = document.getElementById('mfsActiveLogo');
+      if (logoEl) logoEl.innerHTML = m.logoSvg;
+      const nameEl = document.getElementById('mfsActiveName');
+      if (nameEl) nameEl.textContent = `${m.name} Payment Details`;
+      const badgeEl = document.getElementById('mfsActiveBadge');
+      if (badgeEl) {
+        badgeEl.textContent = m.badge;
+        badgeEl.style.color = m.color;
+        badgeEl.style.background = `${m.color}20`;
+      }
+      const numEl = document.getElementById('mfsAccountNumber');
+      if (numEl) numEl.textContent = m.accountNumber;
 
-      const sym = activePlan.currency_symbol || p.currency_symbol || '৳';
+      // Update step instructions
+      const stepsEl = document.getElementById('mfsStepsList');
+      if (stepsEl) {
+        stepsEl.innerHTML = m.steps.map(s => `<li>${s}</li>`).join('');
+      }
 
-      document.getElementById('checkoutProductName').textContent = p.name;
-      document.getElementById('checkoutPlanName').textContent = activePlan.name;
-      document.getElementById('checkoutDeviceCount').textContent = `${activePlan.devices || 1} Device${(activePlan.devices || 1) > 1 ? 's' : ''}`;
-      document.getElementById('checkoutTotalAmount').textContent = `${sym}${parseFloat(activePlan.price).toFixed(2)}`;
+      // Highlight panel border
+      const panelEl = document.getElementById('mfsInstructionPanel');
+      if (panelEl) {
+        panelEl.style.borderColor = `${m.color}60`;
+        panelEl.style.background = `rgba(${methodId === 'bkash' ? '226, 19, 110' : methodId === 'nagad' ? '249, 115, 22' : methodId === 'rocket' ? '140, 52, 148' : '0, 150, 136'}, 0.05)`;
+      }
+    };
 
-      // Auto-fill customer email if logged in
+    // Copy Account Number with feedback
+    window.copyMfsAccountNumber = function() {
+      const numEl = document.getElementById('mfsAccountNumber');
+      if (!numEl) return;
+      const text = numEl.textContent.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        const btnText = document.getElementById('mfsCopyBtnText');
+        if (btnText) {
+          const original = btnText.textContent;
+          btnText.textContent = 'Copied!';
+          setTimeout(() => { btnText.textContent = original; }, 2000);
+        }
+        showToast(`Copied ${selectedPaymentMethod.toUpperCase()} number: ${text}`, 'success');
+      }).catch(() => {
+        showToast(`Account number: ${text}`, 'info');
+      });
+    };
+
+    // Open Instant Checkout Modal (supports single product or whole cart)
+    window.openCheckoutModal = function(productId = null) {
+      // Require customer login
+      if (!customerState.token) {
+        showToast('🔒 Please sign in to confirm and checkout your order.', 'warning');
+        openCustomerAuthModal('login');
+        return;
+      }
+
+      if (productId) {
+        // Direct Instant Buy for a specific product
+        const p = productsList.find(item => item.id === productId);
+        if (!p) return;
+
+        const activePlanId = activeSelectedPlans[p.id];
+        const activePlan = (p.plans && p.plans.find(pl => pl.id === activePlanId)) || p.selected_plan || (p.plans && p.plans[0]);
+        if (!activePlan) return;
+
+        pendingCheckoutProduct = p;
+        pendingCheckoutPlan = activePlan;
+
+        const sym = activePlan.currency_symbol || p.currency_symbol || '৳';
+        document.getElementById('checkoutProductName').textContent = p.name;
+        document.getElementById('checkoutPlanName').textContent = activePlan.name;
+        document.getElementById('checkoutDeviceCount').textContent = `📱 ${activePlan.devices || 1} Device${(activePlan.devices || 1) > 1 ? 's' : ''}`;
+        document.getElementById('checkoutTotalAmount').textContent = `${sym}${parseFloat(activePlan.price).toFixed(2)}`;
+      } else {
+        // Multi-item Cart Checkout
+        if (!currentCartItems || currentCartItems.length === 0) {
+          showToast('Your cart is empty! Browse products to checkout.', 'warning');
+          return;
+        }
+        pendingCheckoutProduct = null;
+        pendingCheckoutPlan = null;
+
+        const names = currentCartItems.map(i => i.product ? i.product.name : 'Subscription').join(', ');
+        const totalDevices = currentCartItems.reduce((acc, i) => acc + ((i.plan && i.plan.devices) ? i.plan.devices : 1), 0);
+        const sym = (currentCartItems[0] && currentCartItems[0].plan && currentCartItems[0].plan.currency_symbol) || '৳';
+
+        document.getElementById('checkoutProductName').textContent = `${currentCartCount} Items: ${names}`;
+        document.getElementById('checkoutPlanName').textContent = 'Cart Selection (All Plans)';
+        document.getElementById('checkoutDeviceCount').textContent = `📱 ${totalDevices} Total Devices`;
+        document.getElementById('checkoutTotalAmount').textContent = `${sym}${currentCartTotal.toFixed(2)}`;
+      }
+
+      // Auto-fill customer details
       const emailInput = document.getElementById('checkoutEmail');
-      if (emailInput && customerState && customerState.user && customerState.user.email) {
+      if (emailInput && customerState.user && customerState.user.email) {
         emailInput.value = customerState.user.email;
       }
+      const senderInput = document.getElementById('checkoutSenderNumber');
+      if (senderInput && customerState.user && customerState.user.phone) {
+        senderInput.value = customerState.user.phone;
+      }
+
+      // Reset TrxID
+      const trxInput = document.getElementById('checkoutTrxId');
+      if (trxInput) trxInput.value = '';
+
+      // Initialize bKash details
+      selectPaymentMethod('bkash');
 
       document.getElementById('checkoutModal').style.display = 'flex';
     };
@@ -3226,45 +4082,512 @@
       document.getElementById('checkoutModal').style.display = 'none';
     };
 
-    // Checkout Submission Simulation
-    window.handleCheckoutSubmit = function(e) {
+    // Real REST API Order Placement & Verification Submission
+    window.handleCheckoutSubmit = async function(e) {
       e.preventDefault();
-      const email = document.getElementById('checkoutEmail').value;
-      const method = document.getElementById('checkoutPaymentMethod').value;
+      if (!customerState.token) {
+        showToast('🔒 Please sign in before submitting your order.', 'warning');
+        openCustomerAuthModal('login');
+        return;
+      }
+
+      const email = document.getElementById('checkoutEmail').value.trim();
+      const senderNumber = document.getElementById('checkoutSenderNumber').value.trim();
+      const trxId = document.getElementById('checkoutTrxId').value.trim().toUpperCase();
+      const notes = (document.getElementById('checkoutNotes') ? document.getElementById('checkoutNotes').value.trim() : '');
       const btn = document.getElementById('checkoutSubmitBtn');
 
+      if (!senderNumber) {
+        showToast('Please enter your sender mobile number.', 'warning');
+        return;
+      }
+
+      if (!trxId || trxId.length < 5) {
+        showToast('Please enter a valid Transaction ID (TrxID) from your MFS payment SMS.', 'warning');
+        return;
+      }
+
+      const orderPayload = {
+        payment_method: selectedPaymentMethod,
+        sender_number: senderNumber,
+        transaction_id: trxId,
+        customer_notes: notes
+      };
+
+      if (pendingCheckoutProduct && pendingCheckoutPlan) {
+        orderPayload.product_id = pendingCheckoutProduct.id;
+        orderPayload.plan_id = pendingCheckoutPlan.id;
+      }
+
+      const prevBtnHtml = btn.innerHTML;
       btn.disabled = true;
-      btn.textContent = 'Processing Instant License...';
+      btn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;">
+          <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
+        </svg>
+        <span>Verifying & Placing Order...</span>
+      `;
 
-      setTimeout(() => {
-        btn.disabled = false;
-        btn.innerHTML = '<span>Confirm & Receive Instant Access</span>';
-        closeCheckoutModal();
-
-        // Update cart badge and order records
-        cartItems.push({ 
-          product: pendingCheckoutProduct, 
-          plan: pendingCheckoutPlan,
-          licenseKey: 'SUB-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
-          date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      try {
+        const res = await fetch('/api/customer/orders/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${customerState.token}`
+          },
+          body: JSON.stringify(orderPayload)
         });
-        document.getElementById('cartCountBadge').textContent = cartItems.length;
-        const ordBadge = document.getElementById('dropdownOrdersBadge');
-        if (ordBadge) ordBadge.textContent = cartItems.length;
-        const crtBadge = document.getElementById('dropdownCartBadge');
-        if (crtBadge) crtBadge.textContent = `${cartItems.length} items`;
 
-        showToast(`🎉 Order confirmed! Access credentials sent to ${email}`, 'success');
-      }, 1200);
+        const data = await res.json();
+
+        if (res.ok) {
+          closeCheckoutModal();
+          pendingCheckoutProduct = null;
+          pendingCheckoutPlan = null;
+
+          // Clear / reload cart
+          await loadCustomerCart();
+
+          showToast(`🎉 Order ${data.order ? data.order.order_number : ''} placed successfully! Transaction ID submitted for Super Admin verification.`, 'success');
+
+          // Immediately open Orders Modal to show user their placed order
+          setTimeout(() => {
+            openCustomerOrdersModal();
+          }, 400);
+        } else if (res.status === 401) {
+          showToast('Session expired. Please sign in again.', 'warning');
+          openCustomerAuthModal('login');
+        } else {
+          const errMsg = data.error || data.detail || (data.transaction_id ? `Transaction ID: ${data.transaction_id[0]}` : null) || 'Failed to place order.';
+          showToast(`❌ ${errMsg}`, 'error');
+        }
+      } catch (err) {
+        console.error('Order submission error:', err);
+        showToast('Network error while placing order. Please try again.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = prevBtnHtml;
+      }
     };
 
-    // Cart Drawer Click
-    document.getElementById('cartDrawerBtn').addEventListener('click', () => {
-      if (cartItems.length === 0) {
-        showToast('Your subscriptions list is currently empty. Choose a product to subscribe!', 'info');
-      } else {
-        openCustomerOrdersModal();
+
+    // ==========================================================================
+    // SHOPPING CART CONTROLLER (AUTHENTICATED REST API ONLY)
+    // ==========================================================================
+    let currentCartItems = [];
+    let currentCartCount = 0;
+    let currentCartTotal = 0;
+
+    async function loadCustomerCart() {
+      if (!customerState.token) {
+        currentCartItems = [];
+        currentCartCount = 0;
+        currentCartTotal = 0;
+        updateCartBadgeUI(0);
+        const modal = document.getElementById('customerCartModal');
+        if (modal && modal.style.display === 'flex') {
+          renderShoppingCartModal();
+        }
+        return;
       }
+
+      try {
+        const res = await fetch('/api/customer/cart/', {
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          currentCartItems = data.items || data.cart_items || [];
+          currentCartCount = data.total_quantity || data.cart_count || data.items_count || 0;
+          currentCartTotal = parseFloat(data.total_amount || data.cart_total || 0);
+        } else if (res.status === 401) {
+          // Token expired or invalid
+          customerState.token = null;
+          customerState.refresh = null;
+          customerState.user = null;
+          localStorage.removeItem('customer_access_token');
+          localStorage.removeItem('customer_refresh_token');
+          localStorage.removeItem('customer_user');
+          updateCustomerUI();
+          currentCartItems = [];
+          currentCartCount = 0;
+          currentCartTotal = 0;
+        } else {
+          currentCartItems = [];
+          currentCartCount = 0;
+          currentCartTotal = 0;
+        }
+      } catch (e) {
+        console.warn('Could not load cart from API:', e);
+      }
+      updateCartBadgeUI(currentCartCount);
+      const modal = document.getElementById('customerCartModal');
+      if (modal && modal.style.display === 'flex') {
+        renderShoppingCartModal();
+      }
+    }
+
+    function updateCartBadgeUI(count) {
+      const navBadge = document.getElementById('cartCountBadge');
+      if (navBadge) navBadge.textContent = count;
+      const dropBadge = document.getElementById('dropdownCartBadge');
+      if (dropBadge) dropBadge.textContent = `${count} item${count === 1 ? '' : 's'}`;
+      const modalBadge = document.getElementById('cartModalCountBadge');
+      if (modalBadge) modalBadge.textContent = `${count} Item${count === 1 ? '' : 's'}`;
+    }
+
+    function animateCartBadge() {
+      const badge = document.getElementById('cartCountBadge');
+      if (!badge) return;
+      badge.classList.remove('cart-badge-bounce');
+      void badge.offsetWidth;
+      badge.classList.add('cart-badge-bounce');
+    }
+
+    // Add to Cart Function - Strictly requires authentication via REST API
+    window.addToCart = async function(productId, planId = null) {
+      const p = productsList.find(item => item.id === productId);
+      if (!p) return;
+
+      const activePlanId = planId || activeSelectedPlans[p.id] || (p.plans && p.plans[0] ? p.plans[0].id : null);
+      const activePlan = (p.plans && p.plans.find(pl => pl.id === activePlanId)) || p.selected_plan || (p.plans && p.plans[0]);
+      if (!activePlan) {
+        showToast('Please select a device tier first.', 'warning');
+        return;
+      }
+
+      // Enforce login: unauthenticated users cannot add to cart
+      if (!customerState.token) {
+        pendingAddToCart = {
+          productId: p.id,
+          planId: activePlan.id,
+          productName: p.name,
+          planName: activePlan.name
+        };
+        showToast(`🔒 Please log in to add "${p.name}" to your cart!`, 'warning');
+        openCustomerAuthModal('login');
+        return;
+      }
+
+      const addBtn = document.getElementById(`card-add-cart-${productId}`);
+      const prevHtml = addBtn ? addBtn.innerHTML : '';
+      if (addBtn) {
+        addBtn.disabled = true;
+        addBtn.innerHTML = `
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation: spin 0.8s linear infinite;">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
+          </svg>
+          Adding...
+        `;
+      }
+
+      try {
+        const res = await fetch('/api/customer/cart/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${customerState.token}`
+          },
+          body: JSON.stringify({
+            product_id: p.id,
+            plan_id: activePlan.id,
+            quantity: 1
+          })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          await loadCustomerCart();
+          animateCartBadge();
+          showToast(`🛒 "${p.name} (${activePlan.name})" added to your cart!`, 'success');
+        } else if (res.status === 401) {
+          pendingAddToCart = {
+            productId: p.id,
+            planId: activePlan.id,
+            productName: p.name,
+            planName: activePlan.name
+          };
+          showToast('Authentication expired. Please sign in to add items to your cart.', 'warning');
+          openCustomerAuthModal('login');
+        } else {
+          showToast(data.detail || data.error || (data.product_id ? data.product_id[0] : null) || 'Failed to add item to cart.', 'error');
+        }
+      } catch (err) {
+        console.error('Error adding to cart:', err);
+        showToast('Network error while adding item to cart.', 'error');
+      } finally {
+        if (addBtn) {
+          addBtn.disabled = false;
+          addBtn.innerHTML = prevHtml || `
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            Add to Cart
+          `;
+        }
+      }
+    };
+
+    // Render Shopping Cart Modal
+    function renderShoppingCartModal() {
+      const container = document.getElementById('shoppingCartContent');
+      if (!container) return;
+
+      if (!customerState.token) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 46px 20px;">
+            <div style="width: 76px; height: 76px; margin: 0 auto 20px; border-radius: 50%; background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.18)); color: var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25);">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <h4 style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Login Required</h4>
+            <p style="font-size: 0.88rem; color: var(--text-muted); max-width: 400px; margin: 0 auto 24px; line-height: 1.5;">
+              You must log in with your verified customer account to add subscriptions, view your cart, and manage orders via our secure REST API.
+            </p>
+            <button type="button" onclick="closeShoppingCartModal(); openCustomerAuthModal('login');" class="btn-card-buy" style="margin: 0 auto; padding: 13px 32px; font-size: 0.95rem; border-radius: var(--radius-md);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+              <span>Sign In to Continue</span>
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      if (!currentCartItems || currentCartItems.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px 16px;">
+            <div style="width: 72px; height: 72px; margin: 0 auto 18px; border-radius: 50%; background: rgba(99, 102, 241, 0.1); color: var(--text-muted); display: flex; align-items: center; justify-content: center;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+            </div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">Your Shopping Cart is Empty</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); max-width: 380px; margin: 0 auto 24px;">Browse our catalog and choose your preferred software & streaming tiers with instant credential delivery!</p>
+            <button type="button" onclick="closeShoppingCartModal(); window.location.hash='#catalog';" class="btn-card-buy" style="margin: 0 auto; padding: 12px 26px; font-size: 0.92rem; border-radius: var(--radius-md);">
+              <span>Explore Catalog Now</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      let itemsHtml = '<div class="cart-items-wrapper">';
+      currentCartItems.forEach(item => {
+        const prod = item.product || {};
+        const plan = item.plan || {};
+        const sym = plan.currency_symbol || prod.currency_symbol || '৳';
+        const unitPrice = parseFloat(plan.price || 0).toFixed(2);
+        const subtotal = item.subtotal ? parseFloat(item.subtotal).toFixed(2) : (parseFloat(unitPrice) * item.quantity).toFixed(2);
+        const itemId = item.id;
+
+        itemsHtml += `
+          <div class="cart-item-row" id="cart-row-${item.id}">
+            <div class="cart-item-info">
+              <div class="cart-item-thumb">
+                ${prod.image ? `<img src="${prod.image}" alt="${prod.name}">` : `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect></svg>`}
+              </div>
+              <div class="cart-item-details">
+                <div class="cart-item-name">${prod.name || 'Digital Subscription'}</div>
+                <div class="cart-item-tier">
+                  <span class="cart-item-tier-badge">${plan.name || 'Selected Tier'}</span>
+                  <span>📱 ${plan.devices || 1} Device${(plan.devices || 1) > 1 ? 's' : ''}</span>
+                  <span>• / ${plan.billing_cycle || 'month'}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="cart-item-actions">
+              <div class="cart-qty-control">
+                <button type="button" class="cart-qty-btn" onclick="updateCartItemQty(${itemId}, ${item.quantity - 1})" title="Decrease quantity">−</button>
+                <span class="cart-qty-value">${item.quantity}</span>
+                <button type="button" class="cart-qty-btn" onclick="updateCartItemQty(${itemId}, ${item.quantity + 1})" title="Increase quantity">+</button>
+              </div>
+
+              <div class="cart-item-price-col">
+                <div class="cart-item-subtotal">${sym}${subtotal}</div>
+                <div class="cart-item-unit-price">${sym}${unitPrice} ea</div>
+              </div>
+
+              <button type="button" class="cart-remove-btn" onclick="removeCartItem(${itemId})" title="Remove item from Cart">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      itemsHtml += '</div>';
+
+      const totalDisplay = currentCartTotal.toFixed(2);
+      const sym = (currentCartItems[0] && currentCartItems[0].plan && currentCartItems[0].plan.currency_symbol) || '৳';
+
+      const summaryHtml = `
+        <div class="cart-footer-summary">
+          <div class="cart-summary-row">
+            <span>Subtotal (${currentCartCount} item${currentCartCount === 1 ? '' : 's'})</span>
+            <span style="font-weight: 700; color: var(--text-main);">${sym}${totalDisplay}</span>
+          </div>
+          <div class="cart-summary-row">
+            <span>Instant Digital Delivery</span>
+            <span style="color: var(--accent-emerald); font-weight: 700;">FREE (Instant 60s)</span>
+          </div>
+          <div class="cart-summary-row">
+            <span>Warranty</span>
+            <span style="color: var(--accent-amber); font-weight: 700;">100% Replacement Guarantee</span>
+          </div>
+          <div class="cart-summary-row cart-summary-total">
+            <span>Total Amount</span>
+            <span class="cart-total-amount">${sym}${totalDisplay}</span>
+          </div>
+
+          <div class="cart-action-buttons">
+            <button type="button" onclick="clearShoppingCart()" class="btn-card-outline" style="flex: 1; padding: 13px; font-size: 0.92rem; border-radius: var(--radius-md);">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              Clear Cart
+            </button>
+            <button type="button" onclick="proceedCartToCheckout()" class="btn-card-buy" style="flex: 2; padding: 13px; font-size: 0.95rem; border-radius: var(--radius-md);">
+              <span>Proceed to Checkout</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </button>
+          </div>
+        </div>
+      `;
+
+      container.innerHTML = itemsHtml + summaryHtml;
+    }
+
+    // Update Quantity via REST API
+    window.updateCartItemQty = async function(itemId, newQty) {
+      if (!customerState.token) {
+        showToast('🔒 Please sign in to manage your shopping cart.', 'warning');
+        openCustomerAuthModal('login');
+        return;
+      }
+      if (newQty <= 0) {
+        return window.removeCartItem(itemId);
+      }
+      try {
+        const res = await fetch(`/api/customer/cart/${itemId}/`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${customerState.token}`
+          },
+          body: JSON.stringify({ quantity: newQty })
+        });
+        if (res.ok) {
+          await loadCustomerCart();
+        } else if (res.status === 401) {
+          showToast('Session expired. Please log in again.', 'warning');
+          openCustomerAuthModal('login');
+        } else {
+          const data = await res.json();
+          showToast(data.detail || 'Could not update quantity.', 'error');
+        }
+      } catch (e) {
+        showToast('Network error updating quantity.', 'error');
+      }
+    };
+
+    // Remove item from Cart via REST API
+    window.removeCartItem = async function(itemId) {
+      if (!customerState.token) {
+        showToast('🔒 Please sign in to manage your shopping cart.', 'warning');
+        openCustomerAuthModal('login');
+        return;
+      }
+      try {
+        const res = await fetch(`/api/customer/cart/${itemId}/`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${customerState.token}` }
+        });
+        if (res.ok) {
+          await loadCustomerCart();
+          showToast('Item removed from cart.', 'info');
+        } else if (res.status === 401) {
+          showToast('Session expired. Please log in again.', 'warning');
+          openCustomerAuthModal('login');
+        } else {
+          showToast('Failed to remove item.', 'error');
+        }
+      } catch (e) {
+        showToast('Network error removing item.', 'error');
+      }
+    };
+
+    // Clear whole Cart via REST API
+    window.clearShoppingCart = async function() {
+      if (!customerState.token) {
+        showToast('🔒 Please sign in to manage your shopping cart.', 'warning');
+        openCustomerAuthModal('login');
+        return;
+      }
+      try {
+        const res = await fetch('/api/customer/cart/', {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${customerState.token}` }
+        });
+        if (res.ok) {
+          await loadCustomerCart();
+          showToast('Your cart has been cleared.', 'info');
+        } else if (res.status === 401) {
+          showToast('Session expired. Please log in again.', 'warning');
+          openCustomerAuthModal('login');
+        } else {
+          showToast('Failed to clear cart.', 'error');
+        }
+      } catch (e) {
+        showToast('Network error clearing cart.', 'error');
+      }
+    };
+
+    // Open & Close Shopping Cart Modal
+    window.openShoppingCartModal = function() {
+      renderShoppingCartModal();
+      const modal = document.getElementById('customerCartModal');
+      if (modal) modal.style.display = 'flex';
+    };
+
+    window.closeShoppingCartModal = function() {
+      const modal = document.getElementById('customerCartModal');
+      if (modal) modal.style.display = 'none';
+    };
+
+    // Proceed to Checkout from Cart
+    window.proceedCartToCheckout = function() {
+      if (!customerState.token) {
+        showToast('🔒 Please sign in to proceed to checkout!', 'warning');
+        openCustomerAuthModal('login');
+        return;
+      }
+      if (!currentCartItems || currentCartItems.length === 0) {
+        showToast('Your cart is empty!', 'warning');
+        return;
+      }
+      closeShoppingCartModal();
+      openCheckoutModal(null);
+    };
+
+    // Cart Drawer / Modal Trigger
+    document.getElementById('cartDrawerBtn').addEventListener('click', () => {
+      if (!customerState.token) {
+        showToast('🔒 Please sign in to view and manage your shopping cart.', 'info');
+        openCustomerAuthModal('login');
+        return;
+      }
+      openShoppingCartModal();
     });
 
     // FAQ Accordion Toggle
@@ -3311,11 +4634,91 @@
       customerState.user = null;
     }
 
+    // Saved Products for Authenticated Customer
+    let customerSavedIds = new Set();
+
+    async function loadCustomerSavedIds() {
+      if (!customerState.token) {
+        customerSavedIds.clear();
+        return;
+      }
+      try {
+        const res = await fetch('/api/customer/saved-products/', {
+          headers: { 'Authorization': `Bearer ${customerState.token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          customerSavedIds = new Set((data.saved_products || []).map(item => item.product.id));
+          customerSavedIds.forEach(id => {
+            const btn = document.getElementById(`card-bookmark-${id}`);
+            if (btn) {
+              btn.classList.add('active');
+              const svg = btn.querySelector('svg');
+              if (svg) svg.setAttribute('fill', 'currentColor');
+              btn.title = 'Remove from Saved';
+            }
+          });
+        }
+      } catch (e) {
+        console.warn('Could not load customer saved products', e);
+      }
+    }
+
+    window.toggleProductSave = async function(productId, e) {
+      if (e) e.stopPropagation();
+
+      if (!customerState.token) {
+        showToast('Please sign in to save products to your account!', 'info');
+        openCustomerAuthModal('login');
+        return;
+      }
+
+      const btn = document.getElementById(`card-bookmark-${productId}`);
+      try {
+        const res = await fetch('/api/customer/saved-products/toggle/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${customerState.token}`
+          },
+          body: JSON.stringify({ product_id: productId })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          if (data.is_saved) {
+            customerSavedIds.add(productId);
+            if (btn) {
+              btn.classList.add('active');
+              const svg = btn.querySelector('svg');
+              if (svg) svg.setAttribute('fill', 'currentColor');
+              btn.title = 'Remove from Saved';
+            }
+            showToast('❤️ Saved to your favorites!', 'success');
+          } else {
+            customerSavedIds.delete(productId);
+            if (btn) {
+              btn.classList.remove('active');
+              const svg = btn.querySelector('svg');
+              if (svg) svg.setAttribute('fill', 'none');
+              btn.title = 'Save Product';
+            }
+            showToast('Removed from saved items.', 'info');
+          }
+        } else {
+          showToast(data.detail || 'Could not update saved status.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error while updating saved item.', 'error');
+      }
+    };
+
     // Initialize Customer Auth State
     async function initCustomerAuth() {
       updateCustomerUI();
       if (customerState.token) {
         await refreshCustomerProfile();
+        await loadCustomerSavedIds();
       }
     }
 
@@ -3329,10 +4732,8 @@
       const navAvatar = document.getElementById('navProfileAvatarImg');
       const dropAvatar = document.getElementById('dropdownProfileAvatarImg');
       const onlineDot = document.getElementById('navProfileOnlineDot');
-      const ordersBadge = document.getElementById('dropdownOrdersBadge');
       const cartBadge = document.getElementById('dropdownCartBadge');
 
-      if (ordersBadge) ordersBadge.textContent = cartItems.length;
       if (cartBadge) cartBadge.textContent = `${cartItems.length} items`;
 
       if (customerState.token && customerState.user) {
@@ -3356,6 +4757,11 @@
         const avatarUrl = u.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(displayName)}&backgroundColor=6366f1,a855f7`;
         if (navAvatar) navAvatar.src = avatarUrl;
         if (dropAvatar) dropAvatar.src = avatarUrl;
+
+        // Fetch and refresh orders badge count
+        if (typeof refreshCustomerOrdersBadge === 'function') {
+          refreshCustomerOrdersBadge();
+        }
       } else {
         if (nameEl) nameEl.textContent = 'Guest Customer';
         if (roleTextEl) roleTextEl.textContent = 'Sign in to track orders';
@@ -3369,6 +4775,13 @@
         if (guestInfo) guestInfo.style.display = 'flex';
         if (loggedInLinks) loggedInLinks.style.display = 'none';
         if (onlineDot) onlineDot.style.background = '#94a3b8';
+
+        const navOrdersBadge = document.getElementById('navOrdersBadge');
+        if (navOrdersBadge) navOrdersBadge.style.display = 'none';
+        const navNavBadge = document.getElementById('navOrdersNavBadge');
+        if (navNavBadge) navNavBadge.style.display = 'none';
+        const dropOrdersBadge = document.getElementById('dropdownOrdersBadge');
+        if (dropOrdersBadge) dropOrdersBadge.textContent = '0 orders';
 
         const guestAvatar = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236366f1'/%3E%3Cstop offset='100%25' stop-color='%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='40' cy='40' r='40' fill='url(%23g)'/%3E%3Ccircle cx='40' cy='32' r='14' fill='%23ffffff'/%3E%3Cpath d='M16 68 C16 52, 28 48, 40 48 C52 48, 64 52, 64 68 Z' fill='%23ffffff'/%3E%3C/svg%3E`;
         if (navAvatar) navAvatar.src = guestAvatar;
@@ -3482,9 +4895,21 @@
 
           updateCustomerUI();
           closeCustomerAuthModal();
+          await loadCustomerSavedIds();
+          await loadCustomerCart();
 
           const name = data.user.first_name || data.user.email;
           showToast(`Welcome back, ${name}! Logged in successfully.`, 'success');
+
+          // If user clicked Add to Cart before logging in, resume adding it now
+          if (pendingAddToCart) {
+            const pending = pendingAddToCart;
+            pendingAddToCart = null;
+            setTimeout(() => {
+              showToast(`Adding "${pending.productName}" to your cart...`, 'info');
+              addToCart(pending.productId, pending.planId);
+            }, 300);
+          }
         } else {
           const errMsg = data.non_field_errors 
             ? data.non_field_errors.join(' ') 
@@ -3543,9 +4968,21 @@
 
           updateCustomerUI();
           closeCustomerAuthModal();
+          await loadCustomerSavedIds();
+          await loadCustomerCart();
 
           const name = data.user.first_name || data.user.email;
           showToast(`Welcome, ${name}! Account created & logged in.`, 'success');
+
+          // If user clicked Add to Cart before registering, resume adding it now
+          if (pendingAddToCart) {
+            const pending = pendingAddToCart;
+            pendingAddToCart = null;
+            setTimeout(() => {
+              showToast(`Adding "${pending.productName}" to your cart...`, 'info');
+              addToCart(pending.productId, pending.planId);
+            }, 300);
+          }
         } else {
           let errText = 'Registration failed.';
           if (data.email) errText = Array.isArray(data.email) ? data.email.join(' ') : data.email;
@@ -3648,10 +5085,21 @@
       customerState.token = null;
       customerState.refresh = null;
       customerState.user = null;
+      customerSavedIds.clear();
+      document.querySelectorAll('.card-bookmark-btn').forEach(btn => {
+        btn.classList.remove('active');
+        const svg = btn.querySelector('svg');
+        if (svg) svg.setAttribute('fill', 'none');
+        btn.title = 'Save Product';
+      });
 
       updateCustomerUI();
       closeProfileDropdown();
       closeCustomerProfileModal();
+      currentCartItems = [];
+      currentCartCount = 0;
+      currentCartTotal = 0;
+      updateCartBadgeUI(0);
 
       if (notify) {
         showToast('You have signed out of your customer account.', 'info');
@@ -3708,63 +5156,410 @@
       if (cartBtn) cartBtn.click();
     };
 
-    // Customer Orders & Subscriptions Modal Management
-    window.openCustomerOrdersModal = function() {
-      const modal = document.getElementById('customerOrdersModal');
-      const content = document.getElementById('customerOrdersContent');
-      if (!modal || !content) return;
+    // Global clipboard helper
+    window.copyToClipboardText = function(text, label = 'Text') {
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Copied ${label}: ${text}`, 'success');
+      }).catch(() => {
+        showToast(`${label}: ${text}`, 'info');
+      });
+    };
 
-      if (cartItems.length === 0) {
+    // ==============================================================================
+    // CUSTOMER ORDERS & SUBSCRIPTIONS CONTROLLER (LIVE REST API)
+    // ==============================================================================
+    let customerOrdersCache = [];
+    let customerOrdersFilter = 'ALL'; // ALL, PENDING, APPROVED, REJECTED
+    let customerOrdersSearchQuery = '';
+
+    window.refreshCustomerOrdersBadge = async function() {
+      const navBadge = document.getElementById('navOrdersBadge');
+      const dropBadge = document.getElementById('dropdownOrdersBadge');
+      const navNavBadge = document.getElementById('navOrdersNavBadge');
+      const modalCountPill = document.getElementById('modalOrdersCountPill');
+
+      if (!customerState.token) {
+        if (navBadge) navBadge.style.display = 'none';
+        if (dropBadge) dropBadge.textContent = '0 orders';
+        if (navNavBadge) navNavBadge.style.display = 'none';
+        if (modalCountPill) modalCountPill.textContent = '0';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/customer/orders/', {
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          customerOrdersCache = data.orders || [];
+          const total = customerOrdersCache.length;
+          const pending = customerOrdersCache.filter(o => o.status === 'PENDING').length;
+
+          if (dropBadge) {
+            dropBadge.textContent = `${total} order${total === 1 ? '' : 's'}`;
+          }
+
+          if (navBadge) {
+            if (total > 0) {
+              navBadge.textContent = total;
+              navBadge.style.display = 'flex';
+              if (pending > 0) {
+                navBadge.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                navBadge.title = `${pending} order(s) pending super admin verification`;
+              } else {
+                navBadge.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                navBadge.title = `${total} confirmed orders`;
+              }
+            } else {
+              navBadge.style.display = 'none';
+            }
+          }
+
+          if (navNavBadge) {
+            if (total > 0) {
+              navNavBadge.textContent = total;
+              navNavBadge.style.display = 'inline-block';
+            } else {
+              navNavBadge.style.display = 'none';
+            }
+          }
+
+          if (modalCountPill) {
+            modalCountPill.textContent = total;
+          }
+
+          updateFilterPillCounts();
+        }
+      } catch (e) {
+        console.warn('Could not refresh orders badge:', e);
+      }
+    };
+
+    function updateFilterPillCounts() {
+      const allCount = customerOrdersCache.length;
+      const pendingCount = customerOrdersCache.filter(o => o.status === 'PENDING').length;
+      const approvedCount = customerOrdersCache.filter(o => o.status === 'APPROVED').length;
+      const rejectedCount = customerOrdersCache.filter(o => o.status === 'REJECTED').length;
+
+      const cAll = document.getElementById('filterCountAll');
+      const cPen = document.getElementById('filterCountPending');
+      const cApp = document.getElementById('filterCountApproved');
+      const cRej = document.getElementById('filterCountRejected');
+
+      if (cAll) cAll.textContent = allCount;
+      if (cPen) cPen.textContent = pendingCount;
+      if (cApp) cApp.textContent = approvedCount;
+      if (cRej) cRej.textContent = rejectedCount;
+    }
+
+    window.setCustomerOrdersFilter = function(filterType) {
+      customerOrdersFilter = filterType;
+      const tabs = document.querySelectorAll('#customerOrdersFilterTabs .order-filter-tab');
+      tabs.forEach(t => {
+        if (t.getAttribute('data-filter') === filterType) {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
+      });
+      renderCustomerOrdersList();
+    };
+
+    window.handleCustomerOrdersSearch = function(query) {
+      customerOrdersSearchQuery = (query || '').trim().toLowerCase();
+      renderCustomerOrdersList();
+    };
+
+    window.fetchCustomerOrders = async function(forceRefresh = false) {
+      const content = document.getElementById('customerOrdersContent');
+      const controls = document.getElementById('customerOrdersControls');
+      const refreshIcon = document.getElementById('refreshOrdersIcon');
+
+      if (refreshIcon) refreshIcon.style.animation = 'spin 0.8s linear infinite';
+
+      try {
+        const res = await fetch('/api/customer/orders/', {
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+
+        if (!res.ok) {
+          if (res.status === 401) {
+            if (controls) controls.style.display = 'none';
+            content.innerHTML = `
+              <div style="text-align: center; padding: 30px 16px;">
+                <p style="color: var(--accent-rose); font-size: 0.9rem; margin-bottom: 14px;">Session expired. Please sign in again.</p>
+                <button type="button" onclick="closeCustomerOrdersModal(); openCustomerAuthModal('login');" class="btn-card-buy" style="padding: 10px 22px;">Sign In</button>
+              </div>
+            `;
+            return;
+          }
+          throw new Error('Failed to fetch orders');
+        }
+
+        const data = await res.json();
+        customerOrdersCache = data.orders || [];
+        updateFilterPillCounts();
+        refreshCustomerOrdersBadge();
+        renderCustomerOrdersList();
+      } catch (err) {
+        console.error('Failed to load customer orders:', err);
+        if (controls) controls.style.display = 'none';
         content.innerHTML = `
-          <div style="text-align: center; padding: 36px 16px;">
-            <div style="width: 64px; height: 64px; margin: 0 auto 16px; border-radius: 50%; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <div style="text-align: center; padding: 30px 16px; color: var(--accent-rose);">
+            <p>Could not load orders. Please check your network and try again.</p>
+            <button type="button" onclick="fetchCustomerOrders(true)" class="btn-primary-glow" style="margin-top: 10px; padding: 8px 18px; border-radius: 6px; font-weight: 700; color: #fff; background: var(--primary); border: none; cursor: pointer;">Try Again</button>
+          </div>
+        `;
+      } finally {
+        if (refreshIcon) refreshIcon.style.animation = '';
+      }
+    };
+
+    window.renderCustomerOrdersList = function() {
+      const content = document.getElementById('customerOrdersContent');
+      const controls = document.getElementById('customerOrdersControls');
+      if (!content) return;
+
+      if (!customerOrdersCache || customerOrdersCache.length === 0) {
+        if (controls) controls.style.display = 'none';
+        content.innerHTML = `
+          <div style="text-align: center; padding: 40px 16px;">
+            <div style="width: 68px; height: 68px; margin: 0 auto 16px; border-radius: 50%; background: var(--bg-surface); border: 1px dashed var(--border-subtle); display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
                 <line x1="8" y1="21" x2="16" y2="21"></line>
                 <line x1="12" y1="17" x2="12" y2="21"></line>
               </svg>
             </div>
-            <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--text-main);">No Active Subscriptions Yet</h4>
-            <p style="font-size: 0.84rem; color: var(--text-muted); max-width: 380px; margin: 0 auto 20px;">You haven't ordered any subscription plans yet. Explore our top software & streaming licenses with instant digital delivery!</p>
-            <a href="#catalog" onclick="closeCustomerOrdersModal();" class="btn-primary-glow" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 700; text-decoration: none; color: #fff; background: linear-gradient(135deg, var(--primary), var(--accent-purple));">
-              Explore Catalog Now
+            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">No Orders Placed Yet</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); max-width: 400px; margin: 0 auto 22px;">You haven't placed any subscription orders yet. Select your desired digital software or tool from our store catalog!</p>
+            <a href="#catalog" onclick="closeCustomerOrdersModal();" class="btn-primary-glow" style="display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px; border-radius: var(--radius-sm); font-weight: 800; text-decoration: none; color: #fff; background: linear-gradient(135deg, var(--primary), var(--accent-purple)); box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);">
+              <span>Browse Subscriptions Catalog</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </a>
           </div>
         `;
-      } else {
-        let html = `<div style="display: flex; flex-direction: column; gap: 12px;">`;
-        cartItems.forEach((item, idx) => {
-          const prod = item.product || {};
-          const plan = item.plan || {};
-          const license = item.licenseKey || ('SUB-' + Math.random().toString(36).substring(2, 10).toUpperCase());
-          html += `
-            <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
-              <div style="display: flex; align-items: center; gap: 12px; min-width: 0;">
-                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(99, 102, 241, 0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;">
-                  ${prod.image ? `<img src="${prod.image}" alt="${prod.name}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect></svg>`}
+        return;
+      }
+
+      if (controls) controls.style.display = 'flex';
+
+      // Apply filter
+      let filtered = customerOrdersCache;
+      if (customerOrdersFilter !== 'ALL') {
+        filtered = filtered.filter(o => o.status === customerOrdersFilter);
+      }
+
+      // Apply search query
+      if (customerOrdersSearchQuery) {
+        filtered = filtered.filter(o => {
+          const ordNum = (o.order_number || '').toLowerCase();
+          const trx = (o.transaction_id || '').toLowerCase();
+          const sender = (o.sender_number || '').toLowerCase();
+          const method = (o.payment_method_display || o.payment_method || '').toLowerCase();
+          const itemsMatch = (o.items || []).some(it => 
+            (it.product_name || '').toLowerCase().includes(customerOrdersSearchQuery) || 
+            (it.plan_name || '').toLowerCase().includes(customerOrdersSearchQuery)
+          );
+          return ordNum.includes(customerOrdersSearchQuery) || trx.includes(customerOrdersSearchQuery) || sender.includes(customerOrdersSearchQuery) || method.includes(customerOrdersSearchQuery) || itemsMatch;
+        });
+      }
+
+      if (filtered.length === 0) {
+        content.innerHTML = `
+          <div style="text-align: center; padding: 36px 16px; background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">🔍</div>
+            <h5 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">No Orders Match Your Filter</h5>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">Try clearing your search keyword or switching the status filter tab.</p>
+            <button type="button" onclick="setCustomerOrdersFilter('ALL'); document.getElementById('customerOrdersSearchInput').value=''; handleCustomerOrdersSearch('');" style="padding: 7px 16px; font-size: 0.78rem; font-weight: 700; border-radius: 9999px; background: rgba(99, 102, 241, 0.15); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.3); cursor: pointer;">
+              Reset Filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      let html = `<div style="display: flex; flex-direction: column; gap: 16px;">`;
+      filtered.forEach(ord => {
+        const isApproved = ord.status === 'APPROVED';
+        const isPending = ord.status === 'PENDING';
+        const isRejected = ord.status === 'REJECTED';
+
+        let statusBadge = '';
+        if (isApproved) {
+          statusBadge = `<span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.35); padding: 4px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>● Confirmed & Active</span>`;
+        } else if (isPending) {
+          statusBadge = `<span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); padding: 4px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #f59e0b;"></span>⏳ Pending Super Admin Approval</span>`;
+        } else {
+          statusBadge = `<span style="background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.35); padding: 4px 12px; border-radius: 9999px; font-size: 0.75rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #f43f5e;"></span>❌ Verification Declined</span>`;
+        }
+
+        const dateObj = ord.created_at ? new Date(ord.created_at) : null;
+        const formattedDate = dateObj ? dateObj.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+        const mfsName = ord.payment_method_display || (ord.payment_method ? ord.payment_method.toUpperCase() : 'MFS');
+        const mfsColor = ord.payment_method === 'bkash' ? '#e2136e' : ord.payment_method === 'nagad' ? '#f97316' : ord.payment_method === 'rocket' ? '#8c3494' : '#009688';
+
+        let itemsHtml = '';
+        (ord.items || []).forEach(it => {
+          itemsHtml += `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--border-subtle); flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 38px; height: 38px; border-radius: 8px; background: rgba(99, 102, 241, 0.12); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 0.78rem; overflow: hidden; flex-shrink: 0;">
+                  ${it.product_image ? `<img src="${it.product_image}" alt="${it.product_name}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`}
                 </div>
-                <div style="min-width: 0;">
-                  <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${prod.name || 'Subscription License'}</div>
-                  <div style="font-size: 0.78rem; color: var(--text-muted);">${plan.name || 'Standard Tier'} • <span style="color: var(--accent-emerald); font-weight: 700;">● Active License</span></div>
+                <div>
+                  <div style="font-weight: 800; font-size: 0.92rem; color: var(--text-main);">${it.product_name || 'Digital Subscription'}</div>
+                  <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                    <span style="color: var(--primary); font-weight: 700;">${it.plan_name || 'Standard Plan'}</span>
+                    <span>&bull;</span>
+                    <span>${it.devices || 1} Device${it.devices > 1 ? 's' : ''}</span>
+                    <span>&bull;</span>
+                    <span style="text-transform: capitalize;">${it.billing_cycle || 'monthly'}</span>
+                    ${it.quantity > 1 ? `<span style="background: rgba(255,255,255,0.08); padding: 1px 6px; border-radius: 4px; font-weight: 700;">x${it.quantity}</span>` : ''}
+                  </div>
                 </div>
               </div>
-              <div style="text-align: right; flex-shrink: 0;">
-                <div style="font-weight: 800; color: var(--primary); font-size: 0.95rem;">${plan.currency_symbol || '৳'}${plan.price || '0.00'}</div>
-                <div style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace; background: var(--bg-card); padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border-subtle); margin-top: 4px;">Key: ${license}</div>
+              <div style="text-align: right;">
+                <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">${it.currency_symbol || ord.currency_symbol || '৳'}${parseFloat(it.total_price || it.unit_price || 0).toFixed(2)}</div>
+                ${it.quantity > 1 ? `<div style="font-size: 0.72rem; color: var(--text-muted);">৳${parseFloat(it.unit_price).toFixed(2)} each</div>` : ''}
               </div>
             </div>
           `;
         });
-        html += `</div>`;
-        content.innerHTML = html;
+
+        html += `
+          <div style="background: var(--bg-surface); border: 1px solid ${isApproved ? 'rgba(16, 185, 129, 0.35)' : isPending ? 'rgba(245, 158, 11, 0.35)' : 'rgba(244, 63, 94, 0.35)'}; border-radius: var(--radius-md); padding: 18px; box-shadow: 0 4px 20px rgba(0,0,0,0.18); transition: var(--transition-smooth);">
+            
+            <!-- Order Header Bar -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 0.96rem; color: var(--text-main); letter-spacing: 0.5px;">#${ord.order_number}</span>
+                <button type="button" onclick="copyToClipboardText('${ord.order_number}', 'Order Number')" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 2px;" title="Copy Order #">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+                <span style="font-size: 0.78rem; color: var(--text-muted);">&bull; ${formattedDate}</span>
+              </div>
+              <div>${statusBadge}</div>
+            </div>
+
+            <!-- Items Section -->
+            <div style="margin-bottom: 12px;">
+              ${itemsHtml}
+            </div>
+
+            <!-- Payment & TrxID Row -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin-bottom: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 0.82rem;">
+                <span style="font-weight: 800; color: #fff; background: ${mfsColor}; padding: 3px 10px; border-radius: 6px; box-shadow: 0 2px 8px ${mfsColor}40;">${mfsName}</span>
+                <span style="color: var(--text-muted);">Sender Phone: <strong style="color: var(--text-main); font-family: 'JetBrains Mono', monospace;">${ord.sender_number}</strong></span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700;">Transaction ID (TrxID):</span>
+                <code style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 0.88rem; color: var(--text-main); background: rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border-subtle);">${ord.transaction_id}</code>
+                <button type="button" onclick="copyToClipboardText('${ord.transaction_id}', 'TrxID')" style="padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: var(--primary); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Copy TrxID">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Status Dependent Details Box -->
+            ${isApproved ? `
+              <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.08)); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+                <div>
+                  <div style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #10b981; letter-spacing: 0.6px; display: flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Confirmed Purchase & Digital License Key</span>
+                  </div>
+                  <div style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.15rem; color: var(--text-main); margin-top: 4px; letter-spacing: 1px;">
+                    ${ord.license_key || 'SUB-ACTIVE-KEY-GRANTED'}
+                  </div>
+                  <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 3px;">
+                    Verified by Super Admin ${ord.approved_by_username ? `(${ord.approved_by_username})` : ''}. ${ord.admin_notes || 'Your digital credentials are ready for instant activation!'}
+                  </div>
+                </div>
+                <button type="button" class="btn-card-buy" onclick="copyToClipboardText('${ord.license_key}', 'License Key')" style="padding: 9px 18px; font-size: 0.84rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy License Key</span>
+                </button>
+              </div>
+            ` : isPending ? `
+              <div style="background: rgba(245, 158, 11, 0.09); border: 1px dashed rgba(245, 158, 11, 0.4); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 12px; display: flex; align-items: flex-start; gap: 12px;">
+                <div style="color: #f59e0b; font-size: 1.25rem; line-height: 1; flex-shrink: 0; margin-top: 2px;">⏳</div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+                  <strong style="color: #f59e0b;">MFS Payment Verification Under Review</strong><br>
+                  Your ${mfsName} transaction with TrxID <strong>${ord.transaction_id}</strong> is currently being reviewed by our Super Admin. As soon as payment is confirmed, your purchase will be confirmed and your license key will be displayed right here!
+                </div>
+              </div>
+            ` : `
+              <div style="background: rgba(244, 63, 94, 0.09); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 12px; font-size: 0.82rem; color: var(--text-muted);">
+                <strong style="color: #f43f5e;">Admin Verification Feedback:</strong> ${ord.admin_notes || 'The Transaction ID provided could not be matched. Please verify the TrxID or contact store support.'}
+              </div>
+            `}
+
+            <!-- Total Amount Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px solid var(--border-subtle); font-size: 0.86rem;">
+              <span style="color: var(--text-muted);">Order Total (${ord.items ? ord.items.length : 0} item${ord.items && ord.items.length === 1 ? '' : 's'}):</span>
+              <span style="font-weight: 800; font-size: 1.15rem; color: var(--accent-emerald);">${ord.currency_symbol || '৳'}${parseFloat(ord.total_amount).toFixed(2)}</span>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+      content.innerHTML = html;
+    };
+
+    window.openCustomerOrdersModal = async function() {
+      const modal = document.getElementById('customerOrdersModal');
+      const content = document.getElementById('customerOrdersContent');
+      const controls = document.getElementById('customerOrdersControls');
+      if (!modal || !content) return;
+
+      if (!customerState.token) {
+        if (controls) controls.style.display = 'none';
+        content.innerHTML = `
+          <div style="text-align: center; padding: 40px 16px;">
+            <div style="width: 68px; height: 68px; margin: 0 auto 16px; border-radius: 50%; background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center; color: var(--primary);">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </div>
+            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">Sign In Required</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); max-width: 360px; margin: 0 auto 20px;">Please sign in to view your placed orders, track MFS payment verification, and access your digital licenses.</p>
+            <button type="button" onclick="closeCustomerOrdersModal(); openCustomerAuthModal('login');" class="btn-card-buy" style="margin: 0 auto; padding: 12px 28px; font-size: 0.92rem; border-radius: var(--radius-md);">
+              Sign In to Your Account
+            </button>
+          </div>
+        `;
+        modal.style.display = 'flex';
+        return;
       }
+
+      content.innerHTML = `
+        <div style="text-align: center; padding: 40px 16px;">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" style="animation: spin 0.8s linear infinite; margin-bottom: 12px;">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
+          </svg>
+          <div style="font-size: 0.92rem; color: var(--text-muted);">Fetching your orders & live payment verification...</div>
+        </div>
+      `;
       modal.style.display = 'flex';
+
+      await fetchCustomerOrders(true);
     };
 
     window.closeCustomerOrdersModal = function() {
       const modal = document.getElementById('customerOrdersModal');
       if (modal) modal.style.display = 'none';
     };
+
 
     // Initialize Store on DOM ready
     document.addEventListener('DOMContentLoaded', initStore);

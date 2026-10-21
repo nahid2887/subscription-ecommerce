@@ -377,3 +377,54 @@ class StorefrontHomeView(TemplateView):
     """
     template_name = 'store/index.html'
 
+
+class ProductSaveToggleActionView(APIView):
+    """
+    Toggle saving/bookmarking this product for the authenticated customer user.
+    POST /api/products/<int:pk>/save/
+    """
+    permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        tags=['Products & Plans', 'Customer Saved Products'],
+        operation_id='product_toggle_save',
+        summary='Toggle Save Product for Customer',
+        description='Toggle saving this product for the currently authenticated customer user.',
+        request=None,
+        responses={
+            200: OpenApiResponse(description='Product removed from saved items'),
+            201: OpenApiResponse(description='Product saved to favorites successfully'),
+            401: OpenApiResponse(description='Unauthorized: Missing or invalid token'),
+            404: OpenApiResponse(description='Product not found'),
+        }
+    )
+    def post(self, request, pk, *args, **kwargs):
+        product = get_object_or_404(Product, pk=pk)
+        from customer.models import SavedProduct
+        from customer.serializers import SavedProductSerializer, SavedProductActionResponseSerializer
+
+        saved_item = SavedProduct.objects.filter(user=request.user, product=product).first()
+        if saved_item:
+            saved_item.delete()
+            return Response({
+                "message": f"'{product.name}' removed from your saved items.",
+                "is_saved": False,
+                "product_id": product.id,
+                "saved_product": None
+            }, status=status.HTTP_200_OK)
+        else:
+            notes = request.data.get('notes', '')
+            saved_item = SavedProduct.objects.create(
+                user=request.user,
+                product=product,
+                notes=notes or ''
+            )
+            serializer = SavedProductSerializer(saved_item, context={'request': request})
+            return Response({
+                "message": f"'{product.name}' saved to your favorites successfully.",
+                "is_saved": True,
+                "product_id": product.id,
+                "saved_product": serializer.data
+            }, status=status.HTTP_201_CREATED)
+
+

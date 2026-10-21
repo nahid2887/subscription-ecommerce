@@ -6,7 +6,13 @@ from django.core.files.base import ContentFile
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import CustomerProfile
+from drf_spectacular.utils import extend_schema_field
+from product.models import Product, ProductPlan
+from product.serializers import ProductDetailSerializer, ProductPlanItemSerializer
+from .models import CustomerProfile, SavedProduct, CustomerCartItem, Order, OrderItem
+
+
+
 
 
 class CustomerAvatarField(serializers.ImageField):
@@ -73,6 +79,7 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['id', 'username', 'email', 'date_joined', 'last_login']
 
+    @extend_schema_field(serializers.URLField(allow_null=True))
     def get_avatar(self, obj):
         try:
             profile = getattr(obj, 'customer_profile', None)
@@ -259,3 +266,524 @@ class CustomerAuthResponseSerializer(serializers.Serializer):
     access_token = serializers.CharField()
     refresh_token = serializers.CharField()
     user = CustomerProfileSerializer()
+
+
+class SavedProductSerializer(serializers.ModelSerializer):
+    """
+    Detailed representation of a saved product item for the customer.
+    Includes full nested Product details for rendering and interaction.
+    """
+    product = ProductDetailSerializer(read_only=True)
+    product_id = serializers.IntegerField(source='product.id', read_only=True)
+
+    class Meta:
+        model = SavedProduct
+        fields = [
+            'id',
+            'product_id',
+            'product',
+            'notes',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'product_id', 'product', 'created_at', 'updated_at']
+
+
+class SavedProductCreateSerializer(serializers.Serializer):
+    """
+    Serializer to save a product to customer's saved items.
+    Accepts:
+    - product_id (int) OR product (int) OR slug (string)
+    - notes (optional string)
+    """
+    product_id = serializers.IntegerField(required=False, help_text="ID of the product to save")
+    product = serializers.IntegerField(required=False, help_text="Alternative parameter for product_id")
+    slug = serializers.CharField(required=False, allow_blank=True, help_text="Slug of the product to save")
+    notes = serializers.CharField(required=False, allow_blank=True, allow_null=True, help_text="Optional customer notes")
+
+    def validate(self, attrs):
+        prod_id = attrs.get('product_id') or attrs.get('product')
+        slug = attrs.get('slug')
+
+        if not prod_id and not slug:
+            raise serializers.ValidationError("Either 'product_id' or 'slug' must be provided.")
+
+        product_obj = None
+        if prod_id:
+            product_obj = Product.objects.filter(pk=prod_id).first()
+        elif slug:
+            product_obj = Product.objects.filter(slug=slug.strip()).first()
+
+        if not product_obj:
+            raise serializers.ValidationError({"product_id": "Product not found."})
+
+        attrs['product_instance'] = product_obj
+        return attrs
+
+
+class SavedProductToggleSerializer(serializers.Serializer):
+    """
+    Serializer to toggle the saved state of a product for the customer.
+    """
+    product_id = serializers.IntegerField(required=False, help_text="ID of the product to toggle")
+    product = serializers.IntegerField(required=False, help_text="Alternative parameter for product_id")
+    slug = serializers.CharField(required=False, allow_blank=True, help_text="Slug of the product to toggle")
+    notes = serializers.CharField(required=False, allow_blank=True, allow_null=True, help_text="Optional notes when saving")
+
+    def validate(self, attrs):
+        prod_id = attrs.get('product_id') or attrs.get('product')
+        slug = attrs.get('slug')
+
+        if not prod_id and not slug:
+            raise serializers.ValidationError("Either 'product_id' or 'slug' must be provided.")
+
+        product_obj = None
+        if prod_id:
+            product_obj = Product.objects.filter(pk=prod_id).first()
+        elif slug:
+            product_obj = Product.objects.filter(slug=slug.strip()).first()
+
+        if not product_obj:
+            raise serializers.ValidationError({"product_id": "Product not found."})
+
+        attrs['product_instance'] = product_obj
+        return attrs
+
+
+class SavedProductActionResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()
+    is_saved = serializers.BooleanField()
+    product_id = serializers.IntegerField()
+    saved_product = SavedProductSerializer(allow_null=True, required=False)
+
+
+class SavedProductListResponseSerializer(serializers.Serializer):
+    count = serializers.IntegerField()
+    saved_products = SavedProductSerializer(many=True)
+
+
+class SavedProductCheckResponseSerializer(serializers.Serializer):
+    is_saved = serializers.BooleanField()
+    product_id = serializers.IntegerField()
+    saved_product_id = serializers.IntegerField(allow_null=True)
+
+
+# ==============================================================================
+# CUSTOMER SHOPPING CART SERIALIZERS
+# ==============================================================================
+class CustomerCartItemSerializer(serializers.ModelSerializer):
+    """
+    Representation of an item in the customer user's shopping cart.
+    Includes full product and plan details, calculated unit and total prices.
+    """
+    product = ProductDetailSerializer(read_only=True)
+    plan = ProductPlanItemSerializer(read_only=True)
+    unit_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+    total_price = serializers.DecimalField(max_digits=10, decimal_places=2, read_only=True)
+    currency = serializers.CharField(read_only=True)
+    currency_symbol = serializers.CharField(read_only=True)
+
+    class Meta:
+        model = CustomerCartItem
+        fields = [
+            'id',
+            'product',
+            'plan',
+            'quantity',
+            'unit_price',
+            'total_price',
+            'currency',
+            'currency_symbol',
+            'created_at',
+            'updated_at',
+        ]
+        read_only_fields = ['id', 'unit_price', 'total_price', 'currency', 'currency_symbol', 'created_at', 'updated_at']
+
+
+class CustomerCartAddSerializer(serializers.Serializer):
+    """
+    Add a product and optional plan tier to the customer's cart.
+    """
+    product_id = serializers.IntegerField(required=True, help_text="ID of the product to add to cart")
+    plan_id = serializers.IntegerField(required=False, allow_null=True, help_text="ID of the selected plan tier (optional)")
+    quantity = serializers.IntegerField(required=False, default=1, min_value=1, help_text="Quantity (defaults to 1)")
+
+    def validate(self, attrs):
+        product_id = attrs.get('product_id')
+        plan_id = attrs.get('plan_id')
+
+        product_obj = Product.objects.filter(pk=product_id, is_active=True).first()
+        if not product_obj:
+            raise serializers.ValidationError({"product_id": "Active product not found."})
+
+        plan_obj = None
+        if plan_id:
+            plan_obj = ProductPlan.objects.filter(pk=plan_id, product=product_obj, is_active=True).first()
+            if not plan_obj:
+                raise serializers.ValidationError({"plan_id": "Selected plan tier not found for this product."})
+        else:
+            plan_obj = product_obj.selected_plan or product_obj.plans.filter(is_default=True).first() or product_obj.plans.first()
+
+        attrs['product_instance'] = product_obj
+        attrs['plan_instance'] = plan_obj
+        return attrs
+
+
+class CustomerCartUpdateSerializer(serializers.Serializer):
+    """
+    Update the quantity of an item in the cart.
+    """
+    quantity = serializers.IntegerField(required=True, min_value=0, help_text="New quantity. Set to 0 to remove item.")
+
+
+class CustomerCartResponseSerializer(serializers.Serializer):
+    items_count = serializers.IntegerField()
+    total_quantity = serializers.IntegerField()
+    total_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
+    currency_symbol = serializers.CharField()
+    items = CustomerCartItemSerializer(many=True)
+    cart_items = CustomerCartItemSerializer(many=True, required=False)
+    cart_count = serializers.IntegerField(required=False)
+    cart_total = serializers.DecimalField(max_digits=10, decimal_places=2, required=False)
+
+
+class CustomerCartActionResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()
+    cart = CustomerCartResponseSerializer()
+    item = CustomerCartItemSerializer(allow_null=True, required=False)
+
+
+# ==============================================================================
+# CUSTOMER ORDER & PAYMENT SERIALIZERS
+# ==============================================================================
+
+class OrderItemSerializer(serializers.ModelSerializer):
+    """
+    Representation of an item inside an order.
+    """
+    class Meta:
+        model = OrderItem
+        fields = [
+            'id',
+            'product',
+            'product_name',
+            'plan',
+            'plan_name',
+            'quantity',
+            'unit_price',
+            'total_price',
+            'devices',
+            'billing_cycle',
+            'product_image',
+            'created_at',
+        ]
+        read_only_fields = ['id', 'created_at']
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    """
+    Full representation of a customer order with MFS verification and license.
+    """
+    items = OrderItemSerializer(many=True, read_only=True)
+    customer_username = serializers.CharField(source='user.username', read_only=True)
+    customer_email = serializers.CharField(source='user.email', read_only=True)
+    approved_by_username = serializers.CharField(source='approved_by.username', read_only=True, default=None)
+    payment_method_display = serializers.CharField(source='get_payment_method_display', read_only=True)
+    status_display = serializers.CharField(source='get_status_display', read_only=True)
+
+    class Meta:
+        model = Order
+        fields = [
+            'id',
+            'order_number',
+            'user',
+            'customer_username',
+            'customer_email',
+            'delivery_email',
+            'sender_number',
+            'payment_method',
+            'payment_method_display',
+            'transaction_id',
+            'total_amount',
+            'currency',
+            'currency_symbol',
+            'status',
+            'status_display',
+            'license_key',
+            'customer_notes',
+            'admin_notes',
+            'approved_by',
+            'approved_by_username',
+            'approved_at',
+            'created_at',
+            'updated_at',
+            'items',
+        ]
+        read_only_fields = [
+            'id',
+            'order_number',
+            'user',
+            'customer_username',
+            'customer_email',
+            'payment_method_display',
+            'total_amount',
+            'currency',
+            'currency_symbol',
+            'status',
+            'status_display',
+            'license_key',
+            'admin_notes',
+            'approved_by',
+            'approved_by_username',
+            'approved_at',
+            'created_at',
+            'updated_at',
+            'items',
+        ]
+
+
+class CustomerOrderCreateSerializer(serializers.Serializer):
+    """
+    Serializer to place an order either from the customer's cart or directly for a product.
+    Requires MFS payment details: payment_method, sender_number, transaction_id.
+    """
+    payment_method = serializers.ChoiceField(
+        choices=Order.PAYMENT_CHOICES,
+        default=Order.PAYMENT_BKASH,
+        help_text="Payment method selected: bkash, nagad, rocket, bangla_qr"
+    )
+    sender_number = serializers.CharField(
+        max_length=30,
+        required=True,
+        help_text="The phone/MFS account number used to send money"
+    )
+    transaction_id = serializers.CharField(
+        max_length=100,
+        required=True,
+        help_text="The Transaction ID (TrxID) received from MFS SMS/receipt"
+    )
+    delivery_email = serializers.EmailField(
+        required=False,
+        allow_blank=True,
+        help_text="Email for receiving license/credentials (defaults to customer email)"
+    )
+    customer_notes = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        default="",
+        help_text="Optional customer notes"
+    )
+    source = serializers.ChoiceField(
+        choices=['cart', 'direct'],
+        default='cart',
+        help_text="Order source: 'cart' checks out current cart items, 'direct' checks out specified product"
+    )
+    # Direct purchase fields (used if source == 'direct')
+    product_id = serializers.IntegerField(
+        required=False,
+        allow_null=True,
+        help_text="Product ID if ordering directly"
+    )
+    plan_id = serializers.IntegerField(
+        required=False,
+        allow_null=True,
+        help_text="Plan ID if ordering directly"
+    )
+    quantity = serializers.IntegerField(
+        required=False,
+        default=1,
+        min_value=1,
+        help_text="Quantity if ordering directly"
+    )
+
+    def validate(self, attrs):
+        user = self.context['request'].user
+        source = attrs.get('source', 'cart')
+        trx_id = attrs.get('transaction_id', '').strip()
+        sender_num = attrs.get('sender_number', '').strip()
+
+        if not trx_id:
+            raise serializers.ValidationError({"transaction_id": "Transaction number (TrxID) is strictly required."})
+        if not sender_num:
+            raise serializers.ValidationError({"sender_number": "Sender phone number is required."})
+
+        # Check for duplicate pending/approved order with same transaction ID
+        if Order.objects.filter(transaction_id__iexact=trx_id).exclude(status=Order.STATUS_REJECTED).exists():
+            raise serializers.ValidationError({
+                "transaction_id": "This Transaction ID has already been submitted. Please check your order history or provide a valid unique TrxID."
+            })
+
+        attrs['transaction_id'] = trx_id
+        attrs['sender_number'] = sender_num
+
+        # Auto-detect direct checkout if product_id is passed
+        product_id = attrs.get('product_id') or self.initial_data.get('product_id')
+        if product_id:
+            source = 'direct'
+            attrs['source'] = 'direct'
+            attrs['product_id'] = int(product_id)
+        else:
+            source = attrs.get('source', 'cart')
+
+        if source == 'cart':
+            cart_items = CustomerCartItem.objects.filter(user=user).select_related('product', 'plan')
+            if not cart_items.exists():
+                raise serializers.ValidationError({"source": "Your shopping cart is empty. Please add items to your cart before confirming order."})
+            attrs['cart_items'] = list(cart_items)
+        else:
+            if not product_id:
+                raise serializers.ValidationError({"product_id": "Product ID is required for direct checkout."})
+            product = Product.objects.filter(pk=product_id, is_active=True).first()
+
+            if not product:
+                raise serializers.ValidationError({"product_id": "Active product not found."})
+
+            plan_id = attrs.get('plan_id')
+            plan = None
+            if plan_id:
+                plan = ProductPlan.objects.filter(pk=plan_id, product=product, is_active=True).first()
+                if not plan:
+                    raise serializers.ValidationError({"plan_id": "Selected plan not found for this product."})
+            else:
+                plan = product.selected_plan or product.plans.filter(is_default=True).first() or product.plans.first()
+
+            attrs['product_obj'] = product
+            attrs['plan_obj'] = plan
+
+        return attrs
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        source = validated_data.get('source', 'cart')
+        delivery_email = validated_data.get('delivery_email') or user.email or ""
+        sender_number = validated_data['sender_number']
+        payment_method = validated_data['payment_method']
+        transaction_id = validated_data['transaction_id']
+        customer_notes = validated_data.get('customer_notes', '')
+
+        if source == 'cart':
+            cart_items = validated_data['cart_items']
+            total_amount = sum((it.total_price or 0) for it in cart_items)
+            sym = cart_items[0].currency_symbol if cart_items else '৳'
+            curr = cart_items[0].currency if cart_items else 'BDT'
+
+            order = Order.objects.create(
+                user=user,
+                delivery_email=delivery_email,
+                sender_number=sender_number,
+                payment_method=payment_method,
+                transaction_id=transaction_id,
+                total_amount=total_amount,
+                currency=curr,
+                currency_symbol=sym,
+                status=Order.STATUS_PENDING,
+                customer_notes=customer_notes
+            )
+
+            for it in cart_items:
+                product_img = None
+                if it.product and it.product.image:
+                    try:
+                        product_img = it.product.image.url
+                    except Exception:
+                        product_img = None
+
+                OrderItem.objects.create(
+                    order=order,
+                    product=it.product,
+                    product_name=it.product.name,
+                    plan=it.plan,
+                    plan_name=it.plan.name if it.plan else "",
+                    quantity=it.quantity,
+                    unit_price=it.unit_price,
+                    total_price=it.total_price,
+                    devices=it.plan.devices if it.plan else 1,
+                    billing_cycle=it.plan.billing_cycle if it.plan else "monthly",
+                    product_image=product_img
+                )
+
+            # Clear cart items upon successful order creation
+            CustomerCartItem.objects.filter(user=user).delete()
+
+            return order
+        else:
+            product = validated_data['product_obj']
+            plan = validated_data['plan_obj']
+            quantity = validated_data.get('quantity', 1)
+
+            unit_price = plan.price if (plan and plan.price is not None) else (product.price or 0)
+            total_price = unit_price * quantity
+            sym = plan.currency_symbol if (plan and plan.currency_symbol) else (product.currency_symbol or '৳')
+            curr = plan.currency if (plan and plan.currency) else (product.currency or 'BDT')
+
+            order = Order.objects.create(
+                user=user,
+                delivery_email=delivery_email,
+                sender_number=sender_number,
+                payment_method=payment_method,
+                transaction_id=transaction_id,
+                total_amount=total_price,
+                currency=curr,
+                currency_symbol=sym,
+                status=Order.STATUS_PENDING,
+                customer_notes=customer_notes
+            )
+
+            product_img = None
+            if product.image:
+                try:
+                    product_img = product.image.url
+                except Exception:
+                    product_img = None
+
+            OrderItem.objects.create(
+                order=order,
+                product=product,
+                product_name=product.name,
+                plan=plan,
+                plan_name=plan.name if plan else "",
+                quantity=quantity,
+                unit_price=unit_price,
+                total_price=total_price,
+                devices=plan.devices if plan else 1,
+                billing_cycle=plan.billing_cycle if plan else "monthly",
+                product_image=product_img
+            )
+
+            return order
+
+
+class AdminOrderApprovalSerializer(serializers.Serializer):
+    """
+    Serializer for Super Admin to approve an order.
+    """
+    license_key = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        help_text="Custom digital license activation key (auto-generated if omitted)"
+    )
+    admin_notes = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        help_text="Verification message, access instructions, or account credentials for the customer"
+    )
+
+
+class AdminOrderRejectionSerializer(serializers.Serializer):
+    """
+    Serializer for Super Admin to reject an order.
+    """
+    reason = serializers.CharField(
+        required=True,
+        help_text="Reason for rejection (e.g. 'Invalid Transaction ID', 'Amount mismatch')"
+    )
+
+
+class OrderActionResponseSerializer(serializers.Serializer):
+    """
+    Standard response for order actions.
+    """
+    message = serializers.CharField()
+    order = OrderSerializer()
+
+

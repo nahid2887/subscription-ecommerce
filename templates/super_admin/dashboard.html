@@ -1007,7 +1007,167 @@
     .footer-links a:hover {
       color: var(--primary);
     }
+
+    /* ==========================================================================
+       SUPER ADMIN ORDERS & MFS VERIFICATION STYLES
+       ========================================================================== */
+    .orders-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-tab-btn {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      color: var(--text-secondary);
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+    }
+    .filter-tab-btn:hover {
+      border-color: var(--primary);
+      color: var(--text-main);
+    }
+    .filter-tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px var(--glow-primary);
+    }
+    .orders-search-input {
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      color: var(--text-main);
+      font-size: 0.82rem;
+      outline: none;
+      min-width: 260px;
+      transition: var(--transition-smooth);
+    }
+    .orders-search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px var(--glow-primary);
+    }
+    .mfs-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+    .mfs-tag.bkash {
+      background: rgba(226, 19, 110, 0.12);
+      color: #e2136e;
+      border: 1px solid rgba(226, 19, 110, 0.3);
+    }
+    .mfs-tag.nagad {
+      background: rgba(249, 115, 22, 0.12);
+      color: #f97316;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+    }
+    .mfs-tag.rocket {
+      background: rgba(140, 52, 148, 0.12);
+      color: #a855f7;
+      border: 1px solid rgba(140, 52, 148, 0.3);
+    }
+    .mfs-tag.bangla_qr {
+      background: rgba(0, 150, 136, 0.12);
+      color: #06b6d4;
+      border: 1px solid rgba(0, 150, 136, 0.3);
+    }
+    .trx-code-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 0.82rem;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      padding: 3px 8px;
+      border-radius: 4px;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-approve {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+      transition: var(--transition-smooth);
+    }
+    .btn-approve:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.45);
+    }
+    .btn-reject {
+      background: rgba(244, 63, 94, 0.12);
+      color: var(--danger);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: var(--transition-smooth);
+    }
+    .btn-reject:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+    .order-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+    .order-status-pill.pending {
+      background: rgba(245, 158, 11, 0.12);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .order-status-pill.approved {
+      background: rgba(16, 185, 129, 0.12);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .order-status-pill.rejected {
+      background: rgba(244, 63, 94, 0.12);
+      color: #f43f5e;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
   </style>
+
 </head>
 <body>
   <div class="ambient-glow-1"></div>
@@ -1038,21 +1198,13 @@
         </svg>
         Overview
       </a>
-      <a href="#subscribersSection" class="nav-link">
+      <a href="#ordersSection" class="nav-link" id="navOrdersLink">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-          <circle cx="9" cy="7" r="4"></circle>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+          <line x1="2" y1="10" x2="22" y2="10"></line>
         </svg>
-        Subscribers
-      </a>
-      <a href="#plansSection" class="nav-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
-        </svg>
-        Plans
+        Orders & Verification
+        <span id="navPendingOrdersBadge" style="background: #f59e0b; color: #000; font-size: 0.68rem; font-weight: 800; padding: 1px 6px; border-radius: 999px; margin-left: 4px; display: none;">0</span>
       </a>
       <a href="/super-admin/products/" class="nav-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1223,109 +1375,96 @@
       </a>
     </div>
 
-    <!-- Active Plans Summary -->
-    <div class="section-card" id="plansSection">
-      <div class="section-header">
+    <!-- ==========================================================================
+         CUSTOMER ORDERS & MFS PAYMENT VERIFICATION SECTION
+         ========================================================================== -->
+    <div class="section-card" id="ordersSection" style="margin-bottom: 24px;">
+      <div class="section-header" style="flex-wrap: wrap; gap: 12px;">
         <h3 class="section-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
-            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
-            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-emerald);">
+            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+            <line x1="2" y1="10" x2="22" y2="10"></line>
           </svg>
-          Subscription Tiers & Breakdown
+          Customer Orders & MFS Payment Verification
         </h3>
-        <span class="status-tag active" style="background: rgba(99, 102, 241, 0.12); border-color: rgba(99, 102, 241, 0.3); color: var(--primary);">
-          3 Tiers Active
-        </span>
-      </div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px;">
-        <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 16px;">
-          <div style="font-size: 0.78rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Enterprise Tier</div>
-          <div style="font-size: 1.35rem; font-weight: 800; color: var(--accent-purple); margin-top: 4px;">488 Subscribers</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">$2,400/yr &bull; 34% share</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span id="ordersPendingBadge" style="font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 999px; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); display: flex; align-items: center; gap: 6px;">
+            <span class="pulse-dot" style="background: #f59e0b;"></span>
+            <span id="pendingBadgeCount">0 Pending Verification</span>
+          </span>
+          <button type="button" class="btn-action" onclick="loadSuperAdminOrders()" title="Refresh Orders" style="padding: 6px 12px; border-radius: var(--radius-sm); font-size: 0.78rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Refresh
+          </button>
         </div>
-        <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 16px;">
-          <div style="font-size: 0.78rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Pro Tier</div>
-          <div style="font-size: 1.35rem; font-weight: 800; color: var(--primary); margin-top: 4px;">682 Subscribers</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">$199/mo &bull; 48% share</div>
-        </div>
-        <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 16px;">
-          <div style="font-size: 0.78rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Starter Tier</div>
-          <div style="font-size: 1.35rem; font-weight: 800; color: var(--accent-cyan); margin-top: 4px;">258 Subscribers</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">$49/mo &bull; 18% share</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Recent Subscribers Table -->
-    <div class="section-card" id="subscribersSection">
-      <div class="section-header">
-        <h3 class="section-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-cyan);">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-            <circle cx="9" cy="7" r="4"></circle>
-            <line x1="19" y1="8" x2="19" y2="14"></line>
-            <line x1="22" y1="11" x2="16" y2="11"></line>
-          </svg>
-          Recent Subscriptions & Subscribers
-        </h3>
       </div>
 
+      <!-- Quick Metrics Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
+        <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 14px;">
+          <div style="font-size: 0.74rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Total Orders</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-top: 4px;" id="metricTotalOrders">0</div>
+        </div>
+        <div style="background: var(--panel-bg); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 14px;">
+          <div style="font-size: 0.74rem; color: #f59e0b; text-transform: uppercase; font-weight: 700;">Pending Verification</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: #f59e0b; margin-top: 4px;" id="metricPendingOrders">0</div>
+        </div>
+        <div style="background: var(--panel-bg); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 14px;">
+          <div style="font-size: 0.74rem; color: #10b981; text-transform: uppercase; font-weight: 700;">Approved / Confirmed</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: #10b981; margin-top: 4px;" id="metricApprovedOrders">0</div>
+        </div>
+        <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 14px;">
+          <div style="font-size: 0.74rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Verified Revenue</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-emerald); margin-top: 4px;" id="metricTotalRevenue">৳0.00</div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs & Search Bar -->
+      <div class="orders-toolbar">
+        <div class="filter-tabs">
+          <button type="button" class="filter-tab-btn active" onclick="setOrdersStatusFilter('ALL', this)">All Orders</button>
+          <button type="button" class="filter-tab-btn" onclick="setOrdersStatusFilter('PENDING', this)" style="color: #f59e0b;">⏳ Pending Verification</button>
+          <button type="button" class="filter-tab-btn" onclick="setOrdersStatusFilter('APPROVED', this)" style="color: #10b981;">✅ Approved</button>
+          <button type="button" class="filter-tab-btn" onclick="setOrdersStatusFilter('REJECTED', this)" style="color: #f43f5e;">❌ Rejected</button>
+        </div>
+
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <select id="ordersPaymentFilter" onchange="loadSuperAdminOrders()" style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-sm); padding: 8px 12px; color: var(--text-main); font-size: 0.82rem; outline: none; cursor: pointer;">
+            <option value="ALL">All Payment Methods</option>
+            <option value="bkash">bKash</option>
+            <option value="nagad">Nagad</option>
+            <option value="rocket">Rocket</option>
+            <option value="bangla_qr">Bangla QR</option>
+          </select>
+          <input type="text" id="ordersSearchInput" class="orders-search-input" placeholder="Search by TrxID, Order #, Phone, Email..." oninput="debounceOrdersSearch()">
+        </div>
+      </div>
+
+      <!-- Orders Table -->
       <div class="table-wrapper">
-        <table>
+        <table id="superAdminOrdersTable">
           <thead>
             <tr>
-              <th>Subscriber</th>
-              <th>Plan</th>
-              <th>Billing</th>
+              <th>Order & Date</th>
+              <th>Customer</th>
+              <th>Items & Amount</th>
+              <th>Payment & Sender</th>
+              <th>Transaction ID (TrxID)</th>
               <th>Status</th>
-              <th>Joined Date</th>
+              <th style="text-align: right;">Action / License</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="superAdminOrdersTbody">
             <tr>
-              <td>
-                <div class="subscriber-name">Elena Rostova</div>
-                <div class="subscriber-email">elena.rostova@acme.corp</div>
+              <td colspan="7" style="text-align: center; padding: 36px; color: var(--text-secondary);">
+                Loading customer orders and transactions...
               </td>
-              <td><span class="plan-badge plan-enterprise">Enterprise</span></td>
-              <td>Yearly ($2,400)</td>
-              <td><span class="sub-status active">&bull; Active</span></td>
-              <td>Oct 16, 2026</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="subscriber-name">David Chen</div>
-                <div class="subscriber-email">david.chen@fintech.io</div>
-              </td>
-              <td><span class="plan-badge plan-pro">Pro Plan</span></td>
-              <td>Monthly ($199)</td>
-              <td><span class="sub-status active">&bull; Active</span></td>
-              <td>Oct 15, 2026</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="subscriber-name">Marcus Vance</div>
-                <div class="subscriber-email">marcus@cloudscale.net</div>
-              </td>
-              <td><span class="plan-badge plan-pro">Pro Plan</span></td>
-              <td>Yearly ($1,890)</td>
-              <td><span class="sub-status trial">&bull; Trialing</span></td>
-              <td>Oct 14, 2026</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="subscriber-name">Sophia Williams</div>
-                <div class="subscriber-email">sophia.w@devlabs.ai</div>
-              </td>
-              <td><span class="plan-badge plan-starter">Starter</span></td>
-              <td>Monthly ($49)</td>
-              <td><span class="sub-status active">&bull; Active</span></td>
-              <td>Oct 12, 2026</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+
   </main>
 
   <!-- ----------------- FOOTER ----------------- -->
@@ -1334,15 +1473,95 @@
       Subscription Super Admin Portal &bull; Django 6.1 &bull; REST Framework JWT
     </div>
     <div class="footer-links">
-      <a href="#plansSection">Plans</a>
-      <a href="#subscribersSection">Subscribers</a>
+      <a href="#ordersSection">Orders & Verification</a>
+      <a href="/super-admin/products/">Products</a>
       <span style="opacity: 0.5;">&bull;</span>
       <span>System Status: 100% Operational</span>
     </div>
   </footer>
 
+  <!-- ----------------- ORDER APPROVAL ACTION MODAL ----------------- -->
+  <div class="modal-overlay" id="orderApprovalModal" aria-hidden="true" style="z-index: 1050;">
+    <div class="profile-modal" style="max-width: 500px;" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: #10b981;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Approve Order & Activate Digital License
+        </h3>
+        <button class="modal-close-btn" type="button" onclick="closeOrderActionModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 22px;">
+        <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; font-size: 0.84rem; color: var(--text-secondary); line-height: 1.5;">
+          Verifying payment for Order <strong id="approveModalOrderNum" style="color: var(--text-main);">-</strong>.<br>
+          Customer MFS TrxID: <strong id="approveModalTrxId" style="color: var(--primary); font-family: monospace;">-</strong>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">
+            Digital License Key / Credentials (Auto-assigned or Custom)
+          </label>
+          <input type="text" id="approveModalLicenseKey" style="width: 100%; background: var(--panel-bg); border: 1.5px solid var(--panel-border); border-radius: var(--radius-sm); padding: 10px 14px; color: var(--text-main); font-family: 'JetBrains Mono', monospace; font-size: 0.94rem; font-weight: 700; letter-spacing: 0.8px; outline: none;">
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">This key will activate in the customer's profile and storefront orders view immediately.</div>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Admin Approval Notes (Optional)</label>
+          <input type="text" id="approveModalNotes" placeholder="e.g. Verified transaction on bKash merchant/statement" style="width: 100%; background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text-main); font-size: 0.84rem; outline: none;">
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="filter-tab-btn" onclick="closeOrderActionModal()">Cancel</button>
+          <button type="button" class="btn-approve" id="approveModalSubmitBtn" onclick="submitOrderApproval()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Confirm Approval & Issue License
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ----------------- ORDER REJECTION ACTION MODAL ----------------- -->
+  <div class="modal-overlay" id="orderRejectionModal" aria-hidden="true" style="z-index: 1050;">
+    <div class="profile-modal" style="max-width: 480px;" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: #f43f5e;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+          Reject Customer Order
+        </h3>
+        <button class="modal-close-btn" type="button" onclick="closeOrderActionModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 22px;">
+        <div style="background: rgba(244, 63, 94, 0.08); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: var(--radius-sm); padding: 12px; margin-bottom: 16px; font-size: 0.84rem; color: var(--text-secondary); line-height: 1.5;">
+          Rejecting Order <strong id="rejectModalOrderNum" style="color: var(--text-main);">-</strong>.<br>
+          Submitted TrxID: <strong id="rejectModalTrxId" style="color: #f43f5e; font-family: monospace;">-</strong>
+        </div>
+
+        <div style="margin-bottom: 18px;">
+          <label style="display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;">Reason for Rejection *</label>
+          <select id="rejectModalReasonSelect" onchange="if(this.value!=='Other') document.getElementById('rejectModalReason').value=this.value;" style="width: 100%; background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text-main); font-size: 0.84rem; margin-bottom: 8px; outline: none;">
+            <option value="Invalid Transaction ID (TrxID not found in statement)">Invalid Transaction ID (TrxID not found in statement)</option>
+            <option value="Payment amount does not match order total">Payment amount does not match order total</option>
+            <option value="Sender mobile number does not match">Sender mobile number does not match</option>
+            <option value="Duplicate or already used Transaction ID">Duplicate or already used Transaction ID</option>
+            <option value="Other">Other (enter custom reason below)</option>
+          </select>
+          <input type="text" id="rejectModalReason" value="Invalid Transaction ID (TrxID not found in statement)" placeholder="Enter rejection reason..." style="width: 100%; background: var(--panel-bg); border: 1.5px solid var(--panel-border); border-radius: var(--radius-sm); padding: 9px 12px; color: var(--text-main); font-size: 0.84rem; outline: none;">
+        </div>
+
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="filter-tab-btn" onclick="closeOrderActionModal()">Cancel</button>
+          <button type="button" class="btn-reject" id="rejectModalSubmitBtn" onclick="submitOrderRejection()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            Confirm Rejection
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ----------------- PROFILE INFORMATION MODAL ----------------- -->
   <div class="modal-overlay" id="profileModalOverlay" aria-hidden="true">
+
     <div class="profile-modal" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modal-header">
         <h3 class="modal-title" id="modalTitle">
@@ -1698,8 +1917,334 @@
       window.location.href = '/super-admin/login/';
     });
 
+    // ==========================================================================
+    // SUPER ADMIN ORDERS & MFS VERIFICATION CONTROLLER
+    // ==========================================================================
+    let currentStatusFilter = 'ALL';
+    let ordersSearchTimer = null;
+    let activeActionOrderId = null;
+
+    window.setOrdersStatusFilter = function(status, btnEl) {
+      currentStatusFilter = status;
+      document.querySelectorAll('.filter-tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      loadSuperAdminOrders();
+    };
+
+    window.debounceOrdersSearch = function() {
+      clearTimeout(ordersSearchTimer);
+      ordersSearchTimer = setTimeout(() => {
+        loadSuperAdminOrders();
+      }, 350);
+    };
+
+    window.loadSuperAdminOrders = async function() {
+      const tbody = document.getElementById('superAdminOrdersTbody');
+      if (!tbody) return;
+
+      if (!authSession || !authSession.accessToken) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--danger);">Super Admin authentication required.</td></tr>`;
+        return;
+      }
+
+      const methodSelect = document.getElementById('ordersPaymentFilter');
+      const searchInput = document.getElementById('ordersSearchInput');
+
+      const params = new URLSearchParams();
+      if (currentStatusFilter && currentStatusFilter !== 'ALL') {
+        params.append('status', currentStatusFilter);
+      }
+      if (methodSelect && methodSelect.value && methodSelect.value !== 'ALL') {
+        params.append('payment_method', methodSelect.value);
+      }
+      if (searchInput && searchInput.value.trim()) {
+        params.append('search', searchInput.value.trim());
+      }
+
+      try {
+        const res = await fetch(`/api/superuser/orders/?${params.toString()}`, {
+          headers: {
+            'Authorization': `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`,
+            'Accept': 'application/json'
+          }
+        });
+
+        if (!res.ok) {
+          if (res.status === 401 || res.status === 403) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--danger);">Admin session expired or access denied. Please re-login.</td></tr>`;
+            return;
+          }
+          throw new Error('Failed to load orders');
+        }
+
+        const data = await res.json();
+        const metrics = data.metrics || {};
+        const orders = data.orders || [];
+
+        // Update summary metrics
+        if (document.getElementById('metricTotalOrders')) document.getElementById('metricTotalOrders').textContent = metrics.total_orders || 0;
+        if (document.getElementById('metricPendingOrders')) document.getElementById('metricPendingOrders').textContent = metrics.pending_orders || 0;
+        if (document.getElementById('metricApprovedOrders')) document.getElementById('metricApprovedOrders').textContent = metrics.approved_orders || 0;
+        if (document.getElementById('metricTotalRevenue')) {
+          document.getElementById('metricTotalRevenue').textContent = `৳${parseFloat(metrics.total_revenue || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
+
+        // Update nav badge
+        const navBadge = document.getElementById('navPendingOrdersBadge');
+        const badgeCount = document.getElementById('pendingBadgeCount');
+        const pendingCount = metrics.pending_orders || 0;
+        if (navBadge) {
+          navBadge.textContent = pendingCount;
+          navBadge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+        }
+        if (badgeCount) {
+          badgeCount.textContent = `${pendingCount} Pending Verification`;
+        }
+
+        if (orders.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">No Orders Found</div>
+                <div style="font-size: 0.82rem;">No customer orders match the current filter criteria.</div>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        let rowsHtml = '';
+        orders.forEach(ord => {
+          const isPending = ord.status === 'PENDING';
+          const isApproved = ord.status === 'APPROVED';
+          const isRejected = ord.status === 'REJECTED';
+
+          const createdDate = ord.created_at ? new Date(ord.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+          const userObj = ord.user || {};
+          const customerEmail = userObj.email || ord.customer_email || 'No email';
+          const customerName = (userObj.first_name || userObj.last_name) ? `${userObj.first_name} ${userObj.last_name}`.trim() : (userObj.username || 'Customer');
+
+          // Payment Tag
+          const pMethod = ord.payment_method || 'bkash';
+          const mfsClass = pMethod.toLowerCase();
+          const mfsName = ord.payment_method_display || pMethod.toUpperCase();
+
+          // Items summary
+          let itemsText = '';
+          (ord.items || []).forEach((it, idx) => {
+            itemsText += `<div><strong>${it.product_name}</strong> <span style="font-size: 0.74rem; color: var(--primary);">(${it.plan_name})</span>${it.quantity > 1 ? ` x${it.quantity}` : ''}</div>`;
+          });
+          if (!itemsText) itemsText = `<span style="color: var(--text-muted);">Direct Purchase</span>`;
+
+          // Status Pill
+          let statusPill = '';
+          if (isApproved) {
+            statusPill = `<span class="order-status-pill approved">&bull; Approved</span>`;
+          } else if (isPending) {
+            statusPill = `<span class="order-status-pill pending">&bull; Pending Verification</span>`;
+          } else {
+            statusPill = `<span class="order-status-pill rejected">&bull; Rejected</span>`;
+          }
+
+          // Action column
+          let actionCol = '';
+          if (isPending) {
+            actionCol = `
+              <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <button type="button" class="btn-approve" onclick="openApproveModal(${ord.id}, '${ord.order_number}', '${ord.transaction_id}', '${ord.license_key || ''}')" title="Verify TrxID & Approve Order">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  Approve
+                </button>
+                <button type="button" class="btn-reject" onclick="openRejectModal(${ord.id}, '${ord.order_number}', '${ord.transaction_id}')" title="Reject Order">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  Reject
+                </button>
+              </div>
+            `;
+          } else if (isApproved) {
+            actionCol = `
+              <div style="text-align: right;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 800; color: #10b981; display: inline-flex; align-items: center; gap: 4px; background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                  <span>Key: ${ord.license_key || 'ACTIVE'}</span>
+                  <button type="button" onclick="navigator.clipboard.writeText('${ord.license_key}'); alert('License key copied!');" style="background: none; border: none; color: #10b981; cursor: pointer; padding: 0 2px;">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  </button>
+                </div>
+                <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">Confirmed by Super Admin</div>
+              </div>
+            `;
+          } else {
+            actionCol = `
+              <div style="text-align: right;">
+                <span style="font-size: 0.74rem; color: #f43f5e; font-weight: 700;">Rejected</span>
+                <div style="font-size: 0.68rem; color: var(--text-muted);" title="${ord.admin_notes || ''}">${(ord.admin_notes || 'Invalid payment').substring(0, 28)}...</div>
+              </div>
+            `;
+          }
+
+          rowsHtml += `
+            <tr style="${isPending ? 'background: rgba(245, 158, 11, 0.03);' : ''}">
+              <td>
+                <div style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 0.88rem; color: var(--text-main);">#${ord.order_number}</div>
+                <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">${createdDate}</div>
+              </td>
+              <td>
+                <div class="subscriber-name">${customerName}</div>
+                <div class="subscriber-email">${customerEmail}</div>
+              </td>
+              <td>
+                <div style="font-size: 0.82rem; color: var(--text-main); line-height: 1.4;">${itemsText}</div>
+                <div style="font-weight: 800; color: var(--accent-emerald); font-size: 0.94rem; margin-top: 3px;">৳${parseFloat(ord.total_amount).toFixed(2)}</div>
+              </td>
+              <td>
+                <div><span class="mfs-tag ${mfsClass}">${mfsName}</span></div>
+                <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 4px;">From: <strong style="color: var(--text-main); font-family: monospace;">${ord.sender_number}</strong></div>
+              </td>
+              <td>
+                <div class="trx-code-badge" title="Click to copy Transaction ID">
+                  <span>${ord.transaction_id}</span>
+                  <button type="button" onclick="navigator.clipboard.writeText('${ord.transaction_id}'); alert('Copied TrxID: ${ord.transaction_id}');" style="background: none; border: none; color: var(--primary); cursor: pointer; padding: 0 2px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  </button>
+                </div>
+              </td>
+              <td>
+                ${statusPill}
+              </td>
+              <td style="text-align: right;">
+                ${actionCol}
+              </td>
+            </tr>
+          `;
+        });
+
+        tbody.innerHTML = rowsHtml;
+      } catch (err) {
+        console.error('Failed to load superadmin orders:', err);
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--danger);">Failed to load orders. Please try again.</td></tr>`;
+      }
+    };
+
+    // Modal Control for Order Approval & Rejection
+    window.openApproveModal = function(orderId, orderNum, trxId, currentKey) {
+      activeActionOrderId = orderId;
+      document.getElementById('approveModalOrderNum').textContent = '#' + orderNum;
+      document.getElementById('approveModalTrxId').textContent = trxId;
+
+      const defaultKey = currentKey || ('SUB-' + String(orderNum).replace(/[^A-Za-z0-9]/g, '') + '-' + Math.random().toString(36).substring(2, 6).toUpperCase());
+      document.getElementById('approveModalLicenseKey').value = defaultKey;
+      document.getElementById('approveModalNotes').value = '';
+
+      const modal = document.getElementById('orderApprovalModal');
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    };
+
+    window.openRejectModal = function(orderId, orderNum, trxId) {
+      activeActionOrderId = orderId;
+      document.getElementById('rejectModalOrderNum').textContent = '#' + orderNum;
+      document.getElementById('rejectModalTrxId').textContent = trxId;
+      document.getElementById('rejectModalReason').value = 'Invalid Transaction ID (TrxID not found in statement)';
+      document.getElementById('rejectModalReasonSelect').value = 'Invalid Transaction ID (TrxID not found in statement)';
+
+      const modal = document.getElementById('orderRejectionModal');
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    };
+
+    window.closeOrderActionModal = function() {
+      const m1 = document.getElementById('orderApprovalModal');
+      const m2 = document.getElementById('orderRejectionModal');
+      if (m1) { m1.classList.remove('open'); m1.setAttribute('aria-hidden', 'true'); }
+      if (m2) { m2.classList.remove('open'); m2.setAttribute('aria-hidden', 'true'); }
+      activeActionOrderId = null;
+    };
+
+    window.submitOrderApproval = async function() {
+      if (!activeActionOrderId) return;
+      const key = document.getElementById('approveModalLicenseKey').value.trim();
+      const notes = document.getElementById('approveModalNotes').value.trim();
+      const btn = document.getElementById('approveModalSubmitBtn');
+
+      btn.disabled = true;
+      btn.textContent = 'Approving & Issuing License...';
+
+      try {
+        const res = await fetch(`/api/superuser/orders/${activeActionOrderId}/approve/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`,
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            license_key: key,
+            admin_notes: notes
+          })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          closeOrderActionModal();
+          await loadSuperAdminOrders();
+          alert(`🎉 Order approved successfully! Digital license '${data.order ? data.order.license_key : key}' is now active for customer.`);
+        } else {
+          alert(`Error approving order: ${data.error || data.detail || JSON.stringify(data)}`);
+        }
+      } catch (err) {
+        console.error('Error approving order:', err);
+        alert('Network error approving order.');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Confirm Approval & Issue License`;
+      }
+    };
+
+    window.submitOrderRejection = async function() {
+      if (!activeActionOrderId) return;
+      const reason = document.getElementById('rejectModalReason').value.trim();
+      const btn = document.getElementById('rejectModalSubmitBtn');
+
+      if (!reason) {
+        alert('Please specify a rejection reason.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Rejecting Order...';
+
+      try {
+        const res = await fetch(`/api/superuser/orders/${activeActionOrderId}/reject/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`,
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ reason: reason })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          closeOrderActionModal();
+          await loadSuperAdminOrders();
+          alert(`Order rejected.`);
+        } else {
+          alert(`Error rejecting order: ${data.error || data.detail || JSON.stringify(data)}`);
+        }
+      } catch (err) {
+        console.error('Error rejecting order:', err);
+        alert('Network error rejecting order.');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Confirm Rejection`;
+      }
+    };
+
     // Run on startup
     initDashboard();
+    loadSuperAdminOrders();
   </script>
+
 </body>
 </html>

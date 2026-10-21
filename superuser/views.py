@@ -1,3 +1,4 @@
+from django.db.models import Q, Sum
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -5,10 +6,17 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from django.views.generic import TemplateView
-from drf_spectacular.utils import extend_schema, OpenApiResponse
+from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from customer.models import Order, OrderItem
+from customer.serializers import (
+    OrderSerializer,
+    AdminOrderApprovalSerializer,
+    AdminOrderRejectionSerializer,
+    OrderActionResponseSerializer,
+)
 from .permissions import IsSuperUser
 from .serializers import (
     SuperuserLoginSerializer,
@@ -287,3 +295,190 @@ class SuperAdminLoginView(TemplateView):
 
 # Alias for backward compatibility
 SuperAdminPageView = SuperAdminLoginView
+
+
+# ==============================================================================
+# SUPER ADMIN ORDER VERIFICATION & APPROVAL VIEWS
+# ==============================================================================
+
+class SuperAdminOrderListView(APIView):
+    """
+    Super Admin Endpoint to view and manage customer orders and MFS transactions.
+    Requires Super Admin authentication.
+    """
+    permission_classes = [IsAuthenticated, IsSuperUser]
+
+    @extend_schema(
+        tags=['Super Admin Orders & Verification'],
+        operation_id='superuser_list_orders',
+        summary='List All Customer Orders for Super Admin Verification',
+        description='Returns all customer orders with filtering by status (PENDING, APPROVED, REJECTED) or search by transaction ID, order number, customer email, or sender phone number.',
+        parameters=[
+            OpenApiParameter('status', type=str, description='Filter by status: PENDING, APPROVED, REJECTED', required=False),
+            OpenApiParameter('payment_method', type=str, description='Filter by payment method: bkash, nagad, rocket, bangla_qr', required=False),
+            OpenApiParameter('search', type=str, description='Search by order number, transaction ID, sender number, or email', required=False),
+        ],
+        responses={
+            200: OpenApiResponse(description='List of customer orders with verification details and summary metrics'),
+            401: OpenApiResponse(description='Unauthorized'),
+            403: OpenApiResponse(description='Super Admin privileges required'),
+        }
+    )
+    def get(self, request, *args, **kwargs):
+        qs = Order.objects.all().select_related('user', 'approved_by').prefetch_related('items', 'items__product', 'items__plan').order_by('-created_at')
+
+        status_param = request.query_params.get('status')
+        if status_param and status_param.upper() != 'ALL':
+            qs = qs.filter(status=status_param.upper())
+
+        method_param = request.query_params.get('payment_method')
+        if method_param and method_param.lower() != 'all':
+            qs = qs.filter(payment_method=method_param.lower())
+
+        search_query = request.query_params.get('search') or request.query_params.get('q')
+        if search_query:
+            q = search_query.strip()
+            qs = qs.filter(
+                Q(order_number__icontains=q) |
+                Q(transaction_id__icontains=q) |
+                Q(sender_number__icontains=q) |
+                Q(user__email__icontains=q) |
+                Q(user__username__icontains=q) |
+                Q(customer_notes__icontains=q)
+            )
+
+        all_orders = Order.objects.all()
+        total_revenue = all_orders.filter(status=Order.STATUS_APPROVED).aggregate(total=Sum('total_amount'))['total'] or 0.00
+        pending_count = all_orders.filter(status=Order.STATUS_PENDING).count()
+        approved_count = all_orders.filter(status=Order.STATUS_APPROVED).count()
+        rejected_count = all_orders.filter(status=Order.STATUS_REJECTED).count()
+
+        serializer = OrderSerializer(qs, many=True, context={'request': request})
+        return Response({
+            "metrics": {
+                "total_orders": all_orders.count(),
+                "pending_orders": pending_count,
+                "approved_orders": approved_count,
+                "rejected_orders": rejected_count,
+                "total_revenue": float(total_revenue),
+            },
+            "orders_count": qs.count(),
+            "orders": serializer.data,
+        }, status=status.HTTP_200_OK)
+
+
+class SuperAdminOrderDetailView(APIView):
+    """
+    Super Admin Endpoint to inspect a specific customer order.
+    """
+    permission_classes = [IsAuthenticated, IsSuperUser]
+
+    @extend_schema(
+        tags=['Super Admin Orders & Verification'],
+        operation_id='superuser_get_order_detail',
+        summary='Inspect Specific Customer Order',
+        description='Retrieve full breakdown of items, payment verification details, and customer information for an order.',
+        responses={
+            200: OrderSerializer,
+            404: OpenApiResponse(description='Order not found'),
+            401: OpenApiResponse(description='Unauthorized'),
+            403: OpenApiResponse(description='Super Admin privileges required'),
+        }
+    )
+    def get(self, request, order_id, *args, **kwargs):
+        order = Order.objects.filter(
+            Q(id=order_id) | Q(order_number=str(order_id))
+        ).select_related('user', 'approved_by').prefetch_related('items', 'items__product', 'items__plan').first()
+        if not order:
+            return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = OrderSerializer(order, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class SuperAdminOrderApproveView(APIView):
+    """
+    Super Admin Endpoint to approve a customer order upon verifying the MFS Transaction ID.
+    Confirms product purchase and activates digital license credentials for the customer.
+    """
+    permission_classes = [IsAuthenticated, IsSuperUser]
+
+    @extend_schema(
+        tags=['Super Admin Orders & Verification'],
+        operation_id='superuser_approve_order',
+        summary='Approve Order & Activate Digital License Credentials',
+        description="""
+        Verifies customer MFS payment and marks the order as APPROVED.
+        - Automatically assigns or accepts a custom digital license activation key.
+        - The purchased products and subscriptions become immediately active in the customer's account.
+        """,
+        request=AdminOrderApprovalSerializer,
+        responses={
+            200: OrderActionResponseSerializer,
+            400: OpenApiResponse(description='Validation error'),
+            404: OpenApiResponse(description='Order not found'),
+            401: OpenApiResponse(description='Unauthorized'),
+            403: OpenApiResponse(description='Super Admin privileges required'),
+        }
+    )
+    def post(self, request, order_id, *args, **kwargs):
+        order = Order.objects.filter(
+            Q(id=order_id) | Q(order_number=str(order_id))
+        ).first()
+        if not order:
+            return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = AdminOrderApprovalSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        custom_key = serializer.validated_data.get('license_key')
+        admin_notes = serializer.validated_data.get('admin_notes')
+
+        order.approve(admin_user=request.user, custom_license_key=custom_key, admin_notes=admin_notes)
+
+        order_data = OrderSerializer(order, context={'request': request}).data
+        return Response({
+            "message": f"Order {order.order_number} approved successfully! Digital subscription license '{order.license_key}' is now active for {order.user.email or order.user.username}.",
+            "order": order_data
+        }, status=status.HTTP_200_OK)
+
+
+class SuperAdminOrderRejectView(APIView):
+    """
+    Super Admin Endpoint to reject an order (e.g. invalid or unverified TrxID).
+    """
+    permission_classes = [IsAuthenticated, IsSuperUser]
+
+    @extend_schema(
+        tags=['Super Admin Orders & Verification'],
+        operation_id='superuser_reject_order',
+        summary='Reject Order with Reason',
+        description='Marks the order as REJECTED and records the administrative explanation (e.g., Fake TrxID, Amount mismatch).',
+        request=AdminOrderRejectionSerializer,
+        responses={
+            200: OrderActionResponseSerializer,
+            400: OpenApiResponse(description='Validation error in reason'),
+            404: OpenApiResponse(description='Order not found'),
+            401: OpenApiResponse(description='Unauthorized'),
+            403: OpenApiResponse(description='Super Admin privileges required'),
+        }
+    )
+    def post(self, request, order_id, *args, **kwargs):
+        order = Order.objects.filter(
+            Q(id=order_id) | Q(order_number=str(order_id))
+        ).first()
+        if not order:
+            return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = AdminOrderRejectionSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        reason = serializer.validated_data['reason']
+        order.reject(admin_user=request.user, reason=reason)
+
+        order_data = OrderSerializer(order, context={'request': request}).data
+        return Response({
+            "message": f"Order {order.order_number} has been rejected.",
+            "order": order_data
+        }, status=status.HTTP_200_OK)

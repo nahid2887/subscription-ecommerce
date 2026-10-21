@@ -4,6 +4,7 @@ from .views import (
     ProductDetailView,
     ProductSelectPlanView,
     CategoryListCreateView,
+    ProductSaveToggleActionView,
 )
 
 app_name = 'product'
@@ -18,4 +19,6 @@ urlpatterns = [
     path('<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
     path('<slug:slug>/', ProductDetailView.as_view(), name='product-detail-slug'),
     path('<int:pk>/select-plan/', ProductSelectPlanView.as_view(), name='product-select-plan'),
+    path('<int:pk>/save/', ProductSaveToggleActionView.as_view(), name='product-save-toggle'),
 ]
+

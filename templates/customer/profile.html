@@ -588,6 +588,168 @@
       background: rgba(99, 102, 241, 0.15);
     }
 
+    .order-filter-tab {
+      padding: 6px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+    .order-filter-tab:hover {
+      color: var(--text-main);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    .order-filter-tab.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--primary);
+      color: var(--primary);
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Saved Products Grid & Cards */
+    .saved-products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .saved-product-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition-smooth);
+      position: relative;
+    }
+
+    .saved-product-card:hover {
+      border-color: rgba(99, 102, 241, 0.45);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .saved-card-banner {
+      height: 110px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(168, 85, 247, 0.15));
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .saved-card-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .saved-card-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      background: rgba(14, 19, 31, 0.85);
+      backdrop-filter: blur(8px);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--primary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .saved-card-remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      color: var(--accent-rose);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+    }
+
+    .saved-card-remove-btn:hover {
+      background: var(--accent-rose);
+      color: #fff;
+      transform: scale(1.1);
+    }
+
+    .saved-card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .saved-card-title {
+      font-size: 0.98rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.3;
+    }
+
+    .saved-card-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--accent-emerald);
+    }
+
+    .saved-card-notes {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      background: var(--input-bg);
+      border-left: 2px solid var(--primary);
+      padding: 6px 10px;
+      border-radius: 0 6px 6px 0;
+      font-style: italic;
+    }
+
+    .saved-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .btn-saved-view {
+      flex: 1;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: var(--transition-smooth);
+    }
+
+    .btn-saved-view:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
     /* Toast Notification */
     .toast-container {
       position: fixed;
@@ -661,6 +823,16 @@
       </a>
 
       <div class="header-actions">
+        <button type="button" onclick="document.getElementById('profileOrdersCard').scrollIntoView({behavior: 'smooth'})" class="back-store-btn" style="cursor: pointer; display: inline-flex; align-items: center; gap: 7px;" title="Jump to My Orders & Transactions">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color: #10b981;">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          <span>My Orders</span>
+          <span id="navProfileOrdersBadge" style="font-size: 0.72rem; padding: 1px 7px; border-radius: 9999px; background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 800;">0</span>
+        </button>
+
         <a href="/" class="back-store-btn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -751,6 +923,14 @@
                 </svg>
                 <span>Digital Delivery: Instant</span>
               </div>
+              <div class="stat-pill" onclick="document.getElementById('profileOrdersCard').scrollIntoView({behavior: 'smooth'})" style="cursor: pointer;" title="Jump to My Orders">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: #10b981;">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                <span id="statOrdersHistoryCount">0 Orders Placed</span>
+              </div>
               <div class="stat-pill">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--primary);">
                   <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
@@ -758,6 +938,20 @@
                   <line x1="12" y1="17" x2="12" y2="21"></line>
                 </svg>
                 <span id="statOrdersCount">0 Active Subscriptions</span>
+              </div>
+              <div class="stat-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="color: var(--accent-rose);">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span id="statSavedCount">0 Saved Products</span>
+              </div>
+              <div class="stat-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--accent-cyan);">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span id="statCartCount">0 In Cart</span>
               </div>
               <button type="button" onclick="document.getElementById('avatarFileInput').click()" style="background: none; border: none; color: var(--primary); font-size: 0.78rem; font-weight: 700; cursor: pointer; text-decoration: underline;">
                 Upload Photo
@@ -846,6 +1040,94 @@
             </div>
           </div>
 
+          <!-- 3. My Order History & MFS Payment Verification -->
+          <div id="profileOrdersCard" class="settings-card" style="grid-column: 1 / -1;">
+            <div class="settings-card-header" style="justify-content: space-between; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div class="section-icon-box" style="background: rgba(16, 185, 129, 0.14); color: #10b981;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="section-title">My Orders & Transaction History</h2>
+                  <p class="section-desc">Track real-time MFS payment verification, view ordered subscription plans, and access digital license keys</p>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <button type="button" onclick="loadProfileOrdersList(true)" class="btn-discard" style="padding: 7px 16px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;" title="Refresh orders from server">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" id="profileRefreshOrdersIcon">
+                    <polyline points="23 4 23 10 17 10"></polyline>
+                    <polyline points="1 20 1 14 7 14"></polyline>
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                  </svg>
+                  <span>Refresh Orders</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Order History KPI Summary Metrics Row -->
+            <div id="profileOrdersKpiRow" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 22px;">
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; display: flex; align-items: center; gap: 12px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(99, 102, 241, 0.14); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">📦</div>
+                <div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Orders</div>
+                  <div id="kpiTotalOrders" style="font-size: 1.25rem; font-weight: 800; color: var(--text-main);">0</div>
+                </div>
+              </div>
+
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; display: flex; align-items: center; gap: 12px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(245, 158, 11, 0.14); color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">⏳</div>
+                <div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Pending Review</div>
+                  <div id="kpiPendingOrders" style="font-size: 1.25rem; font-weight: 800; color: #f59e0b;">0</div>
+                </div>
+              </div>
+
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; display: flex; align-items: center; gap: 12px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(16, 185, 129, 0.14); color: #10b981; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">✅</div>
+                <div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Confirmed Active</div>
+                  <div id="kpiApprovedOrders" style="font-size: 1.25rem; font-weight: 800; color: #10b981;">0</div>
+                </div>
+              </div>
+
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px; display: flex; align-items: center; gap: 12px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(6, 182, 212, 0.14); color: var(--accent-cyan); display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">৳</div>
+                <div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Total Invested</div>
+                  <div id="kpiTotalSpent" style="font-size: 1.25rem; font-weight: 800; color: var(--accent-emerald);">৳0.00</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Filter Tabs & Search Filter -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap;">
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="profileOrderFilterTabs">
+                <button type="button" class="order-filter-tab active" data-filter="ALL" onclick="setProfileOrdersFilter('ALL')">All Orders (<span id="profileFilterCountAll">0</span>)</button>
+                <button type="button" class="order-filter-tab" data-filter="PENDING" onclick="setProfileOrdersFilter('PENDING')">⏳ Pending (<span id="profileFilterCountPending">0</span>)</button>
+                <button type="button" class="order-filter-tab" data-filter="APPROVED" onclick="setProfileOrdersFilter('APPROVED')">✅ Approved (<span id="profileFilterCountApproved">0</span>)</button>
+                <button type="button" class="order-filter-tab" data-filter="REJECTED" onclick="setProfileOrdersFilter('REJECTED')">❌ Rejected (<span id="profileFilterCountRejected">0</span>)</button>
+              </div>
+
+              <div style="position: relative; min-width: 240px; flex: 1; max-width: 320px;">
+                <input type="text" id="profileOrdersSearchInput" oninput="handleProfileOrdersSearch(this.value)" placeholder="Search Order #, TrxID, or product..." style="width: 100%; padding: 8px 12px 8px 34px; font-size: 0.84rem; border-radius: var(--radius-sm); background: var(--input-bg); border: 1px solid var(--border-subtle); color: var(--text-main); outline: none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Order Cards List Container -->
+            <div id="profileOrdersListContainer">
+              <!-- Dynamically populated or empty state -->
+            </div>
+          </div>
+
           <!-- 4. Active Subscriptions & Licenses -->
           <div class="settings-card">
             <div class="settings-card-header">
@@ -863,6 +1145,62 @@
             </div>
 
             <div id="profileSubscriptionsList">
+              <!-- Dynamically populated or empty state -->
+            </div>
+          </div>
+
+          <!-- 5. My Saved Products / Wishlist -->
+          <div class="settings-card" style="grid-column: 1 / -1;">
+            <div class="settings-card-header" style="justify-content: space-between; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div class="section-icon-box" style="background: rgba(244, 63, 94, 0.14); color: var(--accent-rose);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="section-title">My Saved Products</h2>
+                  <p class="section-desc">Products and subscription tiers you saved to review or purchase later</p>
+                </div>
+              </div>
+              <span id="savedProductsCountBadge" style="font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 9999px; background: rgba(99, 102, 241, 0.15); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.3);">
+                0 Saved
+              </span>
+            </div>
+
+            <div id="savedProductsGrid" class="saved-products-grid">
+              <!-- Dynamically populated or empty state -->
+            </div>
+          </div>
+
+          <!-- 6. My Shopping Cart -->
+          <div class="settings-card" style="grid-column: 1 / -1;">
+            <div class="settings-card-header" style="justify-content: space-between; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <div class="section-icon-box" style="background: rgba(6, 182, 212, 0.14); color: var(--accent-cyan);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                </div>
+                <div>
+                  <h2 class="section-title">My Shopping Cart</h2>
+                  <p class="section-desc">Subscription items in your cart ready for instant checkout</p>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span id="profileCartCountBadge" style="font-size: 0.82rem; font-weight: 700; padding: 4px 12px; border-radius: 9999px; background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3);">
+                  0 In Cart
+                </span>
+                <a href="/" class="btn-saved-view" style="font-size: 0.8rem; padding: 6px 14px; text-decoration: none;">
+                  <span>Go to Store Cart</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </a>
+              </div>
+            </div>
+
+            <div id="profileCartItemsList">
               <!-- Dynamically populated or empty state -->
             </div>
           </div>
@@ -985,6 +1323,13 @@
       } catch (err) {
         console.error('Failed to fetch profile', err);
       }
+
+      // Fetch Orders List for customer
+      await loadProfileOrdersList();
+      // Fetch Saved Products for customer
+      await loadSavedProducts();
+      // Fetch Cart Items for customer
+      await loadProfileCart();
     }
 
     // Populate Form Fields
@@ -1011,6 +1356,7 @@
       }
 
       renderSubscriptionsList();
+      loadProfileOrdersList();
     }
 
     // Avatar Upload & Live Preview
@@ -1114,20 +1460,460 @@
       }
     }
 
-    // Render Subscriptions List
-    function renderSubscriptionsList() {
+    // Render Subscriptions List (Live REST API)
+    async function renderSubscriptionsList() {
       const container = document.getElementById('profileSubscriptionsList');
       const statOrdersCount = document.getElementById('statOrdersCount');
-      const items = customerState.cartItems || [];
+      if (!container) return;
 
-      if (statOrdersCount) statOrdersCount.textContent = `${items.length} Active Subscription${items.length === 1 ? '' : 's'}`;
-
-      if (items.length === 0) {
+      if (!customerState.token) {
+        if (statOrdersCount) statOrdersCount.textContent = '0 Active Subscriptions';
         container.innerHTML = `
           <div style="text-align: center; padding: 24px 16px; background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
-            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">You do not have any active subscription licenses queued yet.</p>
-            <a href="/#catalog" style="font-size: 0.82rem; font-weight: 700; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-              <span>Explore Subscriptions Catalog</span>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">Sign in to view your active digital subscriptions.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = `
+        <div style="text-align: center; padding: 20px 16px; color: var(--text-muted); font-size: 0.88rem;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" style="animation: spin 0.8s linear infinite; margin-bottom: 8px;">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
+          </svg>
+          <div>Loading your active subscriptions...</div>
+        </div>
+      `;
+
+      try {
+        const [subRes, ordRes] = await Promise.all([
+          fetch('/api/customer/my-subscriptions/', { headers: { 'Authorization': `Bearer ${customerState.token}` } }),
+          fetch('/api/customer/orders/', { headers: { 'Authorization': `Bearer ${customerState.token}` } })
+        ]);
+
+        let subscriptions = [];
+        let orders = [];
+
+        if (subRes.ok) {
+          const subData = await subRes.json();
+          subscriptions = subData.subscriptions || [];
+        }
+        if (ordRes.ok) {
+          const ordData = await ordRes.json();
+          orders = ordData.orders || [];
+        }
+
+        const pendingOrders = orders.filter(o => o.status === 'PENDING');
+        const activeCount = subscriptions.length;
+
+        if (statOrdersCount) {
+          statOrdersCount.textContent = `${activeCount} Active Subscription${activeCount === 1 ? '' : 's'}`;
+        }
+
+        if (subscriptions.length === 0 && pendingOrders.length === 0) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 24px 16px; background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">You do not have any active subscription licenses yet.</p>
+              <a href="/#catalog" style="font-size: 0.82rem; font-weight: 700; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                <span>Explore Subscriptions Catalog</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </a>
+            </div>
+          `;
+          return;
+        }
+
+        let html = '';
+
+        // If user has orders pending verification, show prominent notification
+        if (pendingOrders.length > 0) {
+          html += `
+            <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.2rem;">⏳</span>
+                <div style="font-size: 0.84rem; color: var(--text-main);">
+                  <strong>${pendingOrders.length} Order${pendingOrders.length > 1 ? 's' : ''} Pending Super Admin Approval</strong>
+                  <div style="color: var(--text-muted); font-size: 0.76rem; margin-top: 2px;">TrxID submitted. Upon verification, your digital licenses will activate automatically.</div>
+                </div>
+              </div>
+              <button type="button" onclick="showToast('Your order is under review by Super Admin.', 'info')" style="padding: 6px 12px; border-radius: 6px; font-size: 0.76rem; font-weight: 700; background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); cursor: pointer;">
+                Pending Verification
+              </button>
+            </div>
+          `;
+        }
+
+        // Render approved active subscriptions
+        subscriptions.forEach((sub) => {
+          const key = sub.license_key || 'ACTIVE-KEY';
+          html += `
+            <div class="sub-item-card" style="margin-bottom: 10px; border-color: rgba(16, 185, 129, 0.35);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(16, 185, 129, 0.12); display: flex; align-items: center; justify-content: center; color: #10b981; flex-shrink: 0; overflow: hidden;">
+                  ${sub.product_image ? `<img src="${sub.product_image}" alt="${sub.product_name}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`}
+                </div>
+                <div>
+                  <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">${sub.product_name || 'Digital Subscription'}</div>
+                  <div style="font-size: 0.76rem; color: var(--text-muted);">${sub.plan_name || 'Active Plan'} &bull; <span style="color: var(--accent-emerald); font-weight: 700;">● Confirmed Purchase (Order #${sub.order_number})</span></div>
+                </div>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="license-badge-pill" onclick="copyToClipboard('${key}')" title="Click to copy license key" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.1);">
+                  <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">Key: ${key}</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </span>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+      } catch (err) {
+        console.error('Could not load subscriptions', err);
+        container.innerHTML = `
+          <div style="text-align: center; padding: 20px 16px; color: var(--accent-rose); font-size: 0.85rem;">
+            Failed to load your subscriptions. Please refresh the page.
+          </div>
+        `;
+      }
+    }
+
+    // ==============================================================================
+    // CUSTOMER ORDERS CONTROLLER (Profile Page)
+    // ==============================================================================
+    let profileOrdersCache = [];
+    let profileOrdersFilter = 'ALL';
+    let profileOrdersSearchQuery = '';
+
+    window.setProfileOrdersFilter = function(filterType) {
+      profileOrdersFilter = filterType;
+      const tabs = document.querySelectorAll('#profileOrderFilterTabs .order-filter-tab');
+      tabs.forEach(t => {
+        if (t.getAttribute('data-filter') === filterType) {
+          t.classList.add('active');
+        } else {
+          t.classList.remove('active');
+        }
+      });
+      renderProfileOrdersList();
+    };
+
+    window.handleProfileOrdersSearch = function(query) {
+      profileOrdersSearchQuery = (query || '').trim().toLowerCase();
+      renderProfileOrdersList();
+    };
+
+    window.loadProfileOrdersList = async function(forceRefresh = false) {
+      const container = document.getElementById('profileOrdersListContainer');
+      const statOrdersHistory = document.getElementById('statOrdersHistoryCount');
+      const navBadge = document.getElementById('navProfileOrdersBadge');
+      const refreshIcon = document.getElementById('profileRefreshOrdersIcon');
+
+      if (!container) return;
+      if (refreshIcon) refreshIcon.style.animation = 'spin 0.8s linear infinite';
+
+      if (!customerState.token) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 24px 16px; background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+            <p style="font-size: 0.88rem; color: var(--text-muted);">Please sign in to view your order history.</p>
+          </div>
+        `;
+        if (refreshIcon) refreshIcon.style.animation = '';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/customer/orders/', {
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          profileOrdersCache = data.orders || [];
+
+          // Update KPI metrics
+          const totalOrders = profileOrdersCache.length;
+          const pendingOrders = profileOrdersCache.filter(o => o.status === 'PENDING').length;
+          const approvedOrders = profileOrdersCache.filter(o => o.status === 'APPROVED').length;
+          const rejectedOrders = profileOrdersCache.filter(o => o.status === 'REJECTED').length;
+          const totalSpent = profileOrdersCache.reduce((acc, o) => acc + (parseFloat(o.total_amount) || 0), 0);
+
+          if (statOrdersHistory) statOrdersHistory.textContent = `${totalOrders} Order${totalOrders === 1 ? '' : 's'} Placed`;
+          if (navBadge) navBadge.textContent = totalOrders;
+
+          const kpiTot = document.getElementById('kpiTotalOrders');
+          const kpiPen = document.getElementById('kpiPendingOrders');
+          const kpiApp = document.getElementById('kpiApprovedOrders');
+          const kpiSpn = document.getElementById('kpiTotalSpent');
+          if (kpiTot) kpiTot.textContent = totalOrders;
+          if (kpiPen) kpiPen.textContent = pendingOrders;
+          if (kpiApp) kpiApp.textContent = approvedOrders;
+          if (kpiSpn) kpiSpn.textContent = `৳${totalSpent.toFixed(2)}`;
+
+          // Update tab counts
+          const fAll = document.getElementById('profileFilterCountAll');
+          const fPen = document.getElementById('profileFilterCountPending');
+          const fApp = document.getElementById('profileFilterCountApproved');
+          const fRej = document.getElementById('profileFilterCountRejected');
+          if (fAll) fAll.textContent = totalOrders;
+          if (fPen) fPen.textContent = pendingOrders;
+          if (fApp) fApp.textContent = approvedOrders;
+          if (fRej) fRej.textContent = rejectedOrders;
+
+          renderProfileOrdersList();
+        } else {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 24px; color: var(--accent-rose); font-size: 0.88rem;">
+              Failed to load order history.
+            </div>
+          `;
+        }
+      } catch (err) {
+        console.error('Error loading profile orders:', err);
+        container.innerHTML = `
+          <div style="text-align: center; padding: 24px; color: var(--accent-rose); font-size: 0.88rem;">
+            Network error loading orders. Please click "Refresh Orders".
+          </div>
+        `;
+      } finally {
+        if (refreshIcon) refreshIcon.style.animation = '';
+      }
+    };
+
+    window.renderProfileOrdersList = function() {
+      const container = document.getElementById('profileOrdersListContainer');
+      if (!container) return;
+
+      if (!profileOrdersCache || profileOrdersCache.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 40px 16px; background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+            <div style="font-size: 2.2rem; margin-bottom: 10px;">📦</div>
+            <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">No Orders Placed Yet</h4>
+            <p style="font-size: 0.86rem; color: var(--text-muted); max-width: 420px; margin: 0 auto 20px;">
+              You have not placed any orders yet. Select your favorite digital subscriptions or tools from our store!
+            </p>
+            <a href="/" class="btn-saved-view" style="display: inline-flex; width: auto; padding: 10px 24px; font-size: 0.88rem; text-decoration: none;">
+              <span>Explore Store Catalog</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      let filtered = profileOrdersCache;
+      if (profileOrdersFilter !== 'ALL') {
+        filtered = filtered.filter(o => o.status === profileOrdersFilter);
+      }
+
+      if (profileOrdersSearchQuery) {
+        filtered = filtered.filter(o => {
+          const ordNum = (o.order_number || '').toLowerCase();
+          const trx = (o.transaction_id || '').toLowerCase();
+          const sender = (o.sender_number || '').toLowerCase();
+          const method = (o.payment_method_display || o.payment_method || '').toLowerCase();
+          const itemsMatch = (o.items || []).some(it => 
+            (it.product_name || '').toLowerCase().includes(profileOrdersSearchQuery) || 
+            (it.plan_name || '').toLowerCase().includes(profileOrdersSearchQuery)
+          );
+          return ordNum.includes(profileOrdersSearchQuery) || trx.includes(profileOrdersSearchQuery) || sender.includes(profileOrdersSearchQuery) || method.includes(profileOrdersSearchQuery) || itemsMatch;
+        });
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 36px 16px; background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+            <div style="font-size: 1.8rem; margin-bottom: 8px;">🔍</div>
+            <h5 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">No Orders Match Your Filter</h5>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">Try clearing your search query or switching the status filter tab.</p>
+            <button type="button" onclick="setProfileOrdersFilter('ALL'); document.getElementById('profileOrdersSearchInput').value=''; handleProfileOrdersSearch('');" style="padding: 7px 16px; font-size: 0.78rem; font-weight: 700; border-radius: 9999px; background: rgba(99, 102, 241, 0.15); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.3); cursor: pointer;">
+              Reset Filters
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      let html = `<div style="display: flex; flex-direction: column; gap: 16px;">`;
+      filtered.forEach(ord => {
+        const isApproved = ord.status === 'APPROVED';
+        const isPending = ord.status === 'PENDING';
+        const isRejected = ord.status === 'REJECTED';
+
+        let statusBadge = '';
+        if (isApproved) {
+          statusBadge = `<span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.35); padding: 4px 12px; border-radius: 9999px; font-size: 0.76rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981;"></span>● Confirmed & Active</span>`;
+        } else if (isPending) {
+          statusBadge = `<span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); padding: 4px 12px; border-radius: 9999px; font-size: 0.76rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #f59e0b;"></span>⏳ Pending Super Admin Approval</span>`;
+        } else {
+          statusBadge = `<span style="background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.35); padding: 4px 12px; border-radius: 9999px; font-size: 0.76rem; font-weight: 800; display: inline-flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; border-radius: 50%; background: #f43f5e;"></span>❌ Verification Declined</span>`;
+        }
+
+        const dateObj = ord.created_at ? new Date(ord.created_at) : null;
+        const formattedDate = dateObj ? dateObj.toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+        const mfsName = ord.payment_method_display || (ord.payment_method ? ord.payment_method.toUpperCase() : 'MFS');
+        const mfsColor = ord.payment_method === 'bkash' ? '#e2136e' : ord.payment_method === 'nagad' ? '#f97316' : ord.payment_method === 'rocket' ? '#8c3494' : '#009688';
+
+        let itemsHtml = '';
+        (ord.items || []).forEach(it => {
+          itemsHtml += `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--border-subtle); flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(99, 102, 241, 0.12); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 0.8rem; overflow: hidden; flex-shrink: 0;">
+                  ${it.product_image ? `<img src="${it.product_image}" alt="${it.product_name}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`}
+                </div>
+                <div>
+                  <div style="font-weight: 800; font-size: 0.94rem; color: var(--text-main);">${it.product_name || 'Digital Subscription'}</div>
+                  <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                    <span style="color: var(--primary); font-weight: 700;">${it.plan_name || 'Standard Plan'}</span>
+                    <span>&bull;</span>
+                    <span>${it.devices || 1} Device${it.devices > 1 ? 's' : ''}</span>
+                    <span>&bull;</span>
+                    <span style="text-transform: capitalize;">${it.billing_cycle || 'monthly'}</span>
+                    ${it.quantity > 1 ? `<span style="background: rgba(255,255,255,0.08); padding: 1px 6px; border-radius: 4px; font-weight: 700;">x${it.quantity}</span>` : ''}
+                  </div>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-weight: 800; font-size: 0.98rem; color: var(--text-main);">${it.currency_symbol || ord.currency_symbol || '৳'}${parseFloat(it.total_price || it.unit_price || 0).toFixed(2)}</div>
+                ${it.quantity > 1 ? `<div style="font-size: 0.72rem; color: var(--text-muted);">৳${parseFloat(it.unit_price).toFixed(2)} each</div>` : ''}
+              </div>
+            </div>
+          `;
+        });
+
+        html += `
+          <div style="background: var(--bg-surface); border: 1px solid ${isApproved ? 'rgba(16, 185, 129, 0.35)' : isPending ? 'rgba(245, 158, 11, 0.35)' : 'rgba(244, 63, 94, 0.35)'}; border-radius: var(--radius-md); padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.18);">
+            
+            <!-- Order Header Bar -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 10px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1rem; color: var(--text-main); letter-spacing: 0.5px;">#${ord.order_number}</span>
+                <button type="button" onclick="copyToClipboard('${ord.order_number}'); showToast('Copied Order #: ${ord.order_number}', 'success');" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 2px;" title="Copy Order #">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+                <span style="font-size: 0.8rem; color: var(--text-muted);">&bull; ${formattedDate}</span>
+              </div>
+              <div>${statusBadge}</div>
+            </div>
+
+            <!-- Items Section -->
+            <div style="margin-bottom: 14px;">
+              ${itemsHtml}
+            </div>
+
+            <!-- Payment & TrxID Verification Row -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; background: var(--input-bg); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin-bottom: 14px; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 0.84rem;">
+                <span style="font-weight: 800; color: #fff; background: ${mfsColor}; padding: 3px 10px; border-radius: 6px; box-shadow: 0 2px 8px ${mfsColor}40;">${mfsName}</span>
+                <span style="color: var(--text-muted);">Sender Phone: <strong style="color: var(--text-main); font-family: 'JetBrains Mono', monospace;">${ord.sender_number}</strong></span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">Transaction ID (TrxID):</span>
+                <code style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 0.9rem; color: var(--text-main); background: rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border-subtle);">${ord.transaction_id}</code>
+                <button type="button" onclick="copyToClipboard('${ord.transaction_id}'); showToast('Copied TrxID: ${ord.transaction_id}', 'success');" style="padding: 4px 9px; font-size: 0.76rem; border-radius: 4px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); color: var(--primary); cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Copy TrxID">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Status Details Box -->
+            ${isApproved ? `
+              <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.08)); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+                <div>
+                  <div style="font-size: 0.74rem; font-weight: 800; text-transform: uppercase; color: #10b981; letter-spacing: 0.6px; display: flex; align-items: center; gap: 6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>Confirmed Purchase & Digital License Key</span>
+                  </div>
+                  <div style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 1.15rem; color: var(--text-main); margin-top: 4px; letter-spacing: 1px;">
+                    ${ord.license_key || 'SUB-ACTIVE-KEY-GRANTED'}
+                  </div>
+                  <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 3px;">
+                    Verified by Super Admin ${ord.approved_by_username ? `(${ord.approved_by_username})` : ''}. ${ord.admin_notes || 'Your digital credentials are ready for instant activation!'}
+                  </div>
+                </div>
+                <button type="button" class="btn-save-profile" onclick="copyToClipboard('${ord.license_key}'); showToast('Copied License Key: ${ord.license_key}', 'success');" style="padding: 9px 18px; font-size: 0.84rem; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35); background: linear-gradient(135deg, #10b981, #059669);">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span>Copy License Key</span>
+                </button>
+              </div>
+            ` : isPending ? `
+              <div style="background: rgba(245, 158, 11, 0.09); border: 1px dashed rgba(245, 158, 11, 0.4); border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 14px; display: flex; align-items: flex-start; gap: 12px;">
+                <div style="color: #f59e0b; font-size: 1.3rem; line-height: 1; flex-shrink: 0; margin-top: 2px;">⏳</div>
+                <div style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.5;">
+                  <strong style="color: #f59e0b;">Payment Verification In Progress</strong><br>
+                  Your ${mfsName} transaction with TrxID <strong>${ord.transaction_id}</strong> is currently being reviewed by Super Admin. Once verified, your product purchase will be confirmed and digital license credentials will activate here immediately!
+                </div>
+              </div>
+            ` : `
+              <div style="background: rgba(244, 63, 94, 0.09); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 14px; font-size: 0.84rem; color: var(--text-muted);">
+                <strong style="color: #f43f5e;">Admin Verification Feedback:</strong> ${ord.admin_notes || 'The Transaction ID provided could not be matched. Please verify the TrxID or contact store support.'}
+              </div>
+            `}
+
+            <!-- Total Amount Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid var(--border-subtle); font-size: 0.88rem;">
+              <span style="color: var(--text-muted);">Order Total (${ord.items ? ord.items.length : 0} item${ord.items && ord.items.length === 1 ? '' : 's'}):</span>
+              <span style="font-weight: 800; font-size: 1.2rem; color: var(--accent-emerald);">${ord.currency_symbol || '৳'}${parseFloat(ord.total_amount).toFixed(2)}</span>
+            </div>
+          </div>
+        `;
+      });
+      html += `</div>`;
+      container.innerHTML = html;
+    };
+
+    // Customer Saved Products Controller
+    let savedProductsState = [];
+
+    async function loadSavedProducts() {
+      const container = document.getElementById('savedProductsGrid');
+      const badge = document.getElementById('savedProductsCountBadge');
+      const statSaved = document.getElementById('statSavedCount');
+      if (!container || !customerState.token) return;
+
+      try {
+        const res = await fetch('/api/customer/saved-products/', {
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          savedProductsState = data.saved_products || [];
+          const count = data.count || savedProductsState.length;
+
+          if (badge) badge.textContent = `${count} Saved`;
+          if (statSaved) statSaved.textContent = `${count} Saved Product${count === 1 ? '' : 's'}`;
+
+          renderSavedProducts(savedProductsState);
+        }
+      } catch (e) {
+        console.warn('Could not fetch saved products', e);
+      }
+    }
+
+    function renderSavedProducts(items) {
+      const container = document.getElementById('savedProductsGrid');
+      if (!container) return;
+
+      if (!items || items.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 36px 20px; background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+            <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(244, 63, 94, 0.12); color: var(--accent-rose); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
+            </div>
+            <h4 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">No Saved Products Yet</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">You haven't bookmarked any subscriptions or software licenses yet.</p>
+            <a href="/#catalog" style="font-size: 0.82rem; font-weight: 700; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              <span>Browse Products Catalog</span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
             </a>
           </div>
@@ -1136,33 +1922,210 @@
       }
 
       let html = '';
-      items.forEach((item) => {
+      items.forEach(item => {
         const p = item.product || {};
-        const pl = item.plan || {};
-        const key = item.licenseKey || 'SUB-DIGITAL-KEY-ACTIVE';
+        const cat = p.category ? p.category.name : 'Subscription';
+        const sym = p.currency_symbol || '৳';
+        const price = p.price !== null && p.price !== undefined ? `${sym}${parseFloat(p.price).toFixed(2)}` : 'Contact for Price';
+        const planName = p.selected_plan ? p.selected_plan.name : (p.plans && p.plans[0] ? p.plans[0].name : 'Default Plan');
+        const notesHtml = item.notes ? `<div class="saved-card-notes">Note: "${item.notes}"</div>` : '';
+
+        const bannerHtml = p.image
+          ? `<img src="${p.image}" alt="${p.name}">`
+          : `<span style="font-size: 2.2rem; font-weight: 800; color: var(--primary);">${(p.name || 'P').charAt(0)}</span>`;
 
         html += `
-          <div class="sub-item-card">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center; color: var(--primary); flex-shrink: 0;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-              </div>
-              <div>
-                <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main);">${p.name || 'Digital Subscription'}</div>
-                <div style="font-size: 0.76rem; color: var(--text-muted);">${pl.name || 'Premium Plan'} • <span style="color: var(--accent-emerald); font-weight: 700;">● Active</span></div>
-              </div>
+          <div class="saved-product-card" id="savedCard-${item.id}">
+            <div class="saved-card-banner">
+              ${bannerHtml}
+              <span class="saved-card-badge">${cat}</span>
+              <button class="saved-card-remove-btn" onclick="removeSavedProduct(${p.id || item.product_id}, ${item.id})" title="Remove from saved products">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span class="license-badge-pill" onclick="copyToClipboard('${key}')" title="Click to copy license key">
-                <span>Key: ${key}</span>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-              </span>
+            <div class="saved-card-body">
+              <div>
+                <h3 class="saved-card-title">${p.name || 'Saved Product'}</h3>
+                <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 4px;">Tier: ${planName}</div>
+                ${notesHtml}
+              </div>
+
+              <div>
+                <div class="saved-card-price">${price}</div>
+                <div class="saved-card-actions">
+                  <a href="/#catalog" class="btn-saved-view">
+                    <span>View & Subscribe</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         `;
       });
+
       container.innerHTML = html;
+    }
+
+    async function removeSavedProduct(productId, savedItemId) {
+      if (!confirm('Remove this product from your saved list?')) return;
+
+      try {
+        const res = await fetch(`/api/customer/saved-products/${productId}/`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+
+        if (res.ok) {
+          showToast('Product removed from your saved list.', 'info');
+          // Refresh list
+          await loadSavedProducts();
+        } else {
+          showToast('Could not remove product. Please try again.', 'error');
+        }
+      } catch (e) {
+        showToast('Network error while removing saved product.', 'error');
+      }
+    }
+
+    // ==========================================================================
+    // Profile Shopping Cart Controller
+    // ==========================================================================
+    let profileCartState = [];
+
+    async function loadProfileCart() {
+      if (!customerState.token) return;
+      const badge = document.getElementById('profileCartCountBadge');
+      const statCart = document.getElementById('statCartCount');
+
+      try {
+        const res = await fetch('/api/customer/cart/', {
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          profileCartState = data.items || data.cart_items || [];
+          const count = data.total_quantity || data.cart_count || data.items_count || 0;
+          const total = parseFloat(data.total_amount || data.cart_total || 0);
+
+          if (badge) badge.textContent = `${count} In Cart`;
+          if (statCart) statCart.textContent = `${count} In Cart`;
+
+          renderProfileCart(profileCartState, total, count);
+        }
+      } catch (e) {
+        console.warn('Could not fetch cart on profile', e);
+      }
+    }
+
+    function renderProfileCart(items, total, count) {
+      const container = document.getElementById('profileCartItemsList');
+      if (!container) return;
+
+      if (!items || items.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 36px 20px; background: var(--bg-surface); border: 1px dashed var(--border-subtle); border-radius: var(--radius-md);">
+            <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+            </div>
+            <h4 style="font-size: 1rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;">Your Shopping Cart is Empty</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">You haven't added any subscription items to your cart yet.</p>
+            <a href="/#catalog" style="font-size: 0.82rem; font-weight: 700; color: var(--primary); text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+              <span>Explore Catalog to Add Items</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div style="display: flex; flex-direction: column; gap: 12px;">';
+      items.forEach(item => {
+        const prod = item.product || {};
+        const plan = item.plan || {};
+        const sym = plan.currency_symbol || prod.currency_symbol || '৳';
+        const unitPrice = parseFloat(plan.price || 0).toFixed(2);
+        const subtotal = item.subtotal ? parseFloat(item.subtotal).toFixed(2) : (parseFloat(unitPrice) * item.quantity).toFixed(2);
+
+        html += `
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1;">
+              <div style="width: 48px; height: 48px; border-radius: var(--radius-sm); background: rgba(99, 102, 241, 0.12); border: 1px solid var(--border-subtle); overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                ${prod.image ? `<img src="${prod.image}" alt="${prod.name}" style="width: 100%; height: 100%; object-fit: cover;">` : `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect></svg>`}
+              </div>
+              <div style="min-width: 0;">
+                <div style="font-weight: 800; font-size: 0.95rem; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${prod.name || 'Digital Subscription'}</div>
+                <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 3px; display: flex; align-items: center; gap: 6px;">
+                  <span style="font-size: 0.72rem; font-weight: 700; padding: 2px 7px; border-radius: 6px; background: rgba(99, 102, 241, 0.12); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.25);">${plan.name || 'Selected Tier'}</span>
+                  <span>📱 ${plan.devices || 1} Device${(plan.devices || 1) > 1 ? 's' : ''}</span>
+                  <span>• Qty: <strong>${item.quantity}</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <div style="text-align: right;">
+                <div style="font-size: 1rem; font-weight: 800; color: var(--accent-emerald);">${sym}${subtotal}</div>
+                <div style="font-size: 0.72rem; color: var(--text-subtle);">${sym}${unitPrice} ea</div>
+              </div>
+
+              <button type="button" onclick="removeProfileCartItem(${item.id})" style="background: none; border: 1px solid var(--border-subtle); color: var(--text-muted); cursor: pointer; padding: 7px 12px; border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; transition: var(--transition-smooth);" onmouseover="this.style.color='#f43f5e'; this.style.borderColor='rgba(244,63,94,0.4)';" onmouseout="this.style.color='var(--text-muted)'; this.style.borderColor='var(--border-subtle)';">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Remove</span>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      const sym = (items[0] && items[0].plan && items[0].plan.currency_symbol) || '৳';
+      html += `
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 14px; border-top: 1px dashed var(--border-subtle); margin-top: 6px; flex-wrap: wrap; gap: 12px;">
+          <div style="font-size: 0.95rem; font-weight: 800; color: var(--text-main);">
+            Total Cart Value: <span style="color: var(--accent-emerald); font-size: 1.15rem; margin-left: 6px;">${sym}${total.toFixed(2)}</span>
+          </div>
+          <a href="/" class="btn-save-profile" style="padding: 10px 22px; font-size: 0.88rem; text-decoration: none;">
+            <span>Checkout in Store</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+        </div>
+      `;
+      html += '</div>';
+
+      container.innerHTML = html;
+    }
+
+    async function removeProfileCartItem(itemId) {
+      if (!confirm('Remove this item from your shopping cart?')) return;
+      try {
+        const res = await fetch(`/api/customer/cart/${itemId}/`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${customerState.token}`
+          }
+        });
+        if (res.ok) {
+          showToast('Item removed from your cart.', 'info');
+          await loadProfileCart();
+        } else {
+          showToast('Failed to remove item.', 'error');
+        }
+      } catch (e) {
+        showToast('Network error removing item from cart.', 'error');
+      }
     }
 
     // Copy to clipboard helper
