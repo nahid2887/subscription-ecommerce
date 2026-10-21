@@ -256,3 +256,22 @@ class OrderItem(models.Model):
         return f"{self.product_name}{plan_str} x{self.quantity}"
 
 
+class CustomerLoginLog(models.Model):
+    """
+    Audit log of customer authentication events for analytics.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='login_logs')
+    ip_address = models.CharField(max_length=45, blank=True, null=True)
+    user_agent = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Customer Login Log"
+        verbose_name_plural = "Customer Login Logs"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username} logged in at {self.created_at}"
+
+
+

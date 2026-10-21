@@ -264,3 +264,110 @@ class SuperAdminDashboardResponseSerializer(serializers.Serializer):
     recent_subscribers = SubscriberItemSerializer(many=True)
 
 
+class SuperAdminCustomerSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    phone_number = serializers.SerializerMethodField()
+    avatar = serializers.SerializerMethodField()
+    city = serializers.SerializerMethodField()
+    country = serializers.SerializerMethodField()
+    is_verified = serializers.SerializerMethodField()
+    orders_count = serializers.SerializerMethodField()
+    pending_orders_count = serializers.SerializerMethodField()
+    approved_orders_count = serializers.SerializerMethodField()
+    total_spent = serializers.SerializerMethodField()
+    last_order_date = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'username',
+            'email',
+            'first_name',
+            'last_name',
+            'full_name',
+            'phone_number',
+            'avatar',
+            'city',
+            'country',
+            'is_verified',
+            'is_active',
+            'orders_count',
+            'pending_orders_count',
+            'approved_orders_count',
+            'total_spent',
+            'last_order_date',
+            'date_joined',
+            'last_login',
+        ]
+        read_only_fields = fields
+
+    @extend_schema_field(serializers.CharField(allow_null=True))
+    def get_full_name(self, obj):
+        name = f"{obj.first_name} {obj.last_name}".strip()
+        return name if name else obj.username
+
+    @extend_schema_field(serializers.CharField(allow_null=True))
+    def get_phone_number(self, obj):
+        profile = getattr(obj, 'customer_profile', None)
+        return profile.phone_number if profile else None
+
+    @extend_schema_field(serializers.URLField(allow_null=True))
+    def get_avatar(self, obj):
+        profile = getattr(obj, 'customer_profile', None)
+        if profile and profile.avatar:
+            try:
+                request = self.context.get('request')
+                if request:
+                    return request.build_absolute_uri(profile.avatar.url)
+                return profile.avatar.url
+            except Exception:
+                return None
+        return None
+
+    @extend_schema_field(serializers.CharField(allow_null=True))
+    def get_city(self, obj):
+        profile = getattr(obj, 'customer_profile', None)
+        return profile.city if profile else None
+
+    @extend_schema_field(serializers.CharField(allow_null=True))
+    def get_country(self, obj):
+        profile = getattr(obj, 'customer_profile', None)
+        return profile.country if profile else 'Bangladesh'
+
+    @extend_schema_field(serializers.BooleanField())
+    def get_is_verified(self, obj):
+        profile = getattr(obj, 'customer_profile', None)
+        return profile.is_verified if profile else False
+
+    @extend_schema_field(serializers.IntegerField())
+    def get_orders_count(self, obj):
+        return obj.customer_orders.count()
+
+    @extend_schema_field(serializers.IntegerField())
+    def get_pending_orders_count(self, obj):
+        return obj.customer_orders.filter(status='PENDING').count()
+
+    @extend_schema_field(serializers.IntegerField())
+    def get_approved_orders_count(self, obj):
+        return obj.customer_orders.filter(status='APPROVED').count()
+
+    @extend_schema_field(serializers.FloatField())
+    def get_total_spent(self, obj):
+        from django.db.models import Sum
+        val = obj.customer_orders.filter(status='APPROVED').aggregate(total=Sum('total_amount'))['total']
+        return float(val or 0.0)
+
+    @extend_schema_field(serializers.DateTimeField(allow_null=True))
+    def get_last_order_date(self, obj):
+        latest = obj.customer_orders.order_by('-created_at').first()
+        return latest.created_at if latest else None
+
+
+class SuperAdminCustomerListResponseSerializer(serializers.Serializer):
+    total_customers = serializers.IntegerField(help_text="Total number of registered customer accounts")
+    verified_customers = serializers.IntegerField(help_text="Number of verified customer accounts")
+    customers = SuperAdminCustomerSerializer(many=True)
+
+
+

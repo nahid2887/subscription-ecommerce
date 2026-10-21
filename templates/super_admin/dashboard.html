@@ -1166,8 +1166,85 @@
       color: #f43f5e;
       border: 1px solid rgba(244, 63, 94, 0.35);
     }
+
+    /* ----------------------------------------------------
+       OPERATIONAL ANALYTICS BAR CHARTS STYLES
+    ---------------------------------------------------- */
+    .analytics-section-wrapper {
+      margin-bottom: 24px;
+    }
+    .analytics-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .analytics-charts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 20px;
+    }
+    @media (max-width: 900px) {
+      .analytics-charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .chart-card {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      min-height: 440px;
+      position: relative;
+    }
+    .chart-card:hover {
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+    }
+    .chart-canvas-wrap {
+      position: relative;
+      height: 270px;
+      width: 100%;
+      flex: 1;
+      margin: 8px 0;
+    }
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+    .verified-badge.yes {
+      background: rgba(16, 185, 129, 0.12);
+      color: #10b981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .verified-badge.no {
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--text-secondary);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+    .customer-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent-purple));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      border: 2px solid var(--panel-border);
+    }
   </style>
 
+  <!-- Chart.js 4.4.1 for interactive, animated bar charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
   <div class="ambient-glow-1"></div>
@@ -1204,7 +1281,17 @@
           <line x1="2" y1="10" x2="22" y2="10"></line>
         </svg>
         Orders & Verification
-        <span id="navPendingOrdersBadge" style="background: #f59e0b; color: #000; font-size: 0.68rem; font-weight: 800; padding: 1px 6px; border-radius: 999px; margin-left: 4px; display: none;">0</span>
+        <span id="navPendingOrdersBadge" style="background: #f59e0b; color: #000; font-size: 0.68rem; font-weight: 800; padding: 1px 6px; border-radius: 999px; margin-left: 4px; display: {% if metrics.pending_orders %}inline-block{% else %}none{% endif %};">{{ metrics.pending_orders|default:0 }}</span>
+      </a>
+      <a href="#customersSection" class="nav-link" id="navCustomersLink">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        Customers
+        <span id="navCustomersBadge" style="background: var(--primary); color: #fff; font-size: 0.68rem; font-weight: 800; padding: 1px 6px; border-radius: 999px; margin-left: 4px;">{{ metrics.total_customers|default:2 }}</span>
       </a>
       <a href="/super-admin/products/" class="nav-link">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1268,111 +1355,151 @@
 
   <!-- ----------------- MAIN BODY ----------------- -->
   <main class="dashboard-container">
-       <!-- Welcome Banner -->
-    <div class="welcome-card">
-      <div class="welcome-text">
-        <h2>Welcome back, <span id="welcomeUsername" style="color: var(--primary);">nahid</span> 👋</h2>
-        <p>Subscription Operations &bull; Real-time subscriber activity, plan metrics, and system overview.</p>
-      </div>
-      <div class="status-badges-group">
-        <div class="status-tag active">
-          <span class="pulse-dot"></span>
-          <span>System Status: Online</span>
-        </div>
-        <div class="status-tag active" style="background: rgba(99, 102, 241, 0.12); border-color: rgba(99, 102, 241, 0.35); color: var(--primary);">
-          <span>Role: Super Admin</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4 KPI Metrics -->
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-top">
-          <span class="metric-title">Monthly Revenue</span>
-          <div class="metric-icon-wrap" style="background: rgba(16, 185, 129, 0.12); color: var(--success);">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="1" x2="12" y2="23"></line>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="metric-value">$38,420</div>
-        <div class="metric-trend">
-          <span>&uarr; 14.8%</span>
-          <span style="color: var(--text-muted); font-weight: 500;">vs last month</span>
-        </div>
-      </div>
-
-      <div class="metric-card">
-        <div class="metric-top">
-          <span class="metric-title">Active Subscriptions</span>
-          <div class="metric-icon-wrap" style="background: rgba(99, 102, 241, 0.12); color: var(--primary);">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-          </div>
-        </div>
-        <div class="metric-value">1,428</div>
-        <div class="metric-trend">
-          <span>&uarr; +86</span>
-          <span style="color: var(--text-muted); font-weight: 500;">new subscribers this week</span>
-        </div>
-      </div>
-
-      <div class="metric-card">
-        <div class="metric-top">
-          <span class="metric-title">Avg Revenue Per User</span>
-          <div class="metric-icon-wrap" style="background: rgba(168, 85, 247, 0.12); color: var(--accent-purple);">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </div>
-        </div>
-        <div class="metric-value">$64.50</div>
-        <div class="metric-trend" style="color: var(--success);">
-          <span>&uarr; +5.2%</span>
-          <span style="color: var(--text-muted); font-weight: 500;">ARPU growth</span>
-        </div>
-      </div>
-
-      <div class="metric-card">
-        <div class="metric-top">
-          <span class="metric-title">System Gateway Health</span>
-          <div class="metric-icon-wrap" style="background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan);">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-            </svg>
-          </div>
-        </div>
-        <div class="metric-value">99.98%</div>
-        <div class="metric-trend">
-          <span>Operational</span>
-          <span style="color: var(--text-muted); font-weight: 500;">Latency: 28ms</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product Catalog Quick Action Banner -->
-    <div style="background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <div style="width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--accent-purple)); display: flex; align-items: center; justify-content: center; color: #fff; box-shadow: 0 4px 15px var(--primary-glow);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-          </svg>
-        </div>
+    <!-- ==========================================================================
+         OPERATIONAL ANALYTICS: MONTHLY USER LOGINS & MONTHLY REVENUE BAR GRAPHS
+         ========================================================================== -->
+    <div class="analytics-section-wrapper" id="analyticsSection">
+      
+      <!-- Top Section Header & Controls -->
+      <div class="analytics-header-bar">
         <div>
-          <div style="font-weight: 800; font-size: 1.05rem; color: var(--text-main);">Product Catalog & Subscription Management</div>
-          <div style="font-size: 0.84rem; color: var(--text-secondary);">Create, update, and delete products with multi-language descriptions and dynamic pricing plans.</div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 9px; letter-spacing: -0.02em;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            Operational Analytics
+          </h2>
+          <p style="font-size: 0.84rem; color: var(--text-secondary); margin-top: 3px;">
+            Monthly user logins and verified subscription revenue performance.
+          </p>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 6px; background: var(--panel-bg); border: 1px solid var(--panel-border); padding: 5px 10px; border-radius: var(--radius-sm);">
+            <label for="analyticsYearFilter" style="font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Year:</label>
+            <select id="analyticsYearFilter" onchange="loadDashboardAnalyticsCharts()" style="background: transparent; border: none; color: var(--text-main); font-size: 0.82rem; font-weight: 700; outline: none; cursor: pointer;">
+              <option value="2026" selected>2026</option>
+              <option value="2025">2025</option>
+            </select>
+          </div>
+
+          <span class="status-tag active" style="font-size: 0.76rem; padding: 4px 10px;">
+            <span class="pulse-dot"></span> Live
+          </span>
+
+          <button type="button" class="btn-action" onclick="loadDashboardAnalyticsCharts()" title="Refresh Analytics Data" style="padding: 6px 14px; font-size: 0.78rem; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 6px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Refresh Charts
+          </button>
         </div>
       </div>
-      <a href="/super-admin/products/" class="btn-action primary" style="padding: 10px 18px; font-weight: 700; text-decoration: none; border-radius: var(--radius-md);">
-        Manage Products &rarr;
-      </a>
+
+      <!-- 2-Column Responsive Bar Graphs Grid -->
+      <div class="analytics-charts-grid">
+        
+        <!-- CHART 1: MONTHLY USER LOGINS -->
+        <div class="section-card chart-card" id="userLoginsCard">
+          <div class="section-header" style="margin-bottom: 12px;">
+            <div>
+              <h3 class="section-title" style="font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                Monthly User Logins
+              </h3>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">
+                Customer authentication sessions per calendar month
+              </p>
+            </div>
+            <span class="status-tag active" style="background: rgba(99, 102, 241, 0.12); border-color: rgba(99, 102, 241, 0.3); color: var(--primary); font-size: 0.72rem;">
+              👥 User Activity
+            </span>
+          </div>
+
+          <!-- Quick Stat Pills Row -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px;">
+            <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-sm); padding: 10px 12px;">
+              <div style="font-size: 0.68rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Total Logins</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-top: 2px;" id="statTotalLogins">{{ analytics.user_logins.total|default:0 }}</div>
+            </div>
+            <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-sm); padding: 10px 12px;">
+              <div style="font-size: 0.68rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Monthly Average</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--primary); margin-top: 2px;" id="statAvgLogins">{{ analytics.user_logins.avg_monthly|default:0 }}/mo</div>
+            </div>
+            <div style="background: var(--panel-bg); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-sm); padding: 10px 12px;">
+              <div style="font-size: 0.68rem; color: #10b981; text-transform: uppercase; font-weight: 700;">Growth Trend</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: #10b981; margin-top: 2px;" id="statGrowthLogins">{{ analytics.user_logins.growth_percentage|default:"+0.0%" }}</div>
+            </div>
+          </div>
+
+          <!-- Canvas Chart Container -->
+          <div class="chart-canvas-wrap">
+            <canvas id="userLoginsChartCanvas"></canvas>
+            <!-- SVG Fallback Container if CDN is unreachable -->
+            <div id="userLoginsFallback" style="display: none; height: 100%; width: 100%;"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--panel-border); padding-top: 8px;">
+            <span><strong style="color: var(--primary);">●</strong> User authentication tracking</span>
+            <span id="loginsPeakMonth">Peak: {{ analytics.user_logins.peak_month|default:"None" }}</span>
+          </div>
+        </div>
+
+        <!-- CHART 2: MONTHLY REVENUE -->
+        <div class="section-card chart-card" id="monthlyRevenueCard">
+          <div class="section-header" style="margin-bottom: 12px;">
+            <div>
+              <h3 class="section-title" style="font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-emerald);">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                Monthly Revenue (BDT)
+              </h3>
+              <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">
+                Verified subscription sales volume across payment gateways (bKash, Nagad, Rocket, QR)
+              </p>
+            </div>
+            <span class="status-tag active" style="background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.3); color: #10b981; font-size: 0.72rem;">
+              💰 Verified Revenue
+            </span>
+          </div>
+
+          <!-- Quick Stat Pills Row -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px;">
+            <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-sm); padding: 10px 12px;">
+              <div style="font-size: 0.68rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Total Revenue</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--accent-emerald); margin-top: 2px;" id="statTotalRevenue">৳{{ analytics.monthly_revenue.total|floatformat:2|default:"0.00" }}</div>
+            </div>
+            <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-sm); padding: 10px 12px;">
+              <div style="font-size: 0.68rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Monthly Average</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin-top: 2px;" id="statAvgRevenue">৳{{ analytics.monthly_revenue.avg_monthly|floatformat:2|default:"0.00" }}/mo</div>
+            </div>
+            <div style="background: var(--panel-bg); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-sm); padding: 10px 12px;">
+              <div style="font-size: 0.68rem; color: #10b981; text-transform: uppercase; font-weight: 700;">Growth Trend</div>
+              <div style="font-size: 1.25rem; font-weight: 800; color: #10b981; margin-top: 2px;" id="statGrowthRevenue">{{ analytics.monthly_revenue.growth_percentage|default:"+0.0%" }}</div>
+            </div>
+          </div>
+
+          <!-- Canvas Chart Container -->
+          <div class="chart-canvas-wrap">
+            <canvas id="monthlyRevenueChartCanvas"></canvas>
+            <!-- SVG Fallback Container if CDN is unreachable -->
+            <div id="monthlyRevenueFallback" style="display: none; height: 100%; width: 100%;"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 0.72rem; color: var(--text-muted); border-top: 1px solid var(--panel-border); padding-top: 8px;">
+            <span><strong style="color: #10b981;">●</strong> Verified MFS payments (৳ BDT)</span>
+            <span id="revenuePeakMonth">Peak: {{ analytics.monthly_revenue.peak_month|default:"None" }}</span>
+          </div>
+        </div>
+
+      </div>
     </div>
 
     <!-- ==========================================================================
@@ -1390,7 +1517,7 @@
         <div style="display: flex; align-items: center; gap: 10px;">
           <span id="ordersPendingBadge" style="font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 999px; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.35); display: flex; align-items: center; gap: 6px;">
             <span class="pulse-dot" style="background: #f59e0b;"></span>
-            <span id="pendingBadgeCount">0 Pending Verification</span>
+            <span id="pendingBadgeCount">{{ metrics.pending_orders|default:0 }} Pending Verification</span>
           </span>
           <button type="button" class="btn-action" onclick="loadSuperAdminOrders()" title="Refresh Orders" style="padding: 6px 12px; border-radius: var(--radius-sm); font-size: 0.78rem;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
@@ -1403,19 +1530,19 @@
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
         <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 14px;">
           <div style="font-size: 0.74rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Total Orders</div>
-          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-top: 4px;" id="metricTotalOrders">0</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-top: 4px;" id="metricTotalOrders">{{ metrics.total_orders|default:0 }}</div>
         </div>
         <div style="background: var(--panel-bg); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-md); padding: 14px;">
           <div style="font-size: 0.74rem; color: #f59e0b; text-transform: uppercase; font-weight: 700;">Pending Verification</div>
-          <div style="font-size: 1.4rem; font-weight: 800; color: #f59e0b; margin-top: 4px;" id="metricPendingOrders">0</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: #f59e0b; margin-top: 4px;" id="metricPendingOrders">{{ metrics.pending_orders|default:0 }}</div>
         </div>
         <div style="background: var(--panel-bg); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 14px;">
           <div style="font-size: 0.74rem; color: #10b981; text-transform: uppercase; font-weight: 700;">Approved / Confirmed</div>
-          <div style="font-size: 1.4rem; font-weight: 800; color: #10b981; margin-top: 4px;" id="metricApprovedOrders">0</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: #10b981; margin-top: 4px;" id="metricApprovedOrders">{{ metrics.approved_orders|default:0 }}</div>
         </div>
         <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 14px;">
           <div style="font-size: 0.74rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Verified Revenue</div>
-          <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-emerald); margin-top: 4px;" id="metricTotalRevenue">৳0.00</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--accent-emerald); margin-top: 4px;" id="metricTotalRevenue">৳{{ metrics.total_revenue|floatformat:2|default:"0.00" }}</div>
         </div>
       </div>
 
@@ -1455,11 +1582,220 @@
             </tr>
           </thead>
           <tbody id="superAdminOrdersTbody">
+            {% if orders %}
+              {% for ord in orders %}
+                <tr style="{% if ord.status == 'PENDING' %}background: rgba(245, 158, 11, 0.03);{% endif %}">
+                  <td>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-weight: 800; font-size: 0.88rem; color: var(--text-main);">#{{ ord.order_number }}</div>
+                    <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">{{ ord.created_at }}</div>
+                  </td>
+                  <td>
+                    <div class="subscriber-name">{{ ord.customer_username|default:"Customer" }}</div>
+                    <div class="subscriber-email">{{ ord.customer_email|default:ord.delivery_email }}</div>
+                  </td>
+                  <td>
+                    <div style="font-size: 0.82rem; color: var(--text-main); line-height: 1.4;">
+                      {% for it in ord.items %}
+                        <div><strong>{{ it.product_name }}</strong> <span style="font-size: 0.74rem; color: var(--primary);">({{ it.plan_name }})</span>{% if it.quantity > 1 %} x{{ it.quantity }}{% endif %}</div>
+                      {% empty %}
+                        <span style="color: var(--text-muted);">Direct Purchase</span>
+                      {% endfor %}
+                    </div>
+                    <div style="font-weight: 800; color: var(--accent-emerald); font-size: 0.94rem; margin-top: 3px;">৳{{ ord.total_amount }}</div>
+                  </td>
+                  <td>
+                    <div><span class="mfs-tag {{ ord.payment_method|lower }}">{{ ord.payment_method|upper }}</span></div>
+                    <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 4px;">From: <strong style="color: var(--text-main); font-family: monospace;">{{ ord.sender_number }}</strong></div>
+                  </td>
+                  <td>
+                    <div class="trx-code-badge" title="Click to copy Transaction ID">
+                      <span>{{ ord.transaction_id }}</span>
+                      <button type="button" onclick="navigator.clipboard.writeText('{{ ord.transaction_id }}'); alert('Copied TrxID: {{ ord.transaction_id }}');" style="background: none; border: none; color: var(--primary); cursor: pointer; padding: 0 2px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    {% if ord.status == 'APPROVED' %}
+                      <span class="order-status-pill approved">&bull; Approved</span>
+                    {% elif ord.status == 'PENDING' %}
+                      <span class="order-status-pill pending">&bull; Pending Verification</span>
+                    {% else %}
+                      <span class="order-status-pill rejected">&bull; Rejected</span>
+                    {% endif %}
+                  </td>
+                  <td style="text-align: right;">
+                    {% if ord.status == 'PENDING' %}
+                      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                        <button type="button" class="btn-approve" onclick="openApproveModal({{ ord.id }}, '{{ ord.order_number }}', '{{ ord.transaction_id }}', '{{ ord.license_key|default:'' }}')" title="Verify TrxID & Approve Order">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          Approve
+                        </button>
+                        <button type="button" class="btn-reject" onclick="openRejectModal({{ ord.id }}, '{{ ord.order_number }}', '{{ ord.transaction_id }}')" title="Reject Order">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                          Reject
+                        </button>
+                      </div>
+                    {% elif ord.status == 'APPROVED' %}
+                      <div style="text-align: right;">
+                        <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 800; color: #10b981; display: inline-flex; align-items: center; gap: 4px; background: rgba(16, 185, 129, 0.1); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(16, 185, 129, 0.3);">
+                          <span>Key: {{ ord.license_key|default:'ACTIVE' }}</span>
+                          <button type="button" onclick="navigator.clipboard.writeText('{{ ord.license_key }}'); alert('License key copied!');" style="background: none; border: none; color: #10b981; cursor: pointer; padding: 0 2px;">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                          </button>
+                        </div>
+                        <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">Confirmed by Super Admin</div>
+                      </div>
+                    {% else %}
+                      <div style="text-align: right;">
+                        <span style="font-size: 0.74rem; color: #f43f5e; font-weight: 700;">Rejected</span>
+                        <div style="font-size: 0.68rem; color: var(--text-muted);">{{ ord.admin_notes|default:'Invalid payment' }}</div>
+                      </div>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 36px; color: var(--text-secondary);">
+                  <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">No Orders Found</div>
+                  <div style="font-size: 0.82rem;">No customer orders placed yet.</div>
+                </td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         REGISTERED CUSTOMERS & USER DIRECTORY SECTION
+         ========================================================================== -->
+    <div class="section-card" id="customersSection" style="margin-bottom: 24px;">
+      <div class="section-header" style="flex-wrap: wrap; gap: 12px;">
+        <h3 class="section-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          Registered Customers & Users
+        </h3>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span id="customersBadge" style="font-size: 0.78rem; font-weight: 800; padding: 4px 12px; border-radius: 999px; background: rgba(99, 102, 241, 0.15); color: var(--primary); border: 1px solid rgba(99, 102, 241, 0.35); display: flex; align-items: center; gap: 6px;">
+            <span class="pulse-dot" style="background: var(--primary);"></span>
+            <span id="customersBadgeCount">{{ metrics.total_customers|default:2 }} Registered</span>
+          </span>
+          <button type="button" class="btn-action" onclick="loadSuperAdminCustomers()" title="Refresh Customers" style="padding: 6px 12px; border-radius: var(--radius-sm); font-size: 0.78rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px;">
+        <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 14px;">
+          <div style="font-size: 0.74rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Total Customer Users</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-main); margin-top: 4px;" id="metricTotalCustomers">{{ metrics.total_customers|default:2 }}</div>
+        </div>
+        <div style="background: var(--panel-bg); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 14px;">
+          <div style="font-size: 0.74rem; color: #10b981; text-transform: uppercase; font-weight: 700;">Verified Accounts</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: #10b981; margin-top: 4px;" id="metricVerifiedCustomers">{{ metrics.verified_customers|default:0 }}</div>
+        </div>
+        <div style="background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 14px;">
+          <div style="font-size: 0.74rem; color: var(--text-secondary); text-transform: uppercase; font-weight: 700;">Active Status</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-top: 4px;">100% Active</div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs & Search Bar -->
+      <div class="orders-toolbar">
+        <div class="filter-tabs">
+          <button type="button" class="filter-tab-btn active" onclick="setCustomersStatusFilter('ALL', this)">All Customers</button>
+          <button type="button" class="filter-tab-btn" onclick="setCustomersStatusFilter('VERIFIED', this)" style="color: #10b981;">🛡️ Verified</button>
+          <button type="button" class="filter-tab-btn" onclick="setCustomersStatusFilter('UNVERIFIED', this)" style="color: var(--text-secondary);">Unverified</button>
+        </div>
+
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <input type="text" id="customersSearchInput" class="orders-search-input" placeholder="Search customer by name, email, phone, username..." oninput="debounceCustomersSearch()">
+        </div>
+      </div>
+
+      <!-- Customers Table -->
+      <div class="table-wrapper">
+        <table id="superAdminCustomersTable">
+          <thead>
             <tr>
-              <td colspan="7" style="text-align: center; padding: 36px; color: var(--text-secondary);">
-                Loading customer orders and transactions...
-              </td>
+              <th>Customer</th>
+              <th>Email & Verification</th>
+              <th>Contact & Phone</th>
+              <th>Orders Count</th>
+              <th>Total Spent</th>
+              <th>Registered</th>
+              <th style="text-align: right;">Status</th>
             </tr>
+          </thead>
+          <tbody id="superAdminCustomersTbody">
+            {% if customers %}
+              {% for cust in customers %}
+                <tr>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                      {% if cust.avatar %}
+                        <img src="{{ cust.avatar }}" alt="{{ cust.username }}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">
+                      {% else %}
+                        <div class="customer-avatar">{{ cust.username|first|upper }}</div>
+                      {% endif %}
+                      <div>
+                        <div style="font-weight: 700; color: var(--text-main);">{{ cust.full_name|default:cust.username }}</div>
+                        <div style="font-size: 0.76rem; color: var(--text-muted); font-family: monospace;">@{{ cust.username }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size: 0.84rem; color: var(--text-main);">{{ cust.email|default:'<span style="color:var(--text-muted);">No email</span>' }}</div>
+                    <div style="margin-top: 3px;">
+                      {% if cust.is_verified %}
+                        <span class="verified-badge yes"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Verified</span>
+                      {% else %}
+                        <span class="verified-badge no">Unverified</span>
+                      {% endif %}
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-size: 0.82rem; color: var(--text-main); font-family: monospace;">{{ cust.phone_number|default:'-' }}</div>
+                    <div style="font-size: 0.74rem; color: var(--text-secondary);">{% if cust.city %}{{ cust.city }}, {% endif %}{{ cust.country|default:'Bangladesh' }}</div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 700; color: var(--text-main); font-size: 0.88rem;">{{ cust.orders_count|default:0 }} Orders</div>
+                    <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;">
+                      <span style="color: #f59e0b;">{{ cust.pending_orders_count|default:0 }} Pending</span> &bull; 
+                      <span style="color: #10b981;">{{ cust.approved_orders_count|default:0 }} Confirmed</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div style="font-weight: 800; color: var(--accent-emerald); font-size: 0.94rem;">৳{{ cust.total_spent|floatformat:2|default:"0.00" }}</div>
+                  </td>
+                  <td>
+                    <div style="font-size: 0.82rem; color: var(--text-secondary);">{{ cust.date_joined|default:'-' }}</div>
+                  </td>
+                  <td style="text-align: right;">
+                    <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; font-weight: 700; color: var(--success); background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 999px;">
+                      <span class="pulse-dot" style="width: 5px; height: 5px;"></span> Active
+                    </span>
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 36px; color: var(--text-secondary);">
+                  <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">No Customers Found</div>
+                  <div style="font-size: 0.82rem;">No registered customer users.</div>
+                </td>
+              </tr>
+            {% endif %}
           </tbody>
         </table>
       </div>
@@ -1660,6 +1996,57 @@
   <script>
     /**
      * ----------------------------------------------------
+     * GLOBAL STATE & DATASETS (Declared at top to prevent TDZ ReferenceError)
+     * ----------------------------------------------------
+     */
+    var DEFAULT_ANALYTICS_DATA = {% if analytics_json %}{{ analytics_json|safe }}{% else %}{
+      year: 2026,
+      user_logins: {
+        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 0,
+        avg_monthly: 0,
+        growth_percentage: '0.0%',
+        peak_month: 'None'
+      },
+      monthly_revenue: {
+        currency: '৳',
+        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        total: 0,
+        avg_monthly: 0,
+        growth_percentage: '0.0%',
+        peak_month: 'None'
+      }
+    }{% endif %};
+
+    var cachedAnalyticsData = DEFAULT_ANALYTICS_DATA;
+    var userLoginsChartInstance = null;
+    var monthlyRevenueChartInstance = null;
+    var authSession = null;
+    var activeActionOrderId = null;
+    var currentStatusFilter = 'ALL';
+    var ordersSearchTimer = null;
+    var currentCustomerFilter = 'ALL';
+    var customersSearchTimer = null;
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    /**
+     * ----------------------------------------------------
      * Theme Switcher (Dark & Day Mode)
      * ----------------------------------------------------
      */
@@ -1687,34 +2074,46 @@
       </svg>
     `;
 
+    function updateChartsTheme(theme) {
+      try {
+        if (cachedAnalyticsData && typeof Chart !== 'undefined') {
+          renderChartJsCharts(cachedAnalyticsData);
+        }
+      } catch (e) {
+        console.warn('updateChartsTheme ignored:', e);
+      }
+    }
+
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('superadmin_theme', theme);
 
       if (theme === 'light') {
-        themeIcon.innerHTML = moonSvg;
-        themeLabel.textContent = 'Dark Mode';
+        if (themeIcon) themeIcon.innerHTML = moonSvg;
+        if (themeLabel) themeLabel.textContent = 'Dark Mode';
       } else {
-        themeIcon.innerHTML = sunSvg;
-        themeLabel.textContent = 'Day Mode';
+        if (themeIcon) themeIcon.innerHTML = sunSvg;
+        if (themeLabel) themeLabel.textContent = 'Day Mode';
       }
+
+      updateChartsTheme(theme);
     }
 
     const savedTheme = localStorage.getItem('superadmin_theme') || 'dark';
     applyTheme(savedTheme);
 
-    themeToggleBtn.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme') || 'dark';
-      applyTheme(current === 'dark' ? 'light' : 'dark');
-    });
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        applyTheme(current === 'dark' ? 'light' : 'dark');
+      });
+    }
 
     /**
      * ----------------------------------------------------
      * Auth Guard & Session Population
      * ----------------------------------------------------
      */
-    let authSession = null;
-
     function getStoredAuth() {
       try {
         const raw = localStorage.getItem('superadmin_auth');
@@ -1724,51 +2123,84 @@
       }
     }
 
-    function initDashboard() {
-      authSession = getStoredAuth();
-
-      // If not logged in, redirect to login page
-      if (!authSession || !authSession.accessToken) {
-        window.location.href = '/super-admin/login/';
-        return;
-      }
-
-      const user = authSession.user || {};
+    function populateUserUI(user) {
+      if (!user) return;
       const username = user.username || 'Admin';
       const initial = username.charAt(0).toUpperCase();
 
       const userAvatarSm = document.getElementById('userAvatarSm');
-      if (user.avatar) {
-        userAvatarSm.innerHTML = `<img src="${user.avatar}" alt="${username}">`;
-      } else {
-        userAvatarSm.textContent = initial;
+      if (userAvatarSm) {
+        if (user.avatar) {
+          userAvatarSm.innerHTML = `<img src="${user.avatar}" alt="${username}">`;
+        } else {
+          userAvatarSm.textContent = initial;
+        }
       }
-      document.getElementById('userPillName').textContent = username;
-      document.getElementById('welcomeUsername').textContent = username;
+      const userPill = document.getElementById('userPillName');
+      if (userPill) userPill.textContent = username;
+    }
 
-      // Sync latest profile information including avatar
-      if (authSession.accessToken) {
-        fetch('/api/superuser/profile/', {
-          method: 'GET',
-          headers: {
-            'Authorization': `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`,
-            'Accept': 'application/json'
-          }
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data && data.user) {
-            authSession.user = Object.assign({}, authSession.user, data.user);
-            localStorage.setItem('superadmin_auth', JSON.stringify(authSession));
-            if (data.user.avatar) {
-              userAvatarSm.innerHTML = `<img src="${data.user.avatar}" alt="${username}">`;
-            } else {
-              userAvatarSm.textContent = initial;
+    async function initDashboard() {
+      // 1. Check SSR tokens injected by Django template context
+      const ssrToken = '{{ token_data.access_token|default:"" }}';
+      const ssrUser = '{{ superadmin_user.username|default:"" }}';
+      if (ssrToken && ssrUser) {
+        authSession = {
+          user: {
+            username: ssrUser,
+            email: '{{ superadmin_user.email|default:"nahid2887@gmail.com" }}',
+            is_superuser: true,
+            is_staff: true,
+            id: {{ superadmin_user.id|default:1 }}
+          },
+          tokenType: 'Bearer',
+          accessToken: ssrToken,
+          refreshToken: '{{ token_data.refresh_token|default:"" }}'
+        };
+        localStorage.setItem('superadmin_auth', JSON.stringify(authSession));
+      } else {
+        authSession = getStoredAuth();
+      }
+
+      // 2. Fallback check via Django session cookie
+      if (!authSession || !authSession.accessToken) {
+        try {
+          const res = await fetch('/api/superuser/profile/', {
+            credentials: 'same-origin',
+            headers: {
+              'Accept': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken') || ''
+            }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.user) {
+              authSession = {
+                user: data.user,
+                tokenType: data.token_type || 'Bearer',
+                accessToken: data.access_token || '',
+                refreshToken: data.refresh_token || ''
+              };
+              localStorage.setItem('superadmin_auth', JSON.stringify(authSession));
+              populateUserUI(data.user);
             }
           }
-        })
-        .catch(err => console.warn('Could not sync profile in dashboard:', err));
+        } catch (e) {
+          console.warn('Session check failed:', e);
+        }
       }
+
+      if (authSession && authSession.user) {
+        populateUserUI(authSession.user);
+      }
+
+      // Instantly render analytics using cached data so graphs and stat cards appear immediately
+      renderDashboardAnalytics(cachedAnalyticsData);
+
+      // Fetch live data from backend
+      if (typeof window.loadSuperAdminOrders === 'function') window.loadSuperAdminOrders();
+      if (typeof window.loadSuperAdminCustomers === 'function') window.loadSuperAdminCustomers();
+      if (typeof window.loadDashboardAnalyticsCharts === 'function') window.loadDashboardAnalyticsCharts();
     }
 
     // Header Logout Button Handler
@@ -1920,58 +2352,78 @@
     // ==========================================================================
     // SUPER ADMIN ORDERS & MFS VERIFICATION CONTROLLER
     // ==========================================================================
-    let currentStatusFilter = 'ALL';
-    let ordersSearchTimer = null;
-    let activeActionOrderId = null;
-
-    window.setOrdersStatusFilter = function(status, btnEl) {
+    function setOrdersStatusFilter(status, btnEl) {
       currentStatusFilter = status;
       document.querySelectorAll('.filter-tab-btn').forEach(btn => btn.classList.remove('active'));
       if (btnEl) btnEl.classList.add('active');
       loadSuperAdminOrders();
-    };
+    }
+    window.setOrdersStatusFilter = setOrdersStatusFilter;
 
-    window.debounceOrdersSearch = function() {
+    function debounceOrdersSearch() {
       clearTimeout(ordersSearchTimer);
       ordersSearchTimer = setTimeout(() => {
         loadSuperAdminOrders();
       }, 350);
-    };
+    }
+    window.debounceOrdersSearch = debounceOrdersSearch;
 
-    window.loadSuperAdminOrders = async function() {
+    async function loadSuperAdminOrders() {
       const tbody = document.getElementById('superAdminOrdersTbody');
       if (!tbody) return;
 
-      if (!authSession || !authSession.accessToken) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--danger);">Super Admin authentication required.</td></tr>`;
-        return;
+      const headers = {
+        'Accept': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken') || ''
+      };
+      if (authSession && authSession.accessToken && authSession.accessToken.trim()) {
+        headers['Authorization'] = `${authSession.tokenType || 'Bearer'} ${authSession.accessToken.trim()}`;
       }
-
-      const methodSelect = document.getElementById('ordersPaymentFilter');
-      const searchInput = document.getElementById('ordersSearchInput');
 
       const params = new URLSearchParams();
       if (currentStatusFilter && currentStatusFilter !== 'ALL') {
         params.append('status', currentStatusFilter);
       }
-      if (methodSelect && methodSelect.value && methodSelect.value !== 'ALL') {
-        params.append('payment_method', methodSelect.value);
+      const paymentSelect = document.getElementById('ordersPaymentFilter');
+      if (paymentSelect && paymentSelect.value && paymentSelect.value !== 'ALL') {
+        params.append('payment_method', paymentSelect.value);
       }
-      if (searchInput && searchInput.value.trim()) {
-        params.append('search', searchInput.value.trim());
+      const searchBox = document.getElementById('ordersSearchInput');
+      if (searchBox && searchBox.value.trim()) {
+        params.append('search', searchBox.value.trim());
       }
 
       try {
-        const res = await fetch(`/api/superuser/orders/?${params.toString()}`, {
-          headers: {
-            'Authorization': `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`,
-            'Accept': 'application/json'
-          }
+        let res = await fetch(`/api/superuser/orders/?${params.toString()}`, {
+          headers: headers,
+          credentials: 'same-origin'
         });
+
+        if (res.status === 401 && authSession && authSession.refreshToken) {
+          try {
+            const refreshRes = await fetch('/api/superuser/token/refresh/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ refresh: authSession.refreshToken })
+            });
+            if (refreshRes.ok) {
+              const refreshData = await refreshRes.json();
+              authSession.accessToken = refreshData.access;
+              localStorage.setItem('superadmin_auth', JSON.stringify(authSession));
+              headers['Authorization'] = `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`;
+              res = await fetch(`/api/superuser/orders/?${params.toString()}`, {
+                headers: headers,
+                credentials: 'same-origin'
+              });
+            }
+          } catch (rErr) {
+            console.warn('Auto token refresh failed:', rErr);
+          }
+        }
 
         if (!res.ok) {
           if (res.status === 401 || res.status === 403) {
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--danger);">Admin session expired or access denied. Please re-login.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--danger);">Admin session expired or access denied. Please <a href="/super-admin/login/" style="color: var(--primary); text-decoration: underline;">re-login</a>.</td></tr>`;
             return;
           }
           throw new Error('Failed to load orders');
@@ -2123,7 +2575,8 @@
         console.error('Failed to load superadmin orders:', err);
         tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--danger);">Failed to load orders. Please try again.</td></tr>`;
       }
-    };
+    }
+    window.loadSuperAdminOrders = loadSuperAdminOrders;
 
     // Modal Control for Order Approval & Rejection
     window.openApproveModal = function(orderId, orderNum, trxId, currentKey) {
@@ -2162,21 +2615,31 @@
 
     window.submitOrderApproval = async function() {
       if (!activeActionOrderId) return;
-      const key = document.getElementById('approveModalLicenseKey').value.trim();
-      const notes = document.getElementById('approveModalNotes').value.trim();
+      const keyEl = document.getElementById('approveModalLicenseKey');
+      const notesEl = document.getElementById('approveModalNotes');
+      const key = keyEl ? keyEl.value.trim() : '';
+      const notes = notesEl ? notesEl.value.trim() : '';
       const btn = document.getElementById('approveModalSubmitBtn');
 
-      btn.disabled = true;
-      btn.textContent = 'Approving & Issuing License...';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Approving & Issuing License...';
+      }
 
       try {
+        const headers = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken') || ''
+        };
+        if (authSession && authSession.accessToken && authSession.accessToken.trim()) {
+          headers['Authorization'] = `${authSession.tokenType || 'Bearer'} ${authSession.accessToken.trim()}`;
+        }
+
         const res = await fetch(`/api/superuser/orders/${activeActionOrderId}/approve/`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`,
-            'Accept': 'application/json'
-          },
+          headers: headers,
+          credentials: 'same-origin',
           body: JSON.stringify({
             license_key: key,
             admin_notes: notes
@@ -2187,22 +2650,27 @@
         if (res.ok) {
           closeOrderActionModal();
           await loadSuperAdminOrders();
-          alert(`🎉 Order approved successfully! Digital license '${data.order ? data.order.license_key : key}' is now active for customer.`);
+          await loadSuperAdminCustomers();
+          await loadDashboardAnalyticsCharts();
+          alert(`🎉 Order approved successfully!\nDigital subscription license '${data.order ? data.order.license_key : key}' is now active for customer.`);
         } else {
           alert(`Error approving order: ${data.error || data.detail || JSON.stringify(data)}`);
         }
       } catch (err) {
         console.error('Error approving order:', err);
-        alert('Network error approving order.');
+        alert('Network error approving order. Please verify connection and try again.');
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Confirm Approval & Issue License`;
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Confirm Approval & Issue License`;
+        }
       }
     };
 
     window.submitOrderRejection = async function() {
       if (!activeActionOrderId) return;
-      const reason = document.getElementById('rejectModalReason').value.trim();
+      const reasonEl = document.getElementById('rejectModalReason');
+      const reason = reasonEl ? reasonEl.value.trim() : '';
       const btn = document.getElementById('rejectModalSubmitBtn');
 
       if (!reason) {
@@ -2210,17 +2678,25 @@
         return;
       }
 
-      btn.disabled = true;
-      btn.textContent = 'Rejecting Order...';
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Rejecting Order...';
+      }
 
       try {
+        const headers = {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken') || ''
+        };
+        if (authSession && authSession.accessToken && authSession.accessToken.trim()) {
+          headers['Authorization'] = `${authSession.tokenType || 'Bearer'} ${authSession.accessToken.trim()}`;
+        }
+
         const res = await fetch(`/api/superuser/orders/${activeActionOrderId}/reject/`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `${authSession.tokenType || 'Bearer'} ${authSession.accessToken}`,
-            'Accept': 'application/json'
-          },
+          headers: headers,
+          credentials: 'same-origin',
           body: JSON.stringify({ reason: reason })
         });
 
@@ -2228,22 +2704,426 @@
         if (res.ok) {
           closeOrderActionModal();
           await loadSuperAdminOrders();
+          await loadSuperAdminCustomers();
+          await loadDashboardAnalyticsCharts();
           alert(`Order rejected.`);
         } else {
           alert(`Error rejecting order: ${data.error || data.detail || JSON.stringify(data)}`);
         }
       } catch (err) {
         console.error('Error rejecting order:', err);
-        alert('Network error rejecting order.');
+        alert('Network error rejecting order. Please verify connection and try again.');
       } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Confirm Rejection`;
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Confirm Rejection`;
+        }
       }
     };
 
-    // Run on startup
-    initDashboard();
-    loadSuperAdminOrders();
+    // ==========================================================================
+    // SUPER ADMIN CUSTOMERS DIRECTORY CONTROLLER
+    // ==========================================================================
+    window.setCustomersStatusFilter = function(filterVal, btnEl) {
+      currentCustomerFilter = filterVal;
+      document.querySelectorAll('#customersSection .filter-tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      loadSuperAdminCustomers();
+    };
+
+    window.debounceCustomersSearch = function() {
+      clearTimeout(customersSearchTimer);
+      customersSearchTimer = setTimeout(() => {
+        loadSuperAdminCustomers();
+      }, 350);
+    };
+
+    window.loadSuperAdminCustomers = async function() {
+      const tbody = document.getElementById('superAdminCustomersTbody');
+      if (!tbody) return;
+
+      const headers = {
+        'Accept': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken') || ''
+      };
+      if (authSession && authSession.accessToken && authSession.accessToken.trim()) {
+        headers['Authorization'] = `${authSession.tokenType || 'Bearer'} ${authSession.accessToken.trim()}`;
+      }
+
+      const params = new URLSearchParams();
+      if (currentCustomerFilter === 'VERIFIED') {
+        params.append('is_verified', 'true');
+      } else if (currentCustomerFilter === 'UNVERIFIED') {
+        params.append('is_verified', 'false');
+      }
+      const searchBox = document.getElementById('customersSearchInput');
+      if (searchBox && searchBox.value.trim()) {
+        params.append('search', searchBox.value.trim());
+      }
+
+      try {
+        let res = await fetch(`/api/superuser/customers/?${params.toString()}`, {
+          headers: headers,
+          credentials: 'same-origin'
+        });
+
+        if (!res.ok) throw new Error('Failed to load customers');
+
+        const data = await res.json();
+        const customers = data.customers || [];
+        const totalCount = data.total_customers || customers.length;
+        const verifiedCount = data.verified_customers || 0;
+
+        if (document.getElementById('metricTotalCustomers')) document.getElementById('metricTotalCustomers').textContent = totalCount;
+        if (document.getElementById('metricVerifiedCustomers')) document.getElementById('metricVerifiedCustomers').textContent = verifiedCount;
+        if (document.getElementById('customersBadgeCount')) document.getElementById('customersBadgeCount').textContent = `${totalCount} Registered`;
+        const navCustomersBadge = document.getElementById('navCustomersBadge');
+        if (navCustomersBadge) navCustomersBadge.textContent = totalCount;
+
+        if (customers.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">No Customers Found</div>
+                <div style="font-size: 0.82rem;">No registered customer users match the search criteria.</div>
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        let rowsHtml = '';
+        customers.forEach(cust => {
+          const initial = (cust.username || 'C').charAt(0).toUpperCase();
+          const avatarHtml = cust.avatar
+            ? `<img src="${cust.avatar}" alt="${cust.username}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover;">`
+            : `<div class="customer-avatar">${initial}</div>`;
+
+          const verifiedBadge = cust.is_verified
+            ? `<span class="verified-badge yes"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Verified</span>`
+            : `<span class="verified-badge no">Unverified</span>`;
+
+          const joinedDate = cust.date_joined ? new Date(cust.date_joined).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : '-';
+          const totalSpentFormatted = cust.total_spent ? `৳${parseFloat(cust.total_spent).toFixed(2)}` : '৳0.00';
+
+          rowsHtml += `
+            <tr>
+              <td>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  ${avatarHtml}
+                  <div>
+                    <div style="font-weight: 700; color: var(--text-main);">${cust.full_name || cust.username}</div>
+                    <div style="font-size: 0.76rem; color: var(--text-muted); font-family: monospace;">@${cust.username}</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div style="font-size: 0.84rem; color: var(--text-main);">${cust.email || '<span style="color:var(--text-muted);">No email</span>'}</div>
+                <div style="margin-top: 3px;">${verifiedBadge}</div>
+              </td>
+              <td>
+                <div style="font-size: 0.82rem; color: var(--text-main); font-family: monospace;">${cust.phone_number || '<span style="color:var(--text-muted);">-</span>'}</div>
+                <div style="font-size: 0.74rem; color: var(--text-secondary);">${cust.city ? cust.city + ', ' : ''}${cust.country || 'Bangladesh'}</div>
+              </td>
+              <td>
+                <div style="font-weight: 700; color: var(--text-main); font-size: 0.88rem;">${cust.orders_count || 0} Orders</div>
+                <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;">
+                  <span style="color: #f59e0b;">${cust.pending_orders_count || 0} Pending</span> &bull; 
+                  <span style="color: #10b981;">${cust.approved_orders_count || 0} Confirmed</span>
+                </div>
+              </td>
+              <td>
+                <div style="font-weight: 800; color: var(--accent-emerald); font-size: 0.94rem;">${totalSpentFormatted}</div>
+              </td>
+              <td>
+                <div style="font-size: 0.82rem; color: var(--text-secondary);">${joinedDate}</div>
+              </td>
+              <td style="text-align: right;">
+                <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.74rem; font-weight: 700; color: var(--success); background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 3px 8px; border-radius: 999px;">
+                  <span class="pulse-dot" style="width: 5px; height: 5px;"></span> Active
+                </span>
+              </td>
+            </tr>
+          `;
+        });
+
+        tbody.innerHTML = rowsHtml;
+      } catch (err) {
+        console.error('Failed to load superadmin customers:', err);
+      }
+    };
+
+    /**
+     * ----------------------------------------------------
+     * Monthly Analytics Bar Charts Controller
+     * 1. Monthly User Logins
+     * 2. Monthly Revenue (৳ BDT)
+     * ----------------------------------------------------
+     */
+    window.loadDashboardAnalyticsCharts = async function() {
+      const yearSelect = document.getElementById('analyticsYearFilter');
+      const year = yearSelect ? yearSelect.value : 2026;
+
+      try {
+        const headers = {
+          'Accept': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken') || ''
+        };
+        if (authSession && authSession.accessToken && authSession.accessToken.trim()) {
+          headers['Authorization'] = `${authSession.tokenType || 'Bearer'} ${authSession.accessToken.trim()}`;
+        }
+        const res = await fetch(`/api/superuser/analytics/?year=${year}`, {
+          headers: headers,
+          credentials: 'same-origin'
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        cachedAnalyticsData = data;
+        renderDashboardAnalytics(data);
+      } catch (err) {
+        console.warn('Analytics API error or offline, rendering default dataset:', err);
+        cachedAnalyticsData = DEFAULT_ANALYTICS_DATA;
+        renderDashboardAnalytics(DEFAULT_ANALYTICS_DATA);
+      }
+    };
+
+    function renderDashboardAnalytics(data) {
+      if (!data || !data.user_logins || !data.monthly_revenue) {
+        data = DEFAULT_ANALYTICS_DATA;
+      }
+
+      // Update User Logins Stats
+      if (data.user_logins) {
+        const elTotal = document.getElementById('statTotalLogins');
+        const elAvg = document.getElementById('statAvgLogins');
+        const elGrowth = document.getElementById('statGrowthLogins');
+        const elPeak = document.getElementById('loginsPeakMonth');
+
+        if (elTotal) elTotal.textContent = Number(data.user_logins.total || 0).toLocaleString();
+        if (elAvg) elAvg.textContent = Number(data.user_logins.avg_monthly || 0).toLocaleString() + '/mo';
+        if (elGrowth) elGrowth.textContent = data.user_logins.growth_percentage !== undefined ? data.user_logins.growth_percentage : '0.0%';
+        if (elPeak) elPeak.textContent = `Peak: ${data.user_logins.peak_month || 'None'}`;
+      }
+
+      // Update Revenue Stats
+      if (data.monthly_revenue) {
+        const elTotalRev = document.getElementById('statTotalRevenue');
+        const elAvgRev = document.getElementById('statAvgRevenue');
+        const elGrowthRev = document.getElementById('statGrowthRevenue');
+        const elPeakRev = document.getElementById('revenuePeakMonth');
+
+        if (elTotalRev) elTotalRev.textContent = `৳${Number(data.monthly_revenue.total || 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
+        if (elAvgRev) elAvgRev.textContent = `৳${Number(data.monthly_revenue.avg_monthly || 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}/mo`;
+        if (elGrowthRev) elGrowthRev.textContent = data.monthly_revenue.growth_percentage !== undefined ? data.monthly_revenue.growth_percentage : '0.0%';
+        if (elPeakRev) elPeakRev.textContent = `Peak: ${data.monthly_revenue.peak_month || 'None'}`;
+      }
+
+      // Render Charts
+      if (typeof Chart !== 'undefined') {
+        renderChartJsCharts(data);
+      } else {
+        renderSvgFallbackCharts(data);
+      }
+    }
+
+    function renderChartJsCharts(data) {
+      if (!data || !data.user_logins || !data.monthly_revenue) {
+        data = DEFAULT_ANALYTICS_DATA;
+      }
+      const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      const gridColor = isLight ? 'rgba(0, 0, 0, 0.05)' : 'rgba(255, 255, 255, 0.06)';
+      const tickColor = isLight ? '#64748b' : '#94a3b8';
+      const tooltipBg = isLight ? '#ffffff' : '#0f172a';
+      const tooltipText = isLight ? '#0f172a' : '#f8fafc';
+      const tooltipBorder = isLight ? '#e2e8f0' : '#334155';
+
+      // 1. User Logins Bar Chart
+      const canvas1 = document.getElementById('userLoginsChartCanvas');
+      if (canvas1) {
+        const ctx1 = canvas1.getContext('2d');
+        if (userLoginsChartInstance) {
+          userLoginsChartInstance.destroy();
+        }
+
+        const gradient1 = ctx1.createLinearGradient(0, 0, 0, 240);
+        gradient1.addColorStop(0, 'rgba(99, 102, 241, 0.95)');
+        gradient1.addColorStop(1, 'rgba(168, 85, 247, 0.65)');
+
+        userLoginsChartInstance = new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: data.user_logins.months,
+            datasets: [{
+              label: 'User Logins',
+              data: data.user_logins.data,
+              backgroundColor: gradient1,
+              hoverBackgroundColor: '#818cf8',
+              borderRadius: 6,
+              borderSkipped: false,
+              barThickness: 20,
+              maxBarThickness: 28,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 750, easing: 'easeOutQuart' },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: tooltipBg,
+                titleColor: tooltipText,
+                bodyColor: tooltipText,
+                borderColor: tooltipBorder,
+                borderWidth: 1,
+                padding: 10,
+                displayColors: false,
+                callbacks: {
+                  label: function(context) {
+                    return `Logins: ${context.parsed.y.toLocaleString()} sessions`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: { color: tickColor, font: { family: 'Plus Jakarta Sans', size: 11, weight: 600 } },
+                border: { display: false }
+              },
+              y: {
+                grid: { color: gridColor },
+                ticks: {
+                  color: tickColor,
+                  font: { family: 'Plus Jakarta Sans', size: 11 },
+                  callback: function(val) {
+                    return val >= 1000 ? (val / 1000).toFixed(1) + 'k' : val;
+                  }
+                },
+                border: { display: false }
+              }
+            }
+          }
+        });
+      }
+
+      // 2. Monthly Revenue Bar Chart
+      const canvas2 = document.getElementById('monthlyRevenueChartCanvas');
+      if (canvas2) {
+        const ctx2 = canvas2.getContext('2d');
+        if (monthlyRevenueChartInstance) {
+          monthlyRevenueChartInstance.destroy();
+        }
+
+        const gradient2 = ctx2.createLinearGradient(0, 0, 0, 240);
+        gradient2.addColorStop(0, 'rgba(16, 185, 129, 0.95)');
+        gradient2.addColorStop(1, 'rgba(6, 182, 212, 0.65)');
+
+        monthlyRevenueChartInstance = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: data.monthly_revenue.months,
+            datasets: [{
+              label: 'Revenue (৳)',
+              data: data.monthly_revenue.data,
+              backgroundColor: gradient2,
+              hoverBackgroundColor: '#34d399',
+              borderRadius: 6,
+              borderSkipped: false,
+              barThickness: 20,
+              maxBarThickness: 28,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 750, easing: 'easeOutQuart' },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: tooltipBg,
+                titleColor: tooltipText,
+                bodyColor: tooltipText,
+                borderColor: tooltipBorder,
+                borderWidth: 1,
+                padding: 10,
+                displayColors: false,
+                callbacks: {
+                  label: function(context) {
+                    return `Revenue: ৳${context.parsed.y.toLocaleString()}`;
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: { color: tickColor, font: { family: 'Plus Jakarta Sans', size: 11, weight: 600 } },
+                border: { display: false }
+              },
+              y: {
+                grid: { color: gridColor },
+                ticks: {
+                  color: tickColor,
+                  font: { family: 'Plus Jakarta Sans', size: 11 },
+                  callback: function(val) {
+                    return '৳' + (val >= 1000 ? (val / 1000).toFixed(0) + 'k' : val);
+                  }
+                },
+                border: { display: false }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    function renderSvgFallbackCharts(data) {
+      if (!data || !data.user_logins || !data.monthly_revenue) {
+        data = DEFAULT_ANALYTICS_DATA;
+      }
+      // Robust SVG Fallback when Chart.js CDN is unavailable
+      const canvas1 = document.getElementById('userLoginsChartCanvas');
+      const fallback1 = document.getElementById('userLoginsFallback');
+      if (canvas1 && fallback1) {
+        canvas1.style.display = 'none';
+        fallback1.style.display = 'flex';
+        fallback1.innerHTML = buildSvgBarsHtml(data.user_logins.months, data.user_logins.data, '#6366f1', '#a855f7', '');
+      }
+
+      const canvas2 = document.getElementById('monthlyRevenueChartCanvas');
+      const fallback2 = document.getElementById('monthlyRevenueFallback');
+      if (canvas2 && fallback2) {
+        canvas2.style.display = 'none';
+        fallback2.style.display = 'flex';
+        fallback2.innerHTML = buildSvgBarsHtml(data.monthly_revenue.months, data.monthly_revenue.data, '#10b981', '#06b6d4', '৳');
+      }
+    }
+
+    function buildSvgBarsHtml(months, values, color1, color2, prefix) {
+      const maxVal = Math.max(...values, 1);
+      return `
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; width: 100%; height: 100%; gap: 6px; padding: 10px 0;">
+          ${months.map((m, i) => {
+            const val = values[i] || 0;
+            const pct = Math.max(Math.round((val / maxVal) * 85), val > 0 ? 6 : 2);
+            return `
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end;" title="${m}: ${prefix}${val.toLocaleString()}">
+                <div style="width: 80%; height: ${pct}%; background: linear-gradient(to top, ${color1}, ${color2}); border-radius: 4px 4px 0 0; transition: height 0.5s ease;"></div>
+                <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 6px; font-weight: 600;">${m}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // Run initialization on startup
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initDashboard);
+    } else {
+      initDashboard();
+    }
   </script>
 
 </body>

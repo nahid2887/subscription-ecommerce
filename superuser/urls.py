@@ -10,6 +10,8 @@ from .views import (
     SuperAdminOrderDetailView,
     SuperAdminOrderApproveView,
     SuperAdminOrderRejectView,
+    SuperAdminAnalyticsView,
+    SuperAdminCustomerListView,
 )
 
 from product.views import ProductListCreateView, ProductDetailView
@@ -28,6 +30,8 @@ urlpatterns = [
     path('orders/<int:order_id>/', SuperAdminOrderDetailView.as_view(), name='superuser-order-detail'),
     path('orders/<int:order_id>/approve/', SuperAdminOrderApproveView.as_view(), name='superuser-order-approve'),
     path('orders/<int:order_id>/reject/', SuperAdminOrderRejectView.as_view(), name='superuser-order-reject'),
+    path('customers/', SuperAdminCustomerListView.as_view(), name='superuser-customers-list'),
+    path('analytics/', SuperAdminAnalyticsView.as_view(), name='superuser-analytics'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
 ]
 

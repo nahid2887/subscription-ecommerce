@@ -8,7 +8,8 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from drf_spectacular.utils import extend_schema, OpenApiResponse, OpenApiParameter, OpenApiExample
 from rest_framework_simplejwt.views import TokenRefreshView
 
-from .models import SavedProduct, CustomerCartItem, Order, OrderItem
+from .models import SavedProduct, CustomerCartItem, Order, OrderItem, CustomerLoginLog
+from django.utils import timezone
 from .serializers import (
     CustomerRegistrationSerializer,
     CustomerLoginSerializer,
@@ -69,6 +70,21 @@ class CustomerRegisterView(APIView):
 
         result = serializer.save()
         user = result['user']
+        user.last_login = timezone.now()
+        user.save(update_fields=['last_login'])
+
+        try:
+            ip = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
+            if ip and ',' in ip:
+                ip = ip.split(',')[0].strip()
+            CustomerLoginLog.objects.create(
+                user=user,
+                ip_address=ip or '127.0.0.1',
+                user_agent=request.META.get('HTTP_USER_AGENT', '')[:250]
+            )
+        except Exception:
+            pass
+
         user_data = CustomerProfileSerializer(user, context={'request': request}).data
 
         response_data = {
@@ -107,6 +123,21 @@ class CustomerLoginView(APIView):
 
         validated_data = serializer.validated_data
         user = validated_data['user']
+        user.last_login = timezone.now()
+        user.save(update_fields=['last_login'])
+
+        try:
+            ip = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
+            if ip and ',' in ip:
+                ip = ip.split(',')[0].strip()
+            CustomerLoginLog.objects.create(
+                user=user,
+                ip_address=ip or '127.0.0.1',
+                user_agent=request.META.get('HTTP_USER_AGENT', '')[:250]
+            )
+        except Exception:
+            pass
+
         user_data = CustomerProfileSerializer(user, context={'request': request}).data
 
         response_data = {
