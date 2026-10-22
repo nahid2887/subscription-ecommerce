@@ -12,13 +12,15 @@ from superuser.views import (
     SuperAdminProductsPageView,
 )
 from product.views import StorefrontHomeView
-from customer.views import CustomerProfilePageView
+from customer.views import CustomerProfilePageView, CustomerOrdersPageView
 
 urlpatterns = [
     # Public E-Commerce Storefront
     path('', StorefrontHomeView.as_view(), name='home'),
     path('store/', StorefrontHomeView.as_view(), name='store'),
     path('profile/', CustomerProfilePageView.as_view(), name='customer-profile-page'),
+    path('orders/', CustomerOrdersPageView.as_view(), name='customer-orders-page'),
+    path('my-orders/', CustomerOrdersPageView.as_view(), name='customer-my-orders-page'),
 
     # Admin
     path('admin/', admin.site.urls),
@@ -38,6 +40,10 @@ urlpatterns = [
 
     # Customer Authentication & Profile API Endpoints
     path('api/customer/', include('customer.urls')),
+
+    # Terms and Conditions API Endpoints
+    path('api/terms/', include('terms.urls')),
+    path('api/terms-and-conditions/', include(('terms.urls', 'terms'), namespace='terms-and-conditions')),
 
     # Swagger / OpenAPI 3.0 Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

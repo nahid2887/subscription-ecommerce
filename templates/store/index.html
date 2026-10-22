@@ -690,12 +690,45 @@
       -webkit-text-fill-color: transparent;
     }
 
+    /* Dynamic Hero Text Rotator */
+    .hero-rotating-wrap {
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      vertical-align: bottom;
+      min-height: 1.15em;
+    }
+
+    .hero-rotating-text {
+      display: inline-block;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+      will-change: transform, opacity;
+    }
+
+    .hero-rotating-text.fade-out-up {
+      transform: translateY(-110%);
+      opacity: 0;
+    }
+
+    .hero-rotating-text.fade-in-down {
+      transform: translateY(110%);
+      opacity: 0;
+    }
+
+    #heroPillBadgeText {
+      display: inline-block;
+      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
+    }
+
     .hero-subtitle {
       font-size: 1.08rem;
       color: var(--text-muted);
       line-height: 1.6;
       margin-bottom: 32px;
       max-width: 620px;
+      transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: opacity, transform;
     }
 
     @media (max-width: 1024px) {
@@ -833,7 +866,47 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+    }
+
+    .hero-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .hero-carousel-nav-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .hero-nav-arrow-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-nav-arrow-btn:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .hero-nav-arrow-btn:active {
+      transform: scale(0.95);
     }
 
     .hero-deal-badge {
@@ -851,6 +924,28 @@
       letter-spacing: 0.05em;
     }
 
+    /* Carousel Sliding Viewport & Track */
+    .hero-carousel-viewport {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      border-radius: var(--radius-md);
+    }
+
+    .hero-carousel-track {
+      display: flex;
+      width: 100%;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    .hero-carousel-slide {
+      flex: 0 0 100%;
+      width: 100%;
+      min-width: 100%;
+      box-sizing: border-box;
+    }
+
     .hero-card-img-wrap {
       height: 160px;
       border-radius: var(--radius-md);
@@ -859,9 +954,44 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       overflow: hidden;
       position: relative;
+    }
+
+    .hero-slide-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .hero-slide-index-pill {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(99, 102, 241, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      letter-spacing: 0.04em;
+      z-index: 2;
     }
 
     .hero-card-icon-art {
@@ -874,12 +1004,21 @@
       font-weight: 800;
       color: var(--text-main);
       margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .hero-card-meta {
       font-size: 0.82rem;
       color: var(--text-muted);
-      margin-bottom: 16px;
+      margin-bottom: 14px;
+      height: 38px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     /* Live Interactive Plan Switcher in Hero */
@@ -887,8 +1026,8 @@
       background: var(--panel-bg);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 12px;
-      margin-bottom: 18px;
+      padding: 10px 12px;
+      margin-bottom: 14px;
     }
 
     .hero-plan-switcher-title {
@@ -912,13 +1051,16 @@
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
-      padding: 6px 8px;
+      padding: 6px 6px;
       text-align: center;
       cursor: pointer;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       font-weight: 700;
       color: var(--text-muted);
       transition: var(--transition-smooth);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .hero-tier-pill.active {
@@ -931,11 +1073,11 @@
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .hero-price-amount {
-      font-size: 1.85rem;
+      font-size: 1.75rem;
       font-weight: 800;
       color: var(--text-main);
       letter-spacing: -0.02em;
@@ -953,11 +1095,47 @@
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
       transition: var(--transition-smooth);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     .hero-card-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(99, 102, 241, 0.55);
+    }
+
+    /* Carousel Pagination Dots */
+    .hero-carousel-indicators {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .hero-indicator-dot {
+      height: 6px;
+      width: 8px;
+      border-radius: 9999px;
+      background: var(--border-subtle);
+      border: none;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0;
+      opacity: 0.6;
+    }
+
+    .hero-indicator-dot:hover {
+      opacity: 0.9;
+    }
+
+    .hero-indicator-dot.active {
+      width: 28px;
+      opacity: 1;
+      background: linear-gradient(90deg, var(--primary), var(--accent-purple));
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
     }
 
     /* Floating badges on hero */
@@ -2377,7 +2555,7 @@
 
       <nav class="main-nav">
         <a href="#catalog" class="nav-item">Catalog</a>
-        <a href="javascript:void(0)" onclick="openCustomerOrdersModal()" class="nav-item" style="display: inline-flex; align-items: center; gap: 6px;">
+        <a href="/orders/" class="nav-item" style="display: inline-flex; align-items: center; gap: 6px;">
           <span>My Orders</span>
           <span id="navOrdersNavBadge" style="display: none; font-size: 0.68rem; padding: 1px 7px; border-radius: 9999px; background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 800; border: 1px solid rgba(16, 185, 129, 0.35);">0</span>
         </a>
@@ -2405,13 +2583,13 @@
 
         <!-- Customer Orders Button -->
         <div class="orders-btn-wrap" style="position: relative;">
-          <button id="navOrdersBtn" class="btn-icon-circle" title="My Orders & MFS Payment Verification" onclick="openCustomerOrdersModal()">
+          <a href="/orders/" id="navOrdersBtn" class="btn-icon-circle" title="My Orders & Transactions" style="text-decoration: none;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
               <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
               <line x1="12" y1="22.08" x2="12" y2="12"></line>
             </svg>
-          </button>
+          </a>
           <span id="navOrdersBadge" class="cart-badge" style="background: linear-gradient(135deg, #10b981, #059669); display: none;">0</span>
         </div>
 
@@ -2481,7 +2659,7 @@
             <div class="profile-menu-items">
               <!-- When Logged In -->
               <div id="customerLoggedInLinks" style="display: none; flex-direction: column; gap: 8px;">
-                <button type="button" onclick="closeProfileDropdown(); openCustomerOrdersModal();" class="profile-dropdown-link" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; font-weight: 800; width: 100%; text-align: left; cursor: pointer; transition: var(--transition-smooth);">
+                <a href="/orders/" class="profile-dropdown-link" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; font-weight: 800; width: 100%; text-decoration: none; transition: var(--transition-smooth);">
                   <div style="display: flex; align-items: center; gap: 10px;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width: 18px; height: 18px; color: #10b981;">
                       <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -2491,7 +2669,7 @@
                     <span>My Orders & Transactions</span>
                   </div>
                   <span id="dropdownOrdersBadge" style="font-size: 0.72rem; padding: 2px 8px; border-radius: 9999px; background: rgba(16, 185, 129, 0.2); color: #10b981; font-weight: 800;">0 orders</span>
-                </button>
+                </a>
 
                 <a href="/profile/" class="profile-dropdown-link" style="display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.22); color: var(--primary); font-weight: 700; text-decoration: none; transition: var(--transition-smooth);">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width: 18px; height: 18px;">
@@ -2549,17 +2727,19 @@
   <section class="hero-section">
     <div class="hero-grid">
       <div class="hero-content">
-        <div class="hero-pill-badge">
+        <div class="hero-pill-badge" id="heroPillBadge">
           <div class="pulse-dot"></div>
-          <span>Digital Provisioning Engine Live • 60s Delivery</span>
+          <span id="heroPillBadgeText">Digital Provisioning Engine Live • 60s Delivery</span>
         </div>
 
         <h1 class="hero-title">
           Premium Digital Subscriptions. <br>
-          <span class="gradient-text">At a Fraction of the Cost.</span>
+          <span class="hero-rotating-wrap">
+            <span class="gradient-text hero-rotating-text" id="heroRotatingText">At a Fraction of the Cost.</span>
+          </span>
         </h1>
 
-        <p class="hero-subtitle">
+        <p class="hero-subtitle" id="heroSubtitle">
           Unlock genuine access to verified software subscriptions and digital tools. Pick the exact device
           tier you need with complete replacement warranties and instant digital delivery.
         </p>
@@ -2617,43 +2797,49 @@
           <span>Activated in 45 Seconds</span>
         </div>
 
-        <div class="hero-featured-card">
+        <div class="hero-featured-card" id="heroFeaturedCard">
           <div class="hero-card-header">
-            <span class="hero-deal-badge">🔥 Featured Subscription</span>
-            <span id="heroCardStockTag" style="font-size: 0.76rem; color: var(--accent-emerald); font-weight: 700;">In Stock • Instant</span>
-          </div>
-
-          <div id="heroCardImgWrap" class="hero-card-img-wrap">
-            <div class="hero-card-icon-art">⚡</div>
-          </div>
-
-          <h3 id="heroCardTitle" class="hero-card-title">Featured Subscription</h3>
-          <p id="heroCardMeta" class="hero-card-meta">Select a plan tier to get started</p>
-
-          <!-- Interactive Plan Switcher in Hero (Populated from API) -->
-          <div class="hero-plan-switcher">
-            <div class="hero-plan-switcher-title">
-              <span>Choose Devices:</span>
-              <span id="heroPlanSelectedName" style="color: var(--primary);">1 Device Access</span>
-            </div>
-            <div id="heroTierPills" class="hero-tier-pills">
-              <div class="hero-tier-pill active">1 Device</div>
-              <div class="hero-tier-pill">2 Devices</div>
-              <div class="hero-tier-pill">Team</div>
+            <span class="hero-deal-badge" id="heroSlideBadgeText">🔥 Latest 1 of 3</span>
+            <div class="hero-header-actions">
+              <span id="heroCardStockTag" style="font-size: 0.76rem; color: var(--accent-emerald); font-weight: 700;">In Stock • Instant</span>
+              <div class="hero-carousel-nav-group">
+                <button type="button" class="hero-nav-arrow-btn" onclick="prevHeroSlide()" title="Previous product" aria-label="Previous product">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                </button>
+                <button type="button" class="hero-nav-arrow-btn" onclick="nextHeroSlide()" title="Next product" aria-label="Next product">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="hero-card-price-row">
-            <div>
-              <span id="heroCardPrice" class="hero-price-amount">৳0.00</span>
-              <span id="heroCardCycle" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">/ monthly</span>
+          <!-- Carousel Sliding Viewport -->
+          <div class="hero-carousel-viewport" id="heroCarouselViewport">
+            <div class="hero-carousel-track" id="heroCarouselTrack">
+              <!-- Initial Skeleton Placeholder -->
+              <div class="hero-carousel-slide hero-slide-skeleton">
+                <div class="hero-card-img-wrap" style="background: rgba(255, 255, 255, 0.05); animation: pulse 1.5s infinite;">
+                  <div class="hero-card-icon-art">⚡</div>
+                </div>
+                <div style="height: 24px; width: 65%; background: rgba(255, 255, 255, 0.08); border-radius: 6px; margin-bottom: 8px;"></div>
+                <div style="height: 38px; width: 90%; background: rgba(255, 255, 255, 0.04); border-radius: 6px; margin-bottom: 14px;"></div>
+                <div style="height: 60px; background: rgba(255, 255, 255, 0.05); border-radius: 8px; margin-bottom: 14px;"></div>
+                <div style="height: 30px; width: 50%; background: rgba(255, 255, 255, 0.08); border-radius: 6px; margin-bottom: 14px;"></div>
+                <div style="height: 44px; width: 100%; background: rgba(255, 255, 255, 0.1); border-radius: 8px;"></div>
+              </div>
             </div>
-            <span id="heroCardWarranty" style="font-size: 0.72rem; color: var(--accent-amber); font-weight: 700;">🛡️ Verified Warranty</span>
           </div>
 
-          <button id="heroSubscribeBtn" class="hero-card-btn" onclick="scrollToCatalog()">
-            Browse All Subscriptions
-          </button>
+          <!-- Carousel Progress Dots -->
+          <div class="hero-carousel-indicators" id="heroCarouselDots">
+            <button type="button" class="hero-indicator-dot active" onclick="goToHeroSlide(0)" aria-label="Slide 1"></button>
+            <button type="button" class="hero-indicator-dot" onclick="goToHeroSlide(1)" aria-label="Slide 2"></button>
+            <button type="button" class="hero-indicator-dot" onclick="goToHeroSlide(2)" aria-label="Slide 3"></button>
+          </div>
         </div>
       </div>
     </div>
@@ -3465,9 +3651,9 @@
             }
           });
 
-          // Populate Hero Featured Showcase Card from the first real product
+          // Initialize Hero Carousel with the latest 3 uploaded products
           if (productsList.length > 0) {
-            populateHeroCard(productsList[0]);
+            initHeroCarousel(productsList.slice(0, 3));
           }
 
           filterAndRenderCatalog();
@@ -3480,74 +3666,430 @@
       }
     }
 
-    // Populate Hero Featured Showcase Card using the first product from /api/products/
-    function populateHeroCard(firstProduct) {
-      if (!firstProduct) return;
+    // Global Hero Carousel State (Top 3 latest uploaded products sliding)
+    let heroLatestProducts = [];
+    let currentHeroSlide = 0;
+    let heroAutoplayTimer = null;
+    let heroSelectedPlans = {}; // productId -> planId
 
-      const titleEl = document.getElementById('heroCardTitle');
-      const metaEl = document.getElementById('heroCardMeta');
-      const imgWrap = document.getElementById('heroCardImgWrap');
-      const pillsWrap = document.getElementById('heroTierPills');
-      const priceEl = document.getElementById('heroCardPrice');
-      const cycleEl = document.getElementById('heroCardCycle');
-      const planNameEl = document.getElementById('heroPlanSelectedName');
-      const warrantyEl = document.getElementById('heroCardWarranty');
-      const buyBtn = document.getElementById('heroSubscribeBtn');
+    // Helper: generate meaningful and concise label for hero plan pills
+    function getPillLabel(pl, plansList) {
+      if (!plansList || plansList.length === 0) return '1 Device';
+      const deviceSet = new Set(plansList.map(p => p.devices || 1));
+      if (deviceSet.size > 1) {
+        const devs = pl.devices || 1;
+        return `${devs} Device${devs > 1 ? 's' : ''}`;
+      }
+      if (pl.name) {
+        let clean = pl.name.replace(/Access|Member|Plan|Pro|Individual/gi, '').trim();
+        if (clean) return clean;
+      }
+      if (pl.billing_cycle) {
+        return pl.billing_cycle.charAt(0).toUpperCase() + pl.billing_cycle.slice(1);
+      }
+      return `${pl.devices || 1} Device`;
+    }
 
-      if (titleEl) titleEl.textContent = firstProduct.name;
-      const desc = typeof firstProduct.description === 'string' 
-        ? firstProduct.description 
-        : (firstProduct.localized_description || (firstProduct.description && firstProduct.description.en) || 'Premium verified digital subscription.');
-      if (metaEl) metaEl.textContent = desc;
+    // Escape HTML strings for safety
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
 
-      if (imgWrap) {
-        if (firstProduct.image) {
-          imgWrap.innerHTML = `<img src="${firstProduct.image}" alt="${firstProduct.name}" style="width: 100%; height: 100%; object-fit: cover;">`;
+    // Initialize Hero Carousel with latest 3 uploaded products
+    function initHeroCarousel(products) {
+      if (!Array.isArray(products) || products.length === 0) return;
+      heroLatestProducts = products.slice(0, 3);
+      currentHeroSlide = 0;
+
+      const track = document.getElementById('heroCarouselTrack');
+      const dotsContainer = document.getElementById('heroCarouselDots');
+
+      if (!track) return;
+
+      // Render carousel slides for the latest products
+      track.innerHTML = heroLatestProducts.map((p, idx) => {
+        const desc = typeof p.description === 'string' 
+          ? p.description 
+          : (p.localized_description || (p.description && p.description.en) || 'Premium verified digital subscription.');
+        
+        const plans = Array.isArray(p.plans) && p.plans.length > 0 
+          ? p.plans 
+          : [{ id: 0, name: 'Standard Plan', price: p.price || 0, devices: 1, billing_cycle: 'monthly' }];
+
+        // Determine default plan for this slide
+        let defPlan = p.selected_plan && plans.find(pl => pl.id === p.selected_plan.id);
+        if (!defPlan) defPlan = plans[0];
+
+        if (!heroSelectedPlans[p.id]) {
+          heroSelectedPlans[p.id] = defPlan.id;
         } else {
-          imgWrap.innerHTML = `<div class="hero-card-icon-art">${firstProduct.name.charAt(0)}</div>`;
+          const matched = plans.find(pl => pl.id === heroSelectedPlans[p.id]);
+          if (matched) defPlan = matched;
         }
-      }
 
-      if (warrantyEl && firstProduct.warranty) {
-        warrantyEl.textContent = `🛡️ ${firstProduct.warranty}`;
-      }
+        const sym = defPlan.currency_symbol || p.currency_symbol || '৳';
 
-      // Populate hero plan pills from product plans
-      if (Array.isArray(firstProduct.plans) && firstProduct.plans.length > 0 && pillsWrap) {
-        pillsWrap.innerHTML = '';
-        const sym = firstProduct.plans[0].currency_symbol || firstProduct.currency_symbol || '৳';
+        // Limit pills to max 3 so all slides maintain consistent height without wrapping
+        const plansToShow = plans.length > 3 ? plans.slice(0, 3) : plans;
 
-        firstProduct.plans.forEach((pl, idx) => {
-          const pill = document.createElement('div');
-          pill.className = `hero-tier-pill ${idx === 0 ? 'active' : ''}`;
-          pill.textContent = `${pl.devices || 1} Device${(pl.devices || 1) > 1 ? 's' : ''}`;
-          pill.onclick = () => {
-            pillsWrap.querySelectorAll('.hero-tier-pill').forEach(p => p.classList.remove('active'));
-            pill.classList.add('active');
-            if (planNameEl) planNameEl.textContent = `${pl.name}`;
-            if (priceEl) priceEl.textContent = `${sym}${parseFloat(pl.price).toFixed(2)}`;
-            if (cycleEl) cycleEl.textContent = `/ ${pl.billing_cycle}`;
-          };
-          pillsWrap.appendChild(pill);
-        });
+        const pillsHtml = plansToShow.map((pl) => {
+          const isSelected = pl.id === defPlan.id;
+          const label = getPillLabel(pl, plansToShow);
+          return `
+            <div class="hero-tier-pill ${isSelected ? 'active' : ''}" 
+                 onclick="selectHeroSlidePlan(${p.id}, ${pl.id})" 
+                 data-plan-id="${pl.id}" 
+                 title="${escapeHtml(pl.name)} • ${sym}${parseFloat(pl.price).toFixed(2)}">
+              ${escapeHtml(label)}
+            </div>
+          `;
+        }).join('');
 
-        const defPlan = firstProduct.selected_plan || firstProduct.plans[0];
-        const defSym = defPlan.currency_symbol || sym;
-        if (planNameEl) planNameEl.textContent = `${defPlan.name}`;
-        if (priceEl) priceEl.textContent = `${defSym}${parseFloat(defPlan.price).toFixed(2)}`;
-        if (cycleEl) cycleEl.textContent = `/ ${defPlan.billing_cycle}`;
-      }
+        const warrantyText = p.warranty ? p.warranty : '100% Replacement Warranty';
+        const categoryName = p.category ? (p.category.name || 'Digital') : 'Digital';
 
-      if (buyBtn) {
-        buyBtn.onclick = () => addToCart(firstProduct.id);
-        buyBtn.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right: 6px;">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <path d="M16 10a4 4 0 0 1-8 0"></path>
-          </svg>
-          Add to Cart
+        return `
+          <div class="hero-carousel-slide" data-slide-index="${idx}" data-product-id="${p.id}">
+            <div class="hero-card-img-wrap">
+              <span class="hero-slide-badge">${escapeHtml(categoryName)}</span>
+              <span class="hero-slide-index-pill">Latest #${idx + 1}</span>
+              ${p.image ? `
+                <img src="${p.image}" alt="${escapeHtml(p.name)}" style="width: 100%; height: 100%; object-fit: cover;">
+              ` : `
+                <div class="hero-card-icon-art">${escapeHtml(p.name.charAt(0))}</div>
+              `}
+            </div>
+
+            <h3 class="hero-card-title" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</h3>
+            <p class="hero-card-meta" title="${escapeHtml(desc)}">${escapeHtml(desc)}</p>
+
+            <div class="hero-plan-switcher">
+              <div class="hero-plan-switcher-title">
+                <span>Choose Devices:</span>
+                <span id="heroPlanSelectedName-${p.id}" style="color: var(--primary); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">${escapeHtml(defPlan.name)}</span>
+              </div>
+              <div class="hero-tier-pills" id="heroTierPills-${p.id}" style="grid-template-columns: repeat(${plansToShow.length}, 1fr);">
+                ${pillsHtml}
+              </div>
+            </div>
+
+            <div class="hero-card-price-row">
+              <div>
+                <span class="hero-price-amount" id="heroCardPrice-${p.id}">${sym}${parseFloat(defPlan.price || 0).toFixed(2)}</span>
+                <span id="heroCardCycle-${p.id}" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">/ ${escapeHtml(defPlan.billing_cycle || 'monthly')}</span>
+              </div>
+              <span id="heroCardWarranty-${p.id}" style="font-size: 0.72rem; color: var(--accent-amber); font-weight: 700; max-width: 180px; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="🛡️ ${escapeHtml(warrantyText)}">
+                🛡️ ${escapeHtml(warrantyText)}
+              </span>
+            </div>
+
+            <button type="button" class="hero-card-btn" id="heroBuyBtn-${p.id}" onclick="heroAddToCart(${p.id})">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+              <span>Add to Cart</span>
+            </button>
+          </div>
         `;
+      }).join('');
+
+      // Build pagination dots
+      if (dotsContainer) {
+        dotsContainer.innerHTML = heroLatestProducts.map((_, i) => `
+          <button type="button" class="hero-indicator-dot ${i === 0 ? 'active' : ''}" 
+                  onclick="goToHeroSlide(${i})" 
+                  aria-label="Slide ${i + 1} of ${heroLatestProducts.length}" 
+                  title="Product ${i + 1} of ${heroLatestProducts.length}">
+          </button>
+        `).join('');
+      }
+
+      updateHeroSlideView();
+      startHeroAutoplay();
+      setupHeroInteractions();
+    }
+
+    // Switch Plan on a specific slide
+    window.selectHeroSlidePlan = function(productId, planId) {
+      const p = heroLatestProducts.find(item => item.id === productId);
+      if (!p || !p.plans) return;
+
+      const plan = p.plans.find(pl => pl.id === planId) || p.plans[0];
+      if (!plan) return;
+
+      heroSelectedPlans[productId] = plan.id;
+      activeSelectedPlans[productId] = plan.id;
+
+      const planNameEl = document.getElementById(`heroPlanSelectedName-${productId}`);
+      const priceEl = document.getElementById(`heroCardPrice-${productId}`);
+      const cycleEl = document.getElementById(`heroCardCycle-${productId}`);
+      const pillsContainer = document.getElementById(`heroTierPills-${productId}`);
+
+      const sym = plan.currency_symbol || p.currency_symbol || '৳';
+      if (planNameEl) planNameEl.textContent = plan.name;
+      if (priceEl) priceEl.textContent = `${sym}${parseFloat(plan.price).toFixed(2)}`;
+      if (cycleEl) cycleEl.textContent = `/ ${plan.billing_cycle || 'monthly'}`;
+
+      if (pillsContainer) {
+        pillsContainer.querySelectorAll('.hero-tier-pill').forEach(pill => pill.classList.remove('active'));
+        const activePill = pillsContainer.querySelector(`[data-plan-id="${planId}"]`);
+        if (activePill) activePill.classList.add('active');
+      }
+
+      showToast(`Selected: ${plan.name} (${sym}${parseFloat(plan.price).toFixed(2)})`, 'info');
+    };
+
+    // Hero Add to Cart with selected plan and responsive feedback
+    window.heroAddToCart = async function(productId) {
+      const p = heroLatestProducts.find(item => item.id === productId);
+      if (!p) return;
+
+      const planId = heroSelectedPlans[productId] || (p.selected_plan && p.selected_plan.id) || (p.plans && p.plans[0] ? p.plans[0].id : null);
+      const buyBtn = document.getElementById(`heroBuyBtn-${productId}`);
+      const prevContent = buyBtn ? buyBtn.innerHTML : '';
+
+      await addToCart(productId, planId);
+
+      if (buyBtn && customerState.token) {
+        buyBtn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>Added to Cart!</span>
+        `;
+        buyBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        setTimeout(() => {
+          buyBtn.innerHTML = prevContent;
+          buyBtn.style.background = '';
+        }, 2200);
+      }
+    };
+
+    // Carousel Navigation
+    window.goToHeroSlide = function(index) {
+      if (!heroLatestProducts.length) return;
+      currentHeroSlide = (index + heroLatestProducts.length) % heroLatestProducts.length;
+      updateHeroSlideView();
+      resetHeroAutoplay();
+    };
+
+    window.nextHeroSlide = function() {
+      if (!heroLatestProducts.length) return;
+      currentHeroSlide = (currentHeroSlide + 1) % heroLatestProducts.length;
+      updateHeroSlideView();
+      resetHeroAutoplay();
+    };
+
+    window.prevHeroSlide = function() {
+      if (!heroLatestProducts.length) return;
+      currentHeroSlide = (currentHeroSlide - 1 + heroLatestProducts.length) % heroLatestProducts.length;
+      updateHeroSlideView();
+      resetHeroAutoplay();
+    };
+
+    // Dynamic content generator for the hero left section
+    function getHeroSlideLeftContent(product, index) {
+      if (!product) {
+        const fallbacks = [
+          {
+            badge: 'Digital Provisioning Engine Live • 60s Delivery',
+            headline: 'At a Fraction of the Cost.',
+            subtitle: 'Unlock genuine access to verified software subscriptions and digital tools. Pick the exact device tier you need with complete replacement warranties and instant digital delivery.'
+          },
+          {
+            badge: 'Military-Grade Cybersecurity Live • Zero-Log Privacy',
+            headline: 'Total Privacy & Ultra-Fast Security.',
+            subtitle: 'Shield your browsing, bypass geo-restrictions, and secure unlimited devices with high-speed encrypted VPN servers worldwide.'
+          },
+          {
+            badge: 'Creative & Brand Suite Live • 100M+ Premium Assets',
+            headline: 'Unlimited Creative Tools for Less.',
+            subtitle: 'Elevate your designs, unlock AI magic studio tools, brand kits, and premium templates for content creators, designers, and teams.'
+          }
+        ];
+        return fallbacks[index % fallbacks.length];
+      }
+
+      const pName = product.name || '';
+      const pNameLower = pName.toLowerCase();
+
+      if (pNameLower.includes('youtube')) {
+        return {
+          badge: 'Digital Provisioning Engine Live • 60s Delivery',
+          headline: 'At a Fraction of the Cost.',
+          subtitle: 'Upgrade your YouTube experience with zero ads, background play, and YouTube Music included across all your devices.'
+        };
+      } else if (pNameLower.includes('vpn') || pNameLower.includes('nord')) {
+        return {
+          badge: 'Military-Grade Cybersecurity Live • Zero-Log Privacy',
+          headline: 'Total Privacy & Ultra-Fast Security.',
+          subtitle: 'Shield your browsing, bypass geo-restrictions, and secure your devices with high-speed encrypted VPN servers worldwide.'
+        };
+      } else if (pNameLower.includes('canva') || pNameLower.includes('design')) {
+        return {
+          badge: 'Creative & Brand Suite Live • 100M+ Premium Assets',
+          headline: 'Unlimited Creative Tools for Less.',
+          subtitle: 'Elevate your designs, unlock AI magic studio tools, brand kits, and premium templates for content creators, designers, and teams.'
+        };
+      } else if (pNameLower.includes('netflix') || pNameLower.includes('spotify') || pNameLower.includes('stream')) {
+        return {
+          badge: 'Ultra HD Streaming Access • Instant Digital Setup',
+          headline: 'Uninterrupted Entertainment Daily.',
+          subtitle: 'Binge your favorite content in 4K UHD and crystal clear sound with instant credentials and 100% replacement warranty.'
+        };
+      } else if (pNameLower.includes('gpt') || pNameLower.includes('gemini') || pNameLower.includes('ai')) {
+        return {
+          badge: 'Next-Gen AI Provisioning Live • Instant API Access',
+          headline: 'Cutting-Edge AI Tools for Everyone.',
+          subtitle: 'Unlock the world\'s most capable language models, image generators, and coding assistants at unbeatable monthly rates.'
+        };
+      } else {
+        const categoryName = product.category ? product.category.name : 'Digital Tools';
+        return {
+          badge: `Verified ${categoryName} Live • Instant 60s Delivery`,
+          headline: `Save Up to 80% on ${escapeHtml(pName)}.`,
+          subtitle: typeof product.description === 'string' && product.description.length > 20
+            ? product.description.slice(0, 160) + '...'
+            : `Get instant credentials and replacement warranty for ${escapeHtml(pName)}. Pick the exact device tier you need.`
+        };
+      }
+    }
+
+    // Smoothly transition left-side hero text (headline, badge, subtitle)
+    function updateHeroLeftContent(slideIndex) {
+      const rotatingTextEl = document.getElementById('heroRotatingText');
+      const badgeTextEl = document.getElementById('heroPillBadgeText');
+      const subtitleEl = document.getElementById('heroSubtitle');
+
+      if (!rotatingTextEl) return;
+
+      const currentProduct = heroLatestProducts[slideIndex];
+      const content = getHeroSlideLeftContent(currentProduct, slideIndex);
+
+      // 1. Smooth vertical roll for the gradient headline
+      if (rotatingTextEl.textContent !== content.headline) {
+        rotatingTextEl.classList.remove('fade-in-down');
+        rotatingTextEl.classList.add('fade-out-up');
+
+        setTimeout(() => {
+          rotatingTextEl.textContent = content.headline;
+          rotatingTextEl.classList.remove('fade-out-up');
+          rotatingTextEl.classList.add('fade-in-down');
+          // Force layout reflow
+          void rotatingTextEl.offsetWidth;
+          rotatingTextEl.classList.remove('fade-in-down');
+        }, 260);
+      }
+
+      // 2. Crossfade for the pill badge
+      if (badgeTextEl && badgeTextEl.textContent !== content.badge) {
+        badgeTextEl.style.opacity = '0';
+        badgeTextEl.style.transform = 'translateY(-4px)';
+        setTimeout(() => {
+          badgeTextEl.textContent = content.badge;
+          badgeTextEl.style.opacity = '1';
+          badgeTextEl.style.transform = 'translateY(0)';
+        }, 220);
+      }
+
+      // 3. Crossfade for the subtitle
+      if (subtitleEl && subtitleEl.textContent.trim() !== content.subtitle.trim()) {
+        subtitleEl.style.opacity = '0';
+        subtitleEl.style.transform = 'translateY(4px)';
+        setTimeout(() => {
+          subtitleEl.textContent = content.subtitle;
+          subtitleEl.style.opacity = '1';
+          subtitleEl.style.transform = 'translateY(0)';
+        }, 260);
+      }
+    }
+
+    function updateHeroSlideView() {
+      const track = document.getElementById('heroCarouselTrack');
+      const badgeText = document.getElementById('heroSlideBadgeText');
+      const dots = document.querySelectorAll('.hero-indicator-dot');
+
+      if (track) {
+        track.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
+      }
+
+      if (badgeText && heroLatestProducts.length > 0) {
+        badgeText.textContent = `🔥 Latest ${currentHeroSlide + 1} of ${heroLatestProducts.length}`;
+      }
+
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentHeroSlide);
+      });
+
+      // Synchronize left-side hero text (headline, badge, subtitle) time by time
+      updateHeroLeftContent(currentHeroSlide);
+    }
+
+    function startHeroAutoplay() {
+      stopHeroAutoplay();
+      if (heroLatestProducts.length > 1) {
+        heroAutoplayTimer = setInterval(() => {
+          currentHeroSlide = (currentHeroSlide + 1) % heroLatestProducts.length;
+          updateHeroSlideView();
+        }, 4500);
+      }
+    }
+
+    function stopHeroAutoplay() {
+      if (heroAutoplayTimer) {
+        clearInterval(heroAutoplayTimer);
+        heroAutoplayTimer = null;
+      }
+    }
+
+    function resetHeroAutoplay() {
+      stopHeroAutoplay();
+      startHeroAutoplay();
+    }
+
+    function setupHeroInteractions() {
+      const card = document.getElementById('heroFeaturedCard');
+      if (!card || card.dataset.carouselBound) return;
+      card.dataset.carouselBound = "true";
+
+      // Pause autoplay on mouse hover, resume on leave
+      card.addEventListener('mouseenter', stopHeroAutoplay);
+      card.addEventListener('mouseleave', startHeroAutoplay);
+
+      // Mobile Touch Swipe support
+      let touchStartX = 0;
+      let touchEndX = 0;
+      card.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+        stopHeroAutoplay();
+      }, { passive: true });
+
+      card.addEventListener('touchend', e => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 40) {
+          if (diff > 0) {
+            nextHeroSlide();
+          } else {
+            prevHeroSlide();
+          }
+        }
+        startHeroAutoplay();
+      }, { passive: true });
+    }
+
+    // Legacy fallback wrapper
+    function populateHeroCard(firstProduct) {
+      if (firstProduct) {
+        initHeroCarousel([firstProduct]);
       }
     }
 
@@ -3751,12 +4293,14 @@
       showToast(`Selected: ${plan.name} (${sym}${parseFloat(plan.price).toFixed(2)})`, 'info');
     };
 
-    // Hero plan switcher simulation
+    // Hero plan switcher simulation (legacy helper)
     window.switchHeroPlan = function(tierName, price, pillEl) {
       document.querySelectorAll('.hero-tier-pill').forEach(p => p.classList.remove('active'));
-      pillEl.classList.add('active');
-      document.getElementById('heroPlanSelectedName').textContent = `${tierName} Access`;
-      document.getElementById('heroCardPrice').textContent = price;
+      if (pillEl) pillEl.classList.add('active');
+      const nameEl = document.getElementById('heroPlanSelectedName');
+      if (nameEl) nameEl.textContent = `${tierName} Access`;
+      const priceEl = document.getElementById('heroCardPrice');
+      if (priceEl) priceEl.textContent = price;
     };
 
     window.scrollToCatalog = function() {
@@ -4150,10 +4694,10 @@
 
           showToast(`🎉 Order ${data.order ? data.order.order_number : ''} placed successfully! Transaction ID submitted for Super Admin verification.`, 'success');
 
-          // Immediately open Orders Modal to show user their placed order
+          // Immediately redirect to dedicated Orders Page
           setTimeout(() => {
-            openCustomerOrdersModal();
-          }, 400);
+            window.location.href = '/orders/';
+          }, 600);
         } else if (res.status === 401) {
           showToast('Session expired. Please sign in again.', 'warning');
           openCustomerAuthModal('login');
@@ -5515,44 +6059,8 @@
       content.innerHTML = html;
     };
 
-    window.openCustomerOrdersModal = async function() {
-      const modal = document.getElementById('customerOrdersModal');
-      const content = document.getElementById('customerOrdersContent');
-      const controls = document.getElementById('customerOrdersControls');
-      if (!modal || !content) return;
-
-      if (!customerState.token) {
-        if (controls) controls.style.display = 'none';
-        content.innerHTML = `
-          <div style="text-align: center; padding: 40px 16px;">
-            <div style="width: 68px; height: 68px; margin: 0 auto 16px; border-radius: 50%; background: rgba(99, 102, 241, 0.15); display: flex; align-items: center; justify-content: center; color: var(--primary);">
-              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-            </div>
-            <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">Sign In Required</h4>
-            <p style="font-size: 0.86rem; color: var(--text-muted); max-width: 360px; margin: 0 auto 20px;">Please sign in to view your placed orders, track MFS payment verification, and access your digital licenses.</p>
-            <button type="button" onclick="closeCustomerOrdersModal(); openCustomerAuthModal('login');" class="btn-card-buy" style="margin: 0 auto; padding: 12px 28px; font-size: 0.92rem; border-radius: var(--radius-md);">
-              Sign In to Your Account
-            </button>
-          </div>
-        `;
-        modal.style.display = 'flex';
-        return;
-      }
-
-      content.innerHTML = `
-        <div style="text-align: center; padding: 40px 16px;">
-          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" style="animation: spin 0.8s linear infinite; margin-bottom: 12px;">
-            <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-linecap="round"></circle>
-          </svg>
-          <div style="font-size: 0.92rem; color: var(--text-muted);">Fetching your orders & live payment verification...</div>
-        </div>
-      `;
-      modal.style.display = 'flex';
-
-      await fetchCustomerOrders(true);
+    window.openCustomerOrdersModal = function() {
+      window.location.href = '/orders/';
     };
 
     window.closeCustomerOrdersModal = function() {

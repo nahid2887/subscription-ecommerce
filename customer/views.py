@@ -45,6 +45,13 @@ class CustomerProfilePageView(TemplateView):
     template_name = 'customer/profile.html'
 
 
+class CustomerOrdersPageView(TemplateView):
+    """
+    Renders the dedicated Customer Orders & Transaction History web page.
+    """
+    template_name = 'customer/orders.html'
+
+
 class CustomerRegisterView(APIView):
     """
     Customer Registration Endpoint.

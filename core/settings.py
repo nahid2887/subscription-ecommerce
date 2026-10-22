@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'superuser',
     'product',
     'customer',
+    'terms',
 ]
 
 MIDDLEWARE = [
